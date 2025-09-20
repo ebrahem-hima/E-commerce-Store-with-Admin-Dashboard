@@ -4,7 +4,7 @@ export const firstProduct = [
     name: "Leather Bag",
     img: "/images/productImages/bag.webp",
     description: "A stylish leather bag perfect for daily use and travel.",
-    imgGallery: [],
+    imgGallery: ["/images/productImages/bag.webp"], // مضافة لأنها كانت فاضية
     rate: 4.5,
     stock: 12,
     discount: 15,
@@ -32,13 +32,16 @@ export const firstProduct = [
     name: "Wireless Controller",
     img: "/images/productImages/Controller.webp",
     description: "Ergonomic wireless controller with haptic feedback.",
-    imgGallery: ["/images/productImages/Controller.webp"],
+    imgGallery: ["/images/productImages/Controller.webp"], // موجودة مسبقًا
     rate: 4.7,
     stock: 0,
-    discount: 300,
-    discount_type: "mixed",
+    discount: 0,
+    discount_type: "",
     price: 1500,
-    options: [{ optionTitle: "Color", values: ["White", "Black", "Red"] }],
+    options: [
+      { optionTitle: "Color", values: ["White", "Black", "Red"] },
+      { optionTitle: "Size", values: ["lg", "md", "sm"] },
+    ],
     active: false,
     reviews: [
       {
@@ -60,7 +63,7 @@ export const firstProduct = [
     name: "Gaming Cooler",
     img: "/images/productImages/cooler.webp",
     description: "High-performance gaming cooler with RGB lighting.",
-    imgGallery: ["/images/productImages/cooler.webp"],
+    imgGallery: ["/images/productImages/cooler.webp"], // موجودة مسبقًا
     rate: 4.2,
     stock: 8,
     discount: 10,
@@ -82,7 +85,7 @@ export const firstProduct = [
     name: "Mechanical Keyboard",
     img: "/images/productImages/keyboard.webp",
     description: "RGB mechanical keyboard with customizable keys.",
-    imgGallery: [],
+    imgGallery: ["/images/productImages/keyboard.webp"], // مضافة لأنها كانت فاضية
     rate: 4.8,
     stock: 20,
     discount: 100,
@@ -104,7 +107,7 @@ export const firstProduct = [
     name: "Mini Bookshelf",
     img: "/images/productImages/Library.webp",
     description: "Compact bookshelf perfect for small spaces.",
-    imgGallery: [],
+    imgGallery: ["/images/productImages/Library.webp"], // مضافة لأنها كانت فاضية
     rate: 4.0,
     stock: 0,
     discount: 0,
@@ -126,7 +129,7 @@ export const firstProduct = [
     name: "Smart TV 55”",
     img: "/images/productImages/TV.webp",
     description: "4K Ultra HD Smart TV with voice control.",
-    imgGallery: ["/images/productImages/TV.webp"],
+    imgGallery: ["/images/productImages/TV.webp"], // موجودة مسبقًا
     rate: 4.9,
     stock: 5,
     discount: 20,
@@ -150,13 +153,14 @@ export const firstProduct = [
     ],
   },
 ];
+
 export const secondProduct = [
   {
     id: "P2-01",
     name: "Leather Bag 2",
     img: "/images/productImages/bag.webp",
     description: "A stylish leather bag perfect for daily use and travel.",
-    imgGallery: [],
+    imgGallery: ["/images/productImages/bag.webp"],
     rate: 4.5,
     stock: 12,
     discount: 15,
@@ -187,8 +191,8 @@ export const secondProduct = [
     imgGallery: ["/images/productImages/Controller.webp"],
     rate: 4.7,
     stock: 0,
-    discount: 200,
-    discount_type: "mixed",
+    discount: 0,
+    discount_type: "",
     price: 1500,
     options: [{ optionTitle: "Color", values: ["White", "Black", "Red"] }],
     active: false,
@@ -234,7 +238,7 @@ export const secondProduct = [
     name: "Mechanical Keyboard 2",
     img: "/images/productImages/keyboard.webp",
     description: "RGB mechanical keyboard with customizable keys.",
-    imgGallery: [],
+    imgGallery: ["/images/productImages/keyboard.webp"],
     rate: 4.8,
     stock: 20,
     discount: 50,
@@ -256,7 +260,7 @@ export const secondProduct = [
     name: "Mini Bookshelf 2",
     img: "/images/productImages/Library.webp",
     description: "Compact bookshelf perfect for small spaces.",
-    imgGallery: [],
+    imgGallery: ["/images/productImages/Library.webp"],
     rate: 4.0,
     stock: 0,
     discount: 0,
@@ -302,13 +306,14 @@ export const secondProduct = [
     ],
   },
 ];
+
 export const thirdProduct = [
   {
     id: "P3-01",
     name: "Leather Bag 3",
     img: "/images/productImages/bag.webp",
     description: "A stylish leather bag perfect for daily use and travel.",
-    imgGallery: [],
+    imgGallery: ["/images/productImages/bag.webp"],
     rate: 4.5,
     stock: 12,
     discount: 15,
@@ -386,7 +391,7 @@ export const thirdProduct = [
     name: "Mechanical Keyboard 3",
     img: "/images/productImages/keyboard.webp",
     description: "RGB mechanical keyboard with customizable keys.",
-    imgGallery: [],
+    imgGallery: ["/images/productImages/keyboard.webp"],
     rate: 4.8,
     stock: 20,
     discount: 0,
@@ -408,7 +413,7 @@ export const thirdProduct = [
     name: "Mini Bookshelf 3",
     img: "/images/productImages/Library.webp",
     description: "Compact bookshelf perfect for small spaces.",
-    imgGallery: [],
+    imgGallery: ["/images/productImages/Library.webp"],
     rate: 4.0,
     stock: 0,
     discount: 0,
@@ -454,6 +459,7 @@ export const thirdProduct = [
     ],
   },
 ];
+
 export const components = [
   {
     title: "Best Selling Products",
@@ -472,5 +478,21 @@ export const components = [
     products: thirdProduct,
     id: "3",
     category: "entertainment",
+  },
+];
+
+import { TbTruckDelivery } from "react-icons/tb";
+import { BsRepeat } from "react-icons/bs";
+
+export const iconsDescription = [
+  {
+    icon: TbTruckDelivery,
+    text: "Free Delivery",
+    description: "Enter your postal code for Delivery Availability",
+  },
+  {
+    icon: BsRepeat,
+    text: "Return Delivery",
+    description: "Free 30 Days Delivery Returns. Details",
   },
 ];

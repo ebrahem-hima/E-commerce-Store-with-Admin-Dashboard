@@ -15,7 +15,7 @@ export const filter = [
 ];
 
 export const navbar = [
-  { text: "Home", link: "/home" },
+  { text: "Home", link: "/" },
   { text: "Contact", link: "/contact" },
   { text: "About", link: "/about" },
   { text: "SignUp", link: "/sign-up" },
@@ -131,4 +131,21 @@ export const categoryCard = [
   { icon: VscGame, text: "Gaming", value: "gaming" },
   { icon: VscGame, text: "Gaming2", value: "gaming2" },
   { icon: VscGame, text: "Gaming3", value: "gaming3" },
+];
+import { CiPhone } from "react-icons/ci";
+import { MdOutlineMail } from "react-icons/md";
+
+export const CONTACT_INFO = [
+  {
+    title: "Call to Us",
+    description: "We are available 24/7, 7 days a week.",
+    detail: "Phone: +01276480215",
+    icon: CiPhone,
+  },
+  {
+    title: "Write To Us",
+    description: "Fill out our form and we will contact you within 24 hours.",
+    detail: "Emails: customer@exclusive.com",
+    icon: MdOutlineMail,
+  },
 ];

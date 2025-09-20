@@ -8,16 +8,17 @@ import Link from "next/link";
 
 interface Props {
   item: typeProduct;
+  type?: string;
 }
 
-const ProductCard = ({ item }: Props) => {
+const ProductCard = ({ item, type }: Props) => {
   return (
     <Link
       href={`/productDetails/${item.id}`}
       className="h-[180px] group flex-center flex-col gap-2 cursor-pointer"
     >
       {/* Img + Icons */}
-      <ImgProduct item={item} />
+      <ImgProduct item={item} type={type} />
       <TextProduct item={item} />
     </Link>
   );

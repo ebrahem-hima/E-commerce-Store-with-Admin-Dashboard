@@ -47,13 +47,20 @@
 
 /* Start Global Colors */
 @theme {
+  /* Colors */
   --color-primary: #db4444;
   --color-secondary: #33cfff;
   --color-text: #000000;
   --color-lightGray: #f5f5f5;
   --color-darkGray: #333333;
-  --screens-900: 900px;
-  --screens-lg: 1000px;
+  --color-hover: #e45f5f;
+  /* Fonts */
+  --font-inter: "Inter", sans-serif;
+  --font-poppins: "Poppins", sans-serif;
+  /* breakpoints */
+  --breakpoint-tablet: 56rem;
+  --breakpoint-laptop: 50rem;
+  /* --breakpoint-lg: 1000px; */
 }
 /* End Global Colors */
 

@@ -1,11 +1,24 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
-import { typeIsOpen } from "../types/productTypes";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  Dispatch,
+  SetStateAction,
+} from "react";
+import { typeIsOpen, typeProduct } from "../types/productTypes";
 
 interface ProductContextType {
   isOpen: typeIsOpen;
   setIsOpen: React.Dispatch<React.SetStateAction<typeIsOpen>>;
+
+  wishList: typeProduct[];
+  setWishList: Dispatch<SetStateAction<typeProduct[]>>;
+
+  cartData: typeProduct[];
+  setCartData: Dispatch<SetStateAction<typeProduct[]>>;
 }
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
@@ -15,7 +28,19 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
     filter: false,
     searchNavbar: false,
   });
-  const values = { isOpen, setIsOpen };
+  const [dataTable, setDataTable] = useState();
+  const [cartData, setCartData] = useState<typeProduct[]>([]);
+  const [wishList, setWishList] = useState<typeProduct[]>([]);
+  const values = {
+    isOpen,
+    setIsOpen,
+    wishList,
+    setWishList,
+    dataTable,
+    setDataTable,
+    cartData,
+    setCartData,
+  };
   return (
     <ProductContext.Provider value={values}>{children}</ProductContext.Provider>
   );

@@ -1,12 +1,24 @@
 import Image from "next/image";
 import { IoEyeOutline } from "react-icons/io5";
-import { CiHeart } from "react-icons/ci";
+import { HiOutlineHeart } from "react-icons/hi2";
 import { typeProduct } from "../../../../types/productTypes";
 import "../Card.css";
+import { AddToCart, addWishList } from "@/lib/utils";
+import { useProductContext } from "../../../../context/productContext";
+import { Trash2 } from "lucide-react";
 
-const ImgProduct = ({ item }: { item: typeProduct }) => {
+interface Props {
+  type?: string;
+  item: typeProduct;
+}
+
+const ImgProduct = ({ item, type }: Props) => {
   const { name, discount, price, discount_type, img } = item;
   const discountPercentage = ((discount! / price) * 100).toFixed(0);
+  const { setWishList, wishList, setCartData, cartData } = useProductContext();
+  const handleDeleteItemWishList = (id: string) => {
+    setWishList((prev) => prev.filter((item) => item.id !== id));
+  };
 
   return (
     <div className="group relative h-full overflow-hidden w-full flex-center">
@@ -18,8 +30,31 @@ const ImgProduct = ({ item }: { item: typeProduct }) => {
         height={100}
       />
       <div className="flex flex-col absolute top-2 right-2">
-        <CiHeart size={26} className="iconImg" />
-        <IoEyeOutline size={26} className="iconImg" />
+        {type === "wishList" ? (
+          <Trash2
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              handleDeleteItemWishList(item.id);
+            }}
+            className="iconImg hover:bg-primary hover:text-white duration-300 p-0.5 rounded-[4px]"
+            size={23}
+          />
+        ) : (
+          <HiOutlineHeart
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              addWishList({ type: "add", item, setWishList, wishList });
+            }}
+            size={24}
+            className="iconImg hover:bg-primary hover:text-white duration-300 p-0.5 rounded-[4px]"
+          />
+        )}
+        <IoEyeOutline
+          size={24}
+          className="iconImg hover:bg-primary hover:text-white duration-300 p-0.5 rounded-[4px]"
+        />
       </div>
       {discount !== 0 &&
         (discount_type === "percentage" ? (
@@ -31,7 +66,15 @@ const ImgProduct = ({ item }: { item: typeProduct }) => {
             -{discountPercentage}%
           </span>
         ))}
-      <div className="addProduct group-hover:bottom-0">Add to Cart</div>
+      <div
+        onClick={(e) => {
+          e.preventDefault();
+          AddToCart({ item, setCartData, cartData });
+        }}
+        className="addProduct group-hover:bottom-0"
+      >
+        Add to Cart
+      </div>
     </div>
   );
 };

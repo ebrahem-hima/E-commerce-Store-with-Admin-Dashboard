@@ -17,7 +17,7 @@ const SliderComponent = ({
 }: SliderComponentType) => {
   const parentRef = useRef<HTMLDivElement | null>(null);
   return (
-    <div className="w-full flex flex-col gap-3 overflow-hidden">
+    <div className="w-full flex flex-col gap-3 overflow-hidden red">
       <TitleComponent parentRef={parentRef} titleComponent={titleComponent} />
       {type === "category" ? (
         <Slider parentRef={parentRef}>

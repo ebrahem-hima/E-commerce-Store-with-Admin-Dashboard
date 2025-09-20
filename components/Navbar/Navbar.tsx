@@ -10,6 +10,7 @@ import { IoPersonOutline } from "react-icons/io5";
 import { IoMenu } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 import {
   Sheet,
   SheetContent,
@@ -18,7 +19,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import Link from "next/link";
+import Image from "next/image";
+import { Trash2 } from "lucide-react";
+import { useProductContext } from "../../context/productContext";
 
 const Navbar = () => {
   const [getLink, setGetLink] = useState("Home");
@@ -34,7 +37,8 @@ const Navbar = () => {
       {/* Links */}
       <div className="flex gap-2 max-md:hidden">
         {navbar.map((nav) => (
-          <span
+          <Link
+            href={nav.link}
             key={nav.text}
             className={`font-poppins cursor-pointer font-normal text-[16px] leading-[24px] ${
               getLink === nav.text && "border-b border-primary"
@@ -42,7 +46,7 @@ const Navbar = () => {
             onClick={() => setGetLink(nav.text)}
           >
             {nav.text}
-          </span>
+          </Link>
         ))}
       </div>
       {/* Input Search */}
@@ -54,17 +58,13 @@ const Navbar = () => {
           className="cursor-pointer"
           onClick={() => push(`/wishlist`)}
         />
-        <IoCartOutline
-          size={25}
-          className="cursor-pointer"
-          onClick={() => {}}
-        />
+        <ShopCart />
         <IoPersonOutline
           size={25}
           className="cursor-pointer"
           onClick={() => push(`/account`)}
         />
-        <SheetDemo />
+        <NavbarMobile />
       </div>
     </nav>
   );
@@ -72,7 +72,7 @@ const Navbar = () => {
 
 export default Navbar;
 
-export function SheetDemo() {
+export function NavbarMobile() {
   const [click, setClick] = useState(false);
   return (
     <Sheet>
@@ -125,7 +125,7 @@ export function SheetDemo() {
               ))}
             </div>
           ) : (
-            <div className="flex flex-col font-bold text-[18px] gap-1">
+            <div className="flex flex-col font-medium text-[18px] gap-1">
               {navbar.map((nav) => (
                 <Link
                   className="hover:ml-5 duration-300"
@@ -144,6 +144,73 @@ export function SheetDemo() {
             className=""
             placeholder="What are you looking for ?"
           />
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
+  );
+}
+
+export function ShopCart() {
+  const { cartData } = useProductContext();
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <IoCartOutline size={25} className="cursor-pointer" />
+      </SheetTrigger>
+      <SheetContent isStrongOverlay>
+        <SheetHeader>
+          <SheetTitle>Your Cart</SheetTitle>
+        </SheetHeader>
+        <div className="flex flex-col gap-4 h-[450px] mt-3">
+          {cartData.map((item) => (
+            <div
+              key={item.id}
+              className="grid grid-cols-[80px_1fr_auto] gap-3 border-t border-[#d4d3d3] pt-3"
+            >
+              <div className="relative">
+                <Image
+                  src={item.img}
+                  alt={`img` + item.name}
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <div className="text-sm">
+                <span className="font-medium line-clamp-2 break-all text-sm">
+                  {item.name}
+                </span>
+                <span>
+                  <span className="font-medium">Price:</span> ${item.price}{" "}
+                  <span>x</span> {item.count || 1}
+                </span>
+                {/* Options */}
+                <div className="flex flex-wrap gap-1 text-sm">
+                  <div className="flex items-center gap-1">
+                    <span className="font-medium">Color:</span>
+                    <span>Red</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="font-medium">Size:</span>
+                    <span>M</span>
+                  </div>
+                </div>
+              </div>
+              <Trash2 />
+            </div>
+          ))}
+        </div>
+        <SheetFooter className="flex !flex-col gap-2 border-t border-[#77777754] pt-1">
+          <div className="flex-between">
+            <span className="font-poppins text-[18px]">Subtotal:</span>
+            <span>$55,500</span>
+          </div>
+          <Button
+            type="submit"
+            className="bg-white text-primary hover:bg-[#e6e1e1] !mr-0"
+          >
+            View Cart
+          </Button>
+          <Button type="submit">Checkout</Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>

@@ -6,6 +6,8 @@ export interface typeProduct {
   imgGallery?: string[];
   rate?: number;
   sales?: string;
+  stock: number;
+  count?: number;
   discount?: number;
   discount_type?: string;
   price: number;
