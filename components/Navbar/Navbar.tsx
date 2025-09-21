@@ -5,7 +5,7 @@ import { categoriesLinks, navbar } from "../../constant/filterNavbar";
 import NavbarSearch from "./NavbarSearch";
 import { IoIosHeartEmpty } from "react-icons/io";
 import { IoCartOutline } from "react-icons/io5";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { IoPersonOutline } from "react-icons/io5";
 import { IoMenu } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
@@ -24,8 +24,9 @@ import { Trash2 } from "lucide-react";
 import { useProductContext } from "../../context/productContext";
 
 const Navbar = () => {
-  const [getLink, setGetLink] = useState("Home");
   const { push } = useRouter();
+  const pathName = usePathname();
+  console.log("pathName", pathName);
   return (
     <nav className="fixed flex-between left-0 py-3 px-10 bg-[#F5F5F5] w-full border-b border-b-[#00000017] z-50 max-md:px-1 max-sm:px-0">
       <Link
@@ -41,9 +42,8 @@ const Navbar = () => {
             href={nav.link}
             key={nav.text}
             className={`font-poppins cursor-pointer font-normal text-[16px] leading-[24px] ${
-              getLink === nav.text && "border-b border-primary"
+              pathName === nav.link && "border-b border-primary"
             }`}
-            onClick={() => setGetLink(nav.text)}
           >
             {nav.text}
           </Link>
