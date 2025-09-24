@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { categoriesLinks, navbar } from "../../constant/filterNavbar";
 import NavbarSearch from "./NavbarSearch";
 import { IoIosHeartEmpty } from "react-icons/io";
@@ -22,11 +22,83 @@ import {
 import Image from "next/image";
 import { Trash2 } from "lucide-react";
 import { useProductContext } from "../../context/productContext";
+import { supabase } from "@/supabase-client";
+import { Session } from "@supabase/supabase-js";
+import { toast } from "sonner";
+
+interface Props {
+  onClick: () => void;
+  session: Session | null;
+  pathName: string;
+}
+
+const SignInSignOut = ({ session, onClick, pathName }: Props) => {
+  return (
+    <div>
+      {session ? (
+        <span
+          onClick={onClick}
+          className="action:ml-5 font-poppins cursor-pointer !font-medium text-[16px] leading-[24px]"
+        >
+          SignOut
+        </span>
+      ) : (
+        <Link
+          href={`/sign-up`}
+          className={`action:ml-5 font-poppins cursor-pointer !font-medium text-[16px] leading-[24px] ${
+            pathName === "/sign-up" && "border-b border-primary"
+          }`}
+        >
+          SignUp
+        </Link>
+      )}
+    </div>
+  );
+};
 
 const Navbar = () => {
+  const [Loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
   const { push } = useRouter();
+
   const pathName = usePathname();
-  console.log("pathName", pathName);
+  const [session, setSession] = useState<Session | null>(null);
+  useEffect(() => {
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setSession(session);
+      }
+    );
+
+    const getSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (!error) setSession(data.session);
+    };
+    getSession();
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
+
+  const handleSignOut = async () => {
+    setLoading(true);
+    setProgress(30);
+    try {
+      setProgress(50);
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      setProgress(70);
+      toast.success("Successfully signed out");
+    } catch (err) {
+      console.log(err instanceof Error ? err.message : err);
+      toast.error(err instanceof Error ? err.message : "Error signing out");
+    } finally {
+      setLoading(false);
+      setProgress(100);
+    }
+  };
+
   return (
     <nav className="fixed flex-between left-0 py-3 px-10 bg-[#F5F5F5] w-full border-b border-b-[#00000017] z-50 max-md:px-1 max-sm:px-0">
       <Link
@@ -48,6 +120,11 @@ const Navbar = () => {
             {nav.text}
           </Link>
         ))}
+        <SignInSignOut
+          session={session}
+          onClick={handleSignOut}
+          pathName={pathName}
+        />
       </div>
       {/* Input Search */}
       <NavbarSearch />
@@ -64,15 +141,26 @@ const Navbar = () => {
           className="cursor-pointer"
           onClick={() => push(`/account`)}
         />
-        <NavbarMobile />
+        <NavbarMobile
+          session={session}
+          onClick={handleSignOut}
+          pathName={pathName}
+        />
       </div>
+      {Loading && (
+        <div
+          className={`w-[${progress}%] h-2 bg-gray-200 mt-2 rounded absolute bottom-0 left-0 duration-300`}
+        >
+          <div className="h-2 bg-red-500 rounded w-full animate-pulse"></div>
+        </div>
+      )}
     </nav>
   );
 };
 
 export default Navbar;
 
-export function NavbarMobile() {
+export function NavbarMobile({ session, onClick, pathName }: Props) {
   const [click, setClick] = useState(false);
   return (
     <Sheet>
@@ -128,13 +216,18 @@ export function NavbarMobile() {
             <div className="flex flex-col font-medium text-[18px] gap-1">
               {navbar.map((nav) => (
                 <Link
-                  className="hover:ml-5 duration-300"
+                  className="action:ml-5 hover:ml-5 duration-300"
                   key={nav.text}
                   href={nav.link}
                 >
                   {nav.text}
                 </Link>
               ))}
+              <SignInSignOut
+                session={session}
+                onClick={onClick}
+                pathName={pathName}
+              />
             </div>
           )}
         </div>
@@ -161,7 +254,7 @@ export function ShopCart() {
         <SheetHeader>
           <SheetTitle>Your Cart</SheetTitle>
         </SheetHeader>
-        <div className="flex flex-col gap-4 h-[450px] mt-3">
+        <div className="flex flex-col gap-4 h-[445px] mt-3">
           {cartData.map((item) => (
             <div
               key={item.id}
@@ -204,13 +297,20 @@ export function ShopCart() {
             <span className="font-poppins text-[18px]">Subtotal:</span>
             <span>$55,500</span>
           </div>
-          <Button
-            type="submit"
-            className="bg-white text-primary hover:bg-[#e6e1e1] !mr-0"
-          >
-            View Cart
-          </Button>
-          <Button type="submit">Checkout</Button>
+          <Link href="/Cart" className="w-full">
+            <Button
+              asChild
+              type="submit"
+              className="w-full bg-white text-primary hover:bg-[#e6e1e1] !mr-0"
+            >
+              <span>View Cart</span>
+            </Button>
+          </Link>
+          <Link href="/checkout" className="w-full">
+            <Button asChild className="w-full">
+              <span>Checkout</span>
+            </Button>
+          </Link>
         </SheetFooter>
       </SheetContent>
     </Sheet>

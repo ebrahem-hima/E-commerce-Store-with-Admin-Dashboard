@@ -72,9 +72,9 @@ const NavbarSearch = () => {
               href={``}
               // href={`/productDetails/${item.id}`}
               key={item.id}
-              className="grid grid-cols-[80px_1fr] gap-1 h-[60px] cursor-pointer hover:bg-[#9999992c] rounded-md "
+              className="grid grid-cols-[80px_1fr] gap-3 cursor-pointer hover:bg-[#9999992c] rounded-md items-center"
             >
-              <div className="relative">
+              <div className="relative w-[80px] h-[60px]">
                 <Image
                   src={item.img}
                   fill
@@ -82,9 +82,7 @@ const NavbarSearch = () => {
                   className="object-contain rounded-md"
                 />
               </div>
-              <span className="line-clamp-2 my-1 break-all text-sm">
-                {item.name} {item.name}
-                {item.name}
+              <span className="line-clamp-2 break-all text-sm">
                 {item.name}
               </span>
             </Link>

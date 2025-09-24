@@ -13,6 +13,6 @@ export const MESSAGES = {
   auth: {
     loginSuccess: "You have logged in successfully.",
     logoutSuccess: "You have logged out successfully.",
-    signInSuccess: "You have signed in successfully.",
+    signUpSuccess: "You have signed Up in successfully.",
   },
 };

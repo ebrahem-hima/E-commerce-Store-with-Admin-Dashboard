@@ -18,7 +18,6 @@ export const navbar = [
   { text: "Home", link: "/" },
   { text: "Contact", link: "/contact" },
   { text: "About", link: "/about" },
-  { text: "SignUp", link: "/sign-up" },
 ];
 
 export const categoriesLinks = [

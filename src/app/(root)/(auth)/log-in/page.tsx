@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,8 +12,48 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { toast } from "sonner";
+import { supabase } from "@/supabase-client";
+import { useRouter } from "next/navigation";
 
-const page = () => {
+interface userDataType {
+  email: string;
+  password: string;
+}
+
+const Page = () => {
+  const [Loading, setLoading] = useState(false);
+  const router = useRouter();
+  const [userData, setUserData] = useState<userDataType>({
+    email: "",
+    password: "",
+  });
+  const LogIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: userData.email,
+        password: userData.password,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast.success("Successfully Logged In");
+      router.push(`/`);
+    } catch (err) {
+      console.log(err instanceof Error ? err.message : err);
+      toast.error(
+        err instanceof Error ? err.message : "An error occurred during login"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
@@ -26,40 +68,63 @@ const page = () => {
         </Link>
       </CardHeader>
       <CardContent>
-        <form>
-          <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6">
+          <Input
+            id="email"
+            type="email"
+            name="email"
+            placeholder="Email or Phone Number"
+            className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-[0px]"
+            required
+            onChange={(e) =>
+              setUserData((prev) => ({
+                ...prev,
+                [e.target.name]: e.target.value,
+              }))
+            }
+          />
+          <div>
             <Input
-              id="email"
-              type="email"
-              placeholder="Email or Phone Number"
+              id="password"
+              type="password"
+              name="password"
+              placeholder="Password"
               className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-[0px]"
               required
+              onChange={(e) =>
+                setUserData((prev) => ({
+                  ...prev,
+                  [e.target.name]: e.target.value,
+                }))
+              }
             />
-            <div>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Password"
-                className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-[0px]"
-                required
-              />
-              <p className="flex justify-end cursor-pointer mt-1 text-sm underline-offset-4 hover:underline">
-                Forgot your password?
-              </p>
-            </div>
+            <p className="flex justify-end cursor-pointer mt-1 text-sm underline-offset-4 hover:underline">
+              Forgot your password?
+            </p>
           </div>
-        </form>
+        </div>
       </CardContent>
-      <CardFooter className="flex-col gap-2">
-        <Button type="submit" className="w-full">
-          Login
-        </Button>
-        <Button variant="outline" className="w-full">
-          Login with Google
-        </Button>
-      </CardFooter>
+      <form onSubmit={LogIn}>
+        <CardFooter className="flex-col gap-2">
+          <Button
+            disabled={Loading}
+            type="submit"
+            className="w-full relative grid grid-cols-[auto_auto] items-center"
+          >
+            Login
+            <span className="w-10 h-6 absolute top-1.5 left-[30%]">
+              {Loading && (
+                <span className="block w-6 h-6 rounded-full border-4 border-white border-t-[#DB4444] animate-spin "></span>
+              )}
+            </span>
+          </Button>
+          <Button variant="outline" className="w-full">
+            Login with Google
+          </Button>
+        </CardFooter>
+      </form>
     </Card>
   );
 };
 
-export default page;
+export default Page;
