@@ -1,60 +1,18 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { categoriesLinks, navbar } from "../../constant/filterNavbar";
+import { navbar } from "../../constant/filterNavbar";
 import NavbarSearch from "./NavbarSearch";
 import { IoIosHeartEmpty } from "react-icons/io";
-import { IoCartOutline } from "react-icons/io5";
 import { usePathname, useRouter } from "next/navigation";
 import { IoPersonOutline } from "react-icons/io5";
-import { IoMenu } from "react-icons/io5";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import Image from "next/image";
-import { Trash2 } from "lucide-react";
-import { useProductContext } from "../../context/productContext";
+
 import { supabase } from "@/supabase-client";
-import { Session } from "@supabase/supabase-js";
 import { toast } from "sonner";
-
-interface Props {
-  onClick: () => void;
-  session: Session | null;
-  pathName: string;
-}
-
-const SignInSignOut = ({ session, onClick, pathName }: Props) => {
-  return (
-    <div>
-      {session ? (
-        <span
-          onClick={onClick}
-          className="action:ml-5 font-poppins cursor-pointer !font-medium text-[16px] leading-[24px]"
-        >
-          SignOut
-        </span>
-      ) : (
-        <Link
-          href={`/sign-up`}
-          className={`action:ml-5 font-poppins cursor-pointer !font-medium text-[16px] leading-[24px] ${
-            pathName === "/sign-up" && "border-b border-primary"
-          }`}
-        >
-          SignUp
-        </Link>
-      )}
-    </div>
-  );
-};
+import NavbarMobile from "./NavbarMobile";
+import SignInSignOut from "./SignInSignOut";
+import ShopCart from "../shared/ShopCart";
 
 const Navbar = () => {
   const [Loading, setLoading] = useState(false);
@@ -62,23 +20,10 @@ const Navbar = () => {
   const { push } = useRouter();
 
   const pathName = usePathname();
-  const [session, setSession] = useState<Session | null>(null);
+  const [session, setSession] = useState("");
   useEffect(() => {
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session);
-      }
-    );
-
-    const getSession = async () => {
-      const { data, error } = await supabase.auth.getSession();
-      if (!error) setSession(data.session);
-    };
-    getSession();
-
-    return () => {
-      listener.subscription.unsubscribe();
-    };
+    const userId = localStorage.getItem("user_id");
+    setSession(userId || "");
   }, []);
 
   const handleSignOut = async () => {
@@ -87,6 +32,7 @@ const Navbar = () => {
     try {
       setProgress(50);
       const { error } = await supabase.auth.signOut();
+      localStorage.removeItem("user_id");
       if (error) throw error;
       setProgress(70);
       toast.success("Successfully signed out");
@@ -159,160 +105,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-export function NavbarMobile({ session, onClick, pathName }: Props) {
-  const [click, setClick] = useState(false);
-  return (
-    <Sheet>
-      <SheetTrigger asChild className="hidden max-md:block">
-        <Button variant="outline">
-          <IoMenu onClick={() => {}} />
-        </Button>
-      </SheetTrigger>
-      <SheetContent className="flex flex-col gap-3">
-        <SheetHeader className="flex items-center justify-between mt-3">
-          <SheetTitle
-            className={`${
-              !click && "text-primary"
-            } cursor-pointer hover:text-primary`}
-            onClick={() => setClick(false)}
-          >
-            Menu
-          </SheetTitle>
-          <span>|</span>
-          <SheetTitle
-            className={`${
-              click && "text-primary"
-            } cursor-pointer hover:text-primary`}
-            onClick={() => setClick(true)}
-          >
-            Search
-          </SheetTitle>
-        </SheetHeader>
-        <div className="flex flex-col">
-          {click ? (
-            <div className="overflow-y-auto h-[500px]">
-              {categoriesLinks.map((category) => (
-                <div key={category.name}>
-                  <ul>
-                    <span className="font-bold cursor-pointer hover:opacity-75">
-                      {category.name}
-                    </span>
-                    <li className="flex flex-col">
-                      {category.values.map((value) => (
-                        <span
-                          className="cursor-pointer hover:opacity-75"
-                          key={value.name}
-                        >
-                          {value.name}
-                        </span>
-                      ))}
-                    </li>
-                  </ul>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col font-medium text-[18px] gap-1">
-              {navbar.map((nav) => (
-                <Link
-                  className="action:ml-5 hover:ml-5 duration-300"
-                  key={nav.text}
-                  href={nav.link}
-                >
-                  {nav.text}
-                </Link>
-              ))}
-              <SignInSignOut
-                session={session}
-                onClick={onClick}
-                pathName={pathName}
-              />
-            </div>
-          )}
-        </div>
-        <SheetFooter className="flex items-end">
-          <Input
-            type="text"
-            className=""
-            placeholder="What are you looking for ?"
-          />
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
-  );
-}
-
-export function ShopCart() {
-  const { cartData } = useProductContext();
-  return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <IoCartOutline size={25} className="cursor-pointer" />
-      </SheetTrigger>
-      <SheetContent isStrongOverlay>
-        <SheetHeader>
-          <SheetTitle>Your Cart</SheetTitle>
-        </SheetHeader>
-        <div className="flex flex-col gap-4 h-[445px] mt-3">
-          {cartData.map((item) => (
-            <div
-              key={item.id}
-              className="grid grid-cols-[80px_1fr_auto] gap-3 border-t border-[#d4d3d3] pt-3"
-            >
-              <div className="relative">
-                <Image
-                  src={item.img}
-                  alt={`img` + item.name}
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <div className="text-sm">
-                <span className="font-medium line-clamp-2 break-all text-sm">
-                  {item.name}
-                </span>
-                <span>
-                  <span className="font-medium">Price:</span> ${item.price}{" "}
-                  <span>x</span> {item.count || 1}
-                </span>
-                {/* Options */}
-                <div className="flex flex-wrap gap-1 text-sm">
-                  <div className="flex items-center gap-1">
-                    <span className="font-medium">Color:</span>
-                    <span>Red</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="font-medium">Size:</span>
-                    <span>M</span>
-                  </div>
-                </div>
-              </div>
-              <Trash2 />
-            </div>
-          ))}
-        </div>
-        <SheetFooter className="flex !flex-col gap-2 border-t border-[#77777754] pt-1">
-          <div className="flex-between">
-            <span className="font-poppins text-[18px]">Subtotal:</span>
-            <span>$55,500</span>
-          </div>
-          <Link href="/Cart" className="w-full">
-            <Button
-              asChild
-              type="submit"
-              className="w-full bg-white text-primary hover:bg-[#e6e1e1] !mr-0"
-            >
-              <span>View Cart</span>
-            </Button>
-          </Link>
-          <Link href="/checkout" className="w-full">
-            <Button asChild className="w-full">
-              <span>Checkout</span>
-            </Button>
-          </Link>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
-  );
-}

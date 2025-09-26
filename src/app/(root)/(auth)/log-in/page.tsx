@@ -33,11 +33,13 @@ const Page = () => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data: Data, error } = await supabase.auth.signInWithPassword({
         email: userData.email,
         password: userData.password,
       });
-
+      if (Data.user) {
+        localStorage.setItem("user_id", Data.user?.id);
+      }
       if (error) {
         throw error;
       }

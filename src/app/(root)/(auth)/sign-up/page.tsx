@@ -44,6 +44,11 @@ const Page = () => {
         password: userData.password,
       });
       if (authError) throw authError;
+
+      if (data.user) {
+        localStorage.setItem("user_id", data.user?.id);
+        console.log("user_id signIn", localStorage.getItem("user_id"));
+      }
       const { error: insertError } = await supabase
         .from("users_profile")
         .insert([
@@ -53,6 +58,7 @@ const Page = () => {
             last_name: userData.lastName,
           },
         ]);
+
       toast.success(MESSAGES.auth.signUpSuccess);
       push(`/`);
       if (insertError) throw insertError;

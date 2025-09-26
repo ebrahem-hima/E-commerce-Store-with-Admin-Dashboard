@@ -71,7 +71,7 @@ const NavbarSearch = () => {
             <Link
               href={``}
               // href={`/productDetails/${item.id}`}
-              key={item.id}
+              key={item.product_id}
               className="grid grid-cols-[80px_1fr] gap-3 cursor-pointer hover:bg-[#9999992c] rounded-md items-center"
             >
               <div className="relative w-[80px] h-[60px]">

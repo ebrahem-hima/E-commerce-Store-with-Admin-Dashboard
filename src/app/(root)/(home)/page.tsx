@@ -16,7 +16,7 @@ const page = () => {
       />
       {components.map((component) => (
         <SliderComponent
-          key={component.id}
+          key={component.component_id}
           titleComponent={component.title}
           Product={component.products}
           category={component.category}

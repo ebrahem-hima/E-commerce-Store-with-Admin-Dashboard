@@ -14,9 +14,6 @@ interface ProductContextType {
   isOpen: typeIsOpen;
   setIsOpen: React.Dispatch<React.SetStateAction<typeIsOpen>>;
 
-  wishList: typeProduct[];
-  setWishList: Dispatch<SetStateAction<typeProduct[]>>;
-
   cartData: typeProduct[];
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
 }
@@ -30,12 +27,9 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
   });
   const [dataTable, setDataTable] = useState();
   const [cartData, setCartData] = useState<typeProduct[]>([]);
-  const [wishList, setWishList] = useState<typeProduct[]>([]);
   const values = {
     isOpen,
     setIsOpen,
-    wishList,
-    setWishList,
     dataTable,
     setDataTable,
     cartData,

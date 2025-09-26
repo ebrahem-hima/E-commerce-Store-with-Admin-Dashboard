@@ -1,10 +1,10 @@
 export const firstProduct = [
   {
-    id: "P1-01",
+    product_id: "550e8400-e29b-41d4-a716-446655440000",
     name: "Leather Bag",
     img: "/images/productImages/bag.webp",
     description: "A stylish leather bag perfect for daily use and travel.",
-    imgGallery: ["/images/productImages/bag.webp"], // مضافة لأنها كانت فاضية
+    imgGallery: ["/images/productImages/bag.webp"],
     rate: 4.5,
     stock: 12,
     discount: 15,
@@ -28,11 +28,11 @@ export const firstProduct = [
     ],
   },
   {
-    id: "P1-02",
+    product_id: "550e8400-e29b-41d4-a716-446655440001",
     name: "Wireless Controller",
     img: "/images/productImages/Controller.webp",
     description: "Ergonomic wireless controller with haptic feedback.",
-    imgGallery: ["/images/productImages/Controller.webp"], // موجودة مسبقًا
+    imgGallery: ["/images/productImages/Controller.webp"],
     rate: 4.7,
     stock: 0,
     discount: 0,
@@ -59,11 +59,11 @@ export const firstProduct = [
     ],
   },
   {
-    id: "P1-03",
+    product_id: "550e8400-e29b-41d4-a716-446655440002",
     name: "Gaming Cooler",
     img: "/images/productImages/cooler.webp",
     description: "High-performance gaming cooler with RGB lighting.",
-    imgGallery: ["/images/productImages/cooler.webp"], // موجودة مسبقًا
+    imgGallery: ["/images/productImages/cooler.webp"],
     rate: 4.2,
     stock: 8,
     discount: 10,
@@ -81,11 +81,11 @@ export const firstProduct = [
     ],
   },
   {
-    id: "P1-04",
+    product_id: "550e8400-e29b-41d4-a716-446655440003",
     name: "Mechanical Keyboard",
     img: "/images/productImages/keyboard.webp",
     description: "RGB mechanical keyboard with customizable keys.",
-    imgGallery: ["/images/productImages/keyboard.webp"], // مضافة لأنها كانت فاضية
+    imgGallery: ["/images/productImages/keyboard.webp"],
     rate: 4.8,
     stock: 20,
     discount: 100,
@@ -103,11 +103,11 @@ export const firstProduct = [
     ],
   },
   {
-    id: "P1-05",
+    product_id: "550e8400-e29b-41d4-a716-446655440004",
     name: "Mini Bookshelf",
     img: "/images/productImages/Library.webp",
     description: "Compact bookshelf perfect for small spaces.",
-    imgGallery: ["/images/productImages/Library.webp"], // مضافة لأنها كانت فاضية
+    imgGallery: ["/images/productImages/Library.webp"],
     rate: 4.0,
     stock: 0,
     discount: 0,
@@ -125,11 +125,11 @@ export const firstProduct = [
     ],
   },
   {
-    id: "P1-06",
+    product_id: "550e8400-e29b-41d4-a716-446655440005",
     name: "Smart TV 55”",
     img: "/images/productImages/TV.webp",
     description: "4K Ultra HD Smart TV with voice control.",
-    imgGallery: ["/images/productImages/TV.webp"], // موجودة مسبقًا
+    imgGallery: ["/images/productImages/TV.webp"],
     rate: 4.9,
     stock: 5,
     discount: 20,
@@ -156,7 +156,7 @@ export const firstProduct = [
 
 export const secondProduct = [
   {
-    id: "P2-01",
+    product_id: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
     name: "Leather Bag 2",
     img: "/images/productImages/bag.webp",
     description: "A stylish leather bag perfect for daily use and travel.",
@@ -170,13 +170,13 @@ export const secondProduct = [
     active: true,
     reviews: [
       {
-        userId: "U2-01",
+        userId: "a1f1c2d3-e4f5-6789-abcd-001122334455",
         username: "Alice",
         rating: 5,
         comment: "Great quality and very durable!",
       },
       {
-        userId: "U2-02",
+        userId: "b2e2f3a4-5678-90ab-cdef-112233445566",
         username: "Mohamed",
         rating: 4,
         comment: "Nice design but a bit heavy.",
@@ -184,7 +184,7 @@ export const secondProduct = [
     ],
   },
   {
-    id: "P2-02",
+    product_id: "d94f5b7c-91a2-4e1b-8c17-9d8b5f6a7e88",
     name: "Wireless Controller 2",
     img: "/images/productImages/Controller.webp",
     description: "Ergonomic wireless controller with haptic feedback.",
@@ -198,13 +198,13 @@ export const secondProduct = [
     active: false,
     reviews: [
       {
-        userId: "U2-03",
+        userId: "c3d3e4f5-6789-0abc-def1-223344556677",
         username: "Sarah",
         rating: 5,
         comment: "Best controller I’ve ever used!",
       },
       {
-        userId: "U2-04",
+        userId: "d4e4f5a6-7890-1bcd-ef23-334455667788",
         username: "Omar",
         rating: 4,
         comment: "Very responsive, but a bit pricey.",
@@ -212,7 +212,7 @@ export const secondProduct = [
     ],
   },
   {
-    id: "P2-03",
+    product_id: "e05b6c7d-89f0-4a12-9bcd-5e6f7a8b9012",
     name: "Gaming Cooler 2",
     img: "/images/productImages/cooler.webp",
     description: "High-performance gaming cooler with RGB lighting.",
@@ -226,7 +226,7 @@ export const secondProduct = [
     active: true,
     reviews: [
       {
-        userId: "U2-05",
+        userId: "e5f6a7b8-9012-3cde-4f56-778899001122",
         username: "James",
         rating: 4,
         comment: "Keeps my PC cool even under heavy load.",
@@ -234,7 +234,7 @@ export const secondProduct = [
     ],
   },
   {
-    id: "P2-04",
+    product_id: "f67a8b9c-0123-4d56-9abc-1234567890ab",
     name: "Mechanical Keyboard 2",
     img: "/images/productImages/keyboard.webp",
     description: "RGB mechanical keyboard with customizable keys.",
@@ -248,7 +248,7 @@ export const secondProduct = [
     active: true,
     reviews: [
       {
-        userId: "U2-06",
+        userId: "f7a8b9c0-1234-5d67-8abc-2345678901cd",
         username: "Ahmed",
         rating: 5,
         comment: "Amazing typing experience and beautiful lights!",
@@ -256,7 +256,7 @@ export const secondProduct = [
     ],
   },
   {
-    id: "P2-05",
+    product_id: "a8b9c0d1-2345-6e78-9abc-3456789012de",
     name: "Mini Bookshelf 2",
     img: "/images/productImages/Library.webp",
     description: "Compact bookshelf perfect for small spaces.",
@@ -270,7 +270,7 @@ export const secondProduct = [
     active: false,
     reviews: [
       {
-        userId: "U2-07",
+        userId: "a9b0c1d2-3456-7f89-0abc-4567890123ef",
         username: "Hana",
         rating: 4,
         comment: "Good quality but a bit smaller than expected.",
@@ -278,7 +278,7 @@ export const secondProduct = [
     ],
   },
   {
-    id: "P2-06",
+    product_id: "b9c0d1e2-4567-8a90-1bcd-5678901234f0",
     name: "Smart TV 55” 2",
     img: "/images/productImages/TV.webp",
     description: "4K Ultra HD Smart TV with voice control.",
@@ -292,13 +292,13 @@ export const secondProduct = [
     active: true,
     reviews: [
       {
-        userId: "U2-08",
+        userId: "b0c1d2e3-5678-9a01-2bcd-6789012345f1",
         username: "Mona",
         rating: 5,
         comment: "Picture quality is stunning!",
       },
       {
-        userId: "U2-09",
+        userId: "c1d2e3f4-6789-0b12-3cde-7890123456f2",
         username: "David",
         rating: 5,
         comment: "Easy to use and excellent sound system.",
@@ -309,7 +309,7 @@ export const secondProduct = [
 
 export const thirdProduct = [
   {
-    id: "P3-01",
+    product_id: "a1b2c3d4-1111-2222-3333-444455556666",
     name: "Leather Bag 3",
     img: "/images/productImages/bag.webp",
     description: "A stylish leather bag perfect for daily use and travel.",
@@ -323,13 +323,13 @@ export const thirdProduct = [
     active: true,
     reviews: [
       {
-        userId: "U3-01",
+        userId: "r1-1111-2222-3333-444444444444",
         username: "Alice",
         rating: 5,
         comment: "Great quality and very durable!",
       },
       {
-        userId: "U3-02",
+        userId: "r2-1111-2222-3333-444444444444",
         username: "Mohamed",
         rating: 4,
         comment: "Nice design but a bit heavy.",
@@ -337,7 +337,7 @@ export const thirdProduct = [
     ],
   },
   {
-    id: "P3-02",
+    product_id: "b2c3d4e5-1111-2222-3333-555566667777",
     name: "Wireless Controller 3",
     img: "/images/productImages/Controller.webp",
     description: "Ergonomic wireless controller with haptic feedback.",
@@ -351,13 +351,13 @@ export const thirdProduct = [
     active: false,
     reviews: [
       {
-        userId: "U3-03",
+        userId: "r3-1111-2222-3333-555555555555",
         username: "Sarah",
         rating: 5,
         comment: "Best controller I’ve ever used!",
       },
       {
-        userId: "U3-04",
+        userId: "r4-1111-2222-3333-555555555555",
         username: "Omar",
         rating: 4,
         comment: "Very responsive, but a bit pricey.",
@@ -365,7 +365,7 @@ export const thirdProduct = [
     ],
   },
   {
-    id: "P3-03",
+    product_id: "c3d4e5f6-1111-2222-3333-666677778888",
     name: "Gaming Cooler 3",
     img: "/images/productImages/cooler.webp",
     description: "High-performance gaming cooler with RGB lighting.",
@@ -379,7 +379,7 @@ export const thirdProduct = [
     active: true,
     reviews: [
       {
-        userId: "U3-05",
+        userId: "r5-1111-2222-3333-666666666666",
         username: "James",
         rating: 4,
         comment: "Keeps my PC cool even under heavy load.",
@@ -387,7 +387,7 @@ export const thirdProduct = [
     ],
   },
   {
-    id: "P3-04",
+    product_id: "d4e5f6a7-1111-2222-3333-777788889999",
     name: "Mechanical Keyboard 3",
     img: "/images/productImages/keyboard.webp",
     description: "RGB mechanical keyboard with customizable keys.",
@@ -401,7 +401,7 @@ export const thirdProduct = [
     active: true,
     reviews: [
       {
-        userId: "U3-06",
+        userId: "r6-1111-2222-3333-777777777777",
         username: "Ahmed",
         rating: 5,
         comment: "Amazing typing experience and beautiful lights!",
@@ -409,7 +409,7 @@ export const thirdProduct = [
     ],
   },
   {
-    id: "P3-05",
+    product_id: "e5f6a7b8-1111-2222-3333-888899990000",
     name: "Mini Bookshelf 3",
     img: "/images/productImages/Library.webp",
     description: "Compact bookshelf perfect for small spaces.",
@@ -423,7 +423,7 @@ export const thirdProduct = [
     active: false,
     reviews: [
       {
-        userId: "U3-07",
+        userId: "r7-1111-2222-3333-888888888888",
         username: "Hana",
         rating: 4,
         comment: "Good quality but a bit smaller than expected.",
@@ -431,7 +431,7 @@ export const thirdProduct = [
     ],
   },
   {
-    id: "P3-06",
+    product_id: "f6a7b8c9-1111-2222-3333-999900001111",
     name: "Smart TV 55” 3",
     img: "/images/productImages/TV.webp",
     description: "4K Ultra HD Smart TV with voice control.",
@@ -445,13 +445,13 @@ export const thirdProduct = [
     active: true,
     reviews: [
       {
-        userId: "U3-08",
+        userId: "r8-1111-2222-3333-999999999999",
         username: "Mona",
         rating: 5,
         comment: "Picture quality is stunning!",
       },
       {
-        userId: "U3-09",
+        userId: "r9-1111-2222-3333-999999999998",
         username: "David",
         rating: 5,
         comment: "Easy to use and excellent sound system.",
@@ -464,19 +464,19 @@ export const components = [
   {
     title: "Best Selling Products",
     products: firstProduct,
-    id: "1",
+    component_id: "1",
     category: "fashion",
   },
   {
     title: "Flash Sales",
     products: secondProduct,
-    id: "2",
+    component_id: "2",
     category: "gaming",
   },
   {
     title: "Explore Our Products",
     products: thirdProduct,
-    id: "3",
+    component_id: "3",
     category: "entertainment",
   },
 ];
