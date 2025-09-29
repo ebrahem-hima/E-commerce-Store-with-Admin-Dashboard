@@ -8,13 +8,13 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import SignInSignOut from "./SignInSignOut";
 
 interface Props {
   onClick: () => void;
@@ -22,13 +22,41 @@ interface Props {
   pathName: string;
 }
 
+const SignInSignOut = ({ session, onClick, pathName }: Props) => {
+  return (
+    <div>
+      {session ? (
+        <SheetClose asChild>
+          <span
+            onClick={onClick}
+            className="action:ml-5 font-poppins cursor-pointer !font-medium text-[16px] leading-[24px]"
+          >
+            SignOut
+          </span>
+        </SheetClose>
+      ) : (
+        <SheetClose asChild>
+          <Link
+            href={`/sign-up`}
+            className={`action:ml-5 max-md:hover:ml-5 duration-300 cursor-pointer font-medium text-[18px] ${
+              pathName === "/sign-up" && "md:border-b md:border-primary"
+            }`}
+          >
+            SignUp
+          </Link>
+        </SheetClose>
+      )}
+    </div>
+  );
+};
+
 export function NavbarMobile({ session, onClick, pathName }: Props) {
   const [click, setClick] = useState(false);
   return (
     <Sheet>
       <SheetTrigger asChild className="hidden max-md:block">
-        <Button variant="outline">
-          <IoMenu onClick={() => {}} />
+        <Button className="px-0" variant="outline">
+          <IoMenu />
         </Button>
       </SheetTrigger>
       <SheetContent className="flex flex-col gap-3">
@@ -77,19 +105,22 @@ export function NavbarMobile({ session, onClick, pathName }: Props) {
           ) : (
             <div className="flex flex-col font-medium text-[18px] gap-1">
               {navbar.map((nav) => (
-                <Link
-                  className="action:ml-5 hover:ml-5 duration-300"
-                  key={nav.text}
-                  href={nav.link}
-                >
-                  {nav.text}
-                </Link>
+                <SheetClose asChild key={nav.text}>
+                  <Link
+                    className="action:ml-5 hover:ml-5 duration-300"
+                    href={nav.link}
+                  >
+                    {nav.text}
+                  </Link>
+                </SheetClose>
               ))}
-              <SignInSignOut
-                session={session}
-                onClick={onClick}
-                pathName={pathName}
-              />
+              <SheetClose asChild>
+                <SignInSignOut
+                  session={session}
+                  onClick={onClick}
+                  pathName={pathName}
+                />
+              </SheetClose>
             </div>
           )}
         </div>

@@ -56,7 +56,6 @@ export const AddToCart = async (
   options?: { optionTitle: string; values: string[] }[]
 ) => {
   const userId = localStorage.getItem("user_id");
-  console.log("userId", userId);
   const { data: exist } = await supabase
     .from("user_cart")
     .select()
@@ -117,25 +116,3 @@ export const handleDeleteItemWishList = async ({ setLoading, item }: Props) => {
     setLoading?.(false);
   }
 };
-
-// interface addToCartType {
-//   item: typeProduct;
-//   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
-//   cartData: typeProduct[];
-// }
-
-// export const AddToCart = ({ item, setCartData, cartData }: addToCartType) => {
-//   const exist = cartData.find(
-//     (product) => product.product_id === item.product_id
-//   );
-//   if (!item.active) {
-//     toast.error(MESSAGES.cart.outOfStock(item.name));
-//     return;
-//   }
-//   if (exist) {
-//     toast.info(MESSAGES.cart.alreadyExists(item.name));
-//   } else {
-//     toast.success(MESSAGES.cart.added(item.name));
-//   }
-//   setCartData((prev) => (exist ? prev : item.active ? [...prev, item] : prev));
-// };

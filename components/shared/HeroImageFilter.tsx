@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const HeroImageFilter = () => {
   return (
-    <div className="grid gap-10 grid-cols-[220px_1fr] h-[340px] max-md:grid-cols-1">
+    <div className="grid gap-10 grid-cols-[300px_1fr] h-[340px] max-md:grid-cols-1">
       <Filters />
       <div className="relative">
         <Image

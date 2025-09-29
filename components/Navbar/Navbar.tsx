@@ -11,8 +11,19 @@ import Link from "next/link";
 import { supabase } from "@/supabase-client";
 import { toast } from "sonner";
 import NavbarMobile from "./NavbarMobile";
-import SignInSignOut from "./SignInSignOut";
 import ShopCart from "../shared/ShopCart";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useProductContext } from "../../context/productContext";
 
 const Navbar = () => {
   const [Loading, setLoading] = useState(false);
@@ -23,8 +34,8 @@ const Navbar = () => {
   const [session, setSession] = useState("");
   useEffect(() => {
     const userId = localStorage.getItem("user_id");
-    setSession(userId || "");
-  }, []);
+    if (userId) setSession(userId);
+  }, [session]);
 
   const handleSignOut = async () => {
     setLoading(true);
@@ -49,44 +60,37 @@ const Navbar = () => {
     <nav className="fixed flex-between left-0 py-3 px-10 bg-[#F5F5F5] w-full border-b border-b-[#00000017] z-50 max-md:px-1 max-sm:px-0">
       <Link
         href={`/`}
-        className="font-bold font-sans text-[20px] tracking-[0.03em]"
+        className="font-inter font-bold text-[20px] tracking-[0.03em]"
       >
         Exclusive
       </Link>
       {/* Links */}
-      <div className="flex gap-2 max-md:hidden">
+      <div className="flex gap-5 max-md:hidden">
         {navbar.map((nav) => (
           <Link
             href={nav.link}
             key={nav.text}
-            className={`font-poppins cursor-pointer font-normal text-[16px] leading-[24px] ${
-              pathName === nav.link && "border-b border-primary"
+            className={`font-poppins relative cursor-pointer font-normal text-[16px] leading-[24px] ${
+              pathName === nav.link
+                ? "border-b-2 border-primary"
+                : "before:content-[''] before:absolute before:bottom-0 before:bg-primary before:h-[2px] before:w-0 hover:before:w-full before:duration-300"
             }`}
           >
             {nav.text}
           </Link>
         ))}
-        <SignInSignOut
-          session={session}
-          onClick={handleSignOut}
-          pathName={pathName}
-        />
       </div>
-      {/* Input Search */}
-      <NavbarSearch />
-      {/* Icons */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
+        {/* Input Search */}
+        <NavbarSearch />
+        {/* Icons */}
         <IoIosHeartEmpty
-          size={25}
+          size={22}
           className="cursor-pointer"
           onClick={() => push(`/wishlist`)}
         />
         <ShopCart />
-        <IoPersonOutline
-          size={25}
-          className="cursor-pointer"
-          onClick={() => push(`/account`)}
-        />
+        <DropdownMenuDemo session={session} />
         <NavbarMobile
           session={session}
           onClick={handleSignOut}
@@ -105,3 +109,70 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+function DropdownMenuDemo({ session }: { session: string }) {
+  const { setChooseComponent } = useProductContext();
+  const { push } = useRouter();
+  return (
+    <div className="relative">
+      {" "}
+      {/* خلي الـ parent relative */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <IoPersonOutline size={22} className="cursor-pointer" />
+        </DropdownMenuTrigger>
+
+        <DropdownMenuPortal>
+          {session ? (
+            <DropdownMenuContent className="w-56" align="start" sideOffset={4}>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuGroup>
+                <Link
+                  href={`/account`}
+                  onClick={() => {
+                    push(`/account`);
+                    setChooseComponent("MyProfile");
+                  }}
+                >
+                  <DropdownMenuItem>Account</DropdownMenuItem>
+                </Link>
+                <Link
+                  href={`/account`}
+                  onClick={() => {
+                    setChooseComponent("Address");
+                    push(`/account`);
+                  }}
+                >
+                  <DropdownMenuItem>Address</DropdownMenuItem>
+                </Link>
+                <Link
+                  href={`/account`}
+                  onClick={() => {
+                    setChooseComponent("Orders");
+                    push(`/account`);
+                  }}
+                >
+                  <DropdownMenuItem>My Orders</DropdownMenuItem>
+                </Link>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Log Out</DropdownMenuItem>
+            </DropdownMenuContent>
+          ) : (
+            <DropdownMenuContent className="w-56" align="start" sideOffset={4}>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuGroup>
+                <Link href={`/log-in`}>
+                  <DropdownMenuItem>LogIn</DropdownMenuItem>
+                </Link>
+                <Link href={`/sign-up`}>
+                  <DropdownMenuItem>SignUp</DropdownMenuItem>
+                </Link>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          )}
+        </DropdownMenuPortal>
+      </DropdownMenu>
+    </div>
+  );
+}

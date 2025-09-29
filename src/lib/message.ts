@@ -6,7 +6,7 @@ export const MESSAGES = {
   },
   cart: {
     alreadyExists: (name: string) => `${name} is already in your cart.`,
-    added: (name: string) => `${name} has been added to your cart.`,
+    added: (name?: string) => `${name || "Items"} has been added to your cart.`,
     removed: (name: string) => `${name} has been removed from your cart.`,
     outOfStock: (name: string) => `${name} is currently out of stock.`,
   },
@@ -14,5 +14,9 @@ export const MESSAGES = {
     loginSuccess: "You have logged in successfully.",
     logoutSuccess: "You have logged out successfully.",
     signUpSuccess: "You have signed Up in successfully.",
+  },
+  table: {
+    tableUpdate: "Table has been updated successfully.",
+    tableRemove: (name: string) => `${name} has been removed.`,
   },
 };
