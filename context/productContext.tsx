@@ -8,14 +8,23 @@ import React, {
   Dispatch,
   SetStateAction,
 } from "react";
-import { typeIsOpen, typeProduct } from "../types/productTypes";
+import { typeIsOpen } from "../types/productTypes";
+import { chooseComponentType } from "../types/typeAliases";
 
 interface ProductContextType {
   isOpen: typeIsOpen;
   setIsOpen: React.Dispatch<React.SetStateAction<typeIsOpen>>;
 
-  cartData: typeProduct[];
-  setCartData: Dispatch<SetStateAction<typeProduct[]>>;
+  isProductAdded: boolean;
+  setIsProductAdded: Dispatch<SetStateAction<boolean>>;
+
+  chooseComponent: chooseComponentType;
+  setChooseComponent: Dispatch<SetStateAction<chooseComponentType>>;
+
+  wishListStatus: { isAdded: boolean; isDeleted: boolean };
+  setWishListStatus: Dispatch<
+    SetStateAction<{ isAdded: boolean; isDeleted: boolean }>
+  >;
 }
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
@@ -25,15 +34,24 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
     filter: false,
     searchNavbar: false,
   });
-  const [dataTable, setDataTable] = useState();
-  const [cartData, setCartData] = useState<typeProduct[]>([]);
+  // to switch between profile, address, orders
+  const [chooseComponent, setChooseComponent] =
+    useState<chooseComponentType>("MyProfile");
+  const [isProductAdded, setIsProductAdded] = useState(false);
+  const [wishListStatus, setWishListStatus] = useState({
+    isAdded: false,
+    isDeleted: false,
+  });
+
   const values = {
     isOpen,
     setIsOpen,
-    dataTable,
-    setDataTable,
-    cartData,
-    setCartData,
+    isProductAdded,
+    setIsProductAdded,
+    wishListStatus,
+    setWishListStatus,
+    chooseComponent,
+    setChooseComponent,
   };
   return (
     <ProductContext.Provider value={values}>{children}</ProductContext.Provider>

@@ -182,7 +182,9 @@
   * {
     @apply border-border outline-ring/50;
   }
+  /* !px-10 max-md:!px-1 max-sm:px-0 !overflow-auto !m-0 => to avoid content move because drop-menu.ui add styles like mr and hidden scrollbar that make changes in width of content */
+  /* !px-10 max-md:!px-1 max-sm:px-0 */
   body {
-    @apply bg-background text-foreground !overflow-auto;
+    @apply bg-background text-foreground !overflow-auto !m-0;
   }
 }

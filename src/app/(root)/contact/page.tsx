@@ -39,21 +39,21 @@ const page = () => {
         {/* 3 Inputs in Grid */}
         <div className="grid grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1 gap-4">
           <div className="flex flex-col gap-2">
-            <Label htmlFor="name" className="text-[#7B7B7B]">
+            <Label htmlFor="name" className="text-black">
               Name
             </Label>
             <Input id="name" placeholder="Enter your name" />
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="email" className="text-[#7B7B7B]">
+            <Label htmlFor="email" className="text-black">
               Email
             </Label>
             <Input id="email" type="email" placeholder="Enter your email" />
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="phone" className="text-[#7B7B7B]">
+            <Label htmlFor="phone" className="text-black">
               Phone
             </Label>
             <Input id="phone" type="tel" placeholder="Enter your phone" />
@@ -62,11 +62,11 @@ const page = () => {
 
         {/* Textarea */}
         <div className="flex flex-col gap-2">
-          <Label htmlFor="message" className="text-[#7B7B7B]">
+          <Label htmlFor="message" className="text-black">
             Message
           </Label>
           <textarea
-            className="h-[150px] p-2"
+            className="h-[150px] p-2 border border-[#646363a4] rounded-[4px]"
             id="message"
             placeholder="Write your message..."
           />

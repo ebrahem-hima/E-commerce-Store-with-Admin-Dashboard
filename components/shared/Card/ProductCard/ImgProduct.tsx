@@ -1,11 +1,12 @@
 import Image from "next/image";
-import { IoEyeOutline } from "react-icons/io5";
-import { HiOutlineHeart } from "react-icons/hi2";
+import { HiMiniHeart, HiOutlineHeart } from "react-icons/hi2";
 import { typeProduct } from "../../../../types/productTypes";
 import "../Card.css";
-import { AddToCart, addWishList } from "@/lib/utils";
-import { useProductContext } from "../../../../context/productContext";
+import { AddToCart, addWishList, handleDeleteItemWishList } from "@/lib/utils";
 import { Trash2 } from "lucide-react";
+import { useProductContext } from "../../../../context/productContext";
+import { supabase } from "@/supabase-client";
+import { MouseEvent, useEffect, useState } from "react";
 
 interface Props {
   type?: string;
@@ -15,46 +16,84 @@ interface Props {
 const ImgProduct = ({ item, type }: Props) => {
   const { name, discount, price, discount_type, img } = item;
   const discountPercentage = ((discount! / price) * 100).toFixed(0);
-  const { setWishList, wishList, setCartData, cartData } = useProductContext();
-  const handleDeleteItemWishList = (id: string) => {
-    setWishList((prev) => prev.filter((item) => item.id !== id));
-  };
+  const { setIsProductAdded, setWishListStatus } = useProductContext();
+  const [isWishList, setIsWishList] = useState(false);
 
+  useEffect(() => {
+    const isProductWishList = async () => {
+      // try {
+      const { data, error } = await supabase
+        .from("user_wishlist")
+        .select("id")
+        .eq("product_id", item.product_id)
+        .single();
+      if (error) console.log(error);
+      console.log("data", data);
+      const exists = data ? true : false;
+      console.log("exists", exists);
+      setIsWishList(exists);
+      // } catch (error) {
+      //   console.log("error", error);
+      // }
+    };
+    isProductWishList();
+  }, [item.product_id]);
+  console.log("isWishList", isWishList);
+  // <HiMiniHeart
+  //   size={33}
+  //   className="text-primary cursor-pointer border border-[#777] rounded-[4px] p-[4px]"
+  //   onClick={() => addWishList(item, "remove")}
+  // />
   return (
     <div className="group relative h-full overflow-hidden w-full flex-center">
       <Image
         src={img}
         alt={`img-${name}`}
         className="object-cover"
-        width={100}
-        height={100}
+        width={110}
+        height={110}
+        priority
       />
       <div className="flex flex-col absolute top-2 right-2">
         {type === "wishList" ? (
           <Trash2
-            onClick={(e) => {
+            onClick={async (e) => {
               e.stopPropagation();
               e.preventDefault();
-              handleDeleteItemWishList(item.id);
+              await handleDeleteItemWishList({ item });
+              setWishListStatus((prev) => ({
+                ...prev,
+                isDeleted: !prev.isDeleted,
+              }));
             }}
             className="iconImg hover:bg-primary hover:text-white duration-300 p-0.5 rounded-[4px]"
-            size={23}
+            size={28}
+          />
+        ) : isWishList ? (
+          <HiMiniHeart
+            onClick={async (e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              await addWishList(item, "remove");
+              setIsWishList(false);
+            }}
+            size={28}
+            className={`${
+              isWishList ? "text-primary" : "hover:bg-primary hover:text-white"
+            } iconImg duration-300 p-0.5 rounded-[4px]`}
           />
         ) : (
           <HiOutlineHeart
-            onClick={(e) => {
+            onClick={async (e) => {
               e.stopPropagation();
               e.preventDefault();
-              addWishList({ type: "add", item, setWishList, wishList });
+              await addWishList(item, "add");
+              setIsWishList(true);
             }}
-            size={24}
+            size={28}
             className="iconImg hover:bg-primary hover:text-white duration-300 p-0.5 rounded-[4px]"
           />
         )}
-        <IoEyeOutline
-          size={24}
-          className="iconImg hover:bg-primary hover:text-white duration-300 p-0.5 rounded-[4px]"
-        />
       </div>
       {discount !== 0 &&
         (discount_type === "percentage" ? (
@@ -67,9 +106,10 @@ const ImgProduct = ({ item, type }: Props) => {
           </span>
         ))}
       <div
-        onClick={(e) => {
+        onClick={async (e) => {
           e.preventDefault();
-          AddToCart({ item, setCartData, cartData });
+          await AddToCart(item);
+          setIsProductAdded((prev) => !prev);
         }}
         className="addProduct group-hover:bottom-0"
       >

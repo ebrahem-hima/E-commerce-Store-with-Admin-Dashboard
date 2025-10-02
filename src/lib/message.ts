@@ -19,4 +19,7 @@ export const MESSAGES = {
     tableUpdate: "Table has been updated successfully.",
     tableRemove: (name: string) => `${name} has been removed.`,
   },
+  account: {
+    update: "Changes have been updated",
+  },
 };

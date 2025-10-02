@@ -14,8 +14,8 @@ interface Props {
 const ProductCard = ({ item, type }: Props) => {
   return (
     <Link
-      href={`/productDetails/${item.id}`}
-      className="h-[180px] group flex-center flex-col gap-2 cursor-pointer"
+      href={`/productDetails/${item.product_id}`}
+      className="h-[230px] group flex-center flex-col gap-2 cursor-pointer"
     >
       {/* Img + Icons */}
       <ImgProduct item={item} type={type} />

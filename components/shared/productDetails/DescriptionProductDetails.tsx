@@ -11,11 +11,11 @@ import "../Card/Card.css";
 import { iconsDescription } from "../../../constant/product";
 import { usePathname, useRouter } from "next/navigation";
 import { AddToCart, addWishList } from "@/lib/utils";
+import { supabase } from "@/supabase-client";
 
 type optionsType = { optionTitle: string; values: string[] };
 
 const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
-  const { setWishList, wishList, setCartData, cartData } = useProductContext();
   const {
     name,
     description,
@@ -28,8 +28,7 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
   } = item;
   const [count, setCount] = useState(1);
   const [getOptions, setGetOptions] = useState<optionsType[]>([]);
-  const isProductWishList = wishList.some((product) => product.id === item.id);
-  const [heart, setHeart] = useState(isProductWishList);
+  const [heart, setHeart] = useState(false);
   const { replace } = useRouter();
   const pathName = usePathname();
 
@@ -50,22 +49,19 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
           ]
     );
   };
-  const newProduct = {
-    id: item.id,
-    name: item.name,
-    img: item.img,
-    description: item.description,
-    imgGallery: item.imgGallery,
-    rate: item.rate,
-    stock: item.stock,
-    count: count,
-    discount: item.discount,
-    discount_type: item.discount_type,
-    price: item.price,
-    options: item.options,
-    active: item.active,
-    reviews: item.reviews,
-  };
+
+  useEffect(() => {
+    const isInWishList = async (item: typeProduct) => {
+      const { data: exist } = await supabase
+        .from("user_wishlist")
+        .select()
+        .eq("product_id", item.product_id)
+        .maybeSingle();
+      setHeart(!!exist);
+    };
+    isInWishList(item);
+  }, [item]);
+
   const Counter = () => {
     return (
       <div className="flex items-center gap-2">
@@ -93,7 +89,7 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
           size="sm"
           disabled={!active}
           className="w-fit text-[15px] px-6 rounded-[4px] hover:bg-hover duration-300"
-          onClick={() => AddToCart({ item: newProduct, setCartData, cartData })}
+          onClick={() => AddToCart(item, count, getOptions)}
         >
           Buy Now
         </Button>
@@ -102,17 +98,13 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
             <HiMiniHeart
               size={33}
               className="text-primary cursor-pointer border border-[#777] rounded-[4px] p-[4px]"
-              onClick={() =>
-                addWishList({ type: "remove", item, setWishList, wishList })
-              }
+              onClick={() => addWishList(item, "remove")}
             />
           ) : (
             <HiOutlineHeart
               size={33}
               className="cursor-pointer border border-[#777] rounded-[4px] p-[4px]"
-              onClick={() =>
-                addWishList({ type: "add", item, setWishList, wishList })
-              }
+              onClick={() => addWishList(item, "add")}
             />
           )}
         </button>

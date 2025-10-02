@@ -15,7 +15,7 @@ const Page = () => {
   const params = useParams();
   const { id } = params;
   const concatArrays = [...firstProduct, ...secondProduct, ...thirdProduct];
-  const getProductDetails = concatArrays.find((item) => item.id === id);
+  const getProductDetails = concatArrays.find((item) => item.product_id === id);
   if (!getProductDetails) return;
   return (
     <div className="mt-10">

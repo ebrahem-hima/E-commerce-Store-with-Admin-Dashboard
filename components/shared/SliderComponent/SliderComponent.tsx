@@ -37,7 +37,7 @@ const SliderComponent = ({
         <Slider parentRef={parentRef}>
           <div className="productGrid">
             {Product.map((item) => (
-              <ProductCard key={item.id} item={item} />
+              <ProductCard key={item.product_id} item={item} />
             ))}
           </div>
         </Slider>

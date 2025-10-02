@@ -4,6 +4,7 @@ import "./globals.css";
 import { ProductProvider } from "../../context/productContext";
 import Navbar from "../../components/Navbar/Navbar";
 import { Toaster } from "sonner";
+import Footer from "../../components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,11 +39,14 @@ export default function RootLayout({
       <html lang="en">
         {/* ${geistMono.variable}  */}
         <body
-          className={`${poppins.variable} ${inter.variable} font-poppins antialiased px-10 max-md:!px-1 max-sm:px-0`}
+          className={`${poppins.variable} ${inter.variable} flex flex-col font-poppins antialiased`}
         >
           <Navbar />
-          <div className="pt-20">{children}</div>
+          <div className="pt-20 !px-10 max-md:!px-1 max-sm:px-0">
+            {children}
+          </div>
           <Toaster expand richColors />
+          <Footer />
         </body>
       </html>
     </ProductProvider>

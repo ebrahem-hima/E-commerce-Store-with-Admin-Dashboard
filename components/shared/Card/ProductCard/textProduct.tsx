@@ -5,10 +5,10 @@ import "../Card.css";
 const TextProduct = ({ item }: { item: typeProduct }) => {
   const { name, discount, price, rate, discount_type } = item;
   return (
-    <div className="flex flex-col mr-auto gap-1">
+    <div className="flex flex-col mr-auto">
       <span>{name}</span>
       {discount ? (
-        <div className="flex items-center gap-3 text-sm">
+        <div className="flex items-center gap-2 text-sm">
           <span className="text-primary font-poppins font-medium">
             {discount_type === "percentage" ? (
               <span>{price - (price * discount) / 100}EGP</span>

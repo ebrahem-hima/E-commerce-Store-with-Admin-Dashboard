@@ -1,3 +1,12 @@
+import { CiPhone } from "react-icons/ci";
+import { MdOutlineMail } from "react-icons/md";
+import { GiSmartphone } from "react-icons/gi";
+import { HiOutlineComputerDesktop } from "react-icons/hi2";
+import { BsSmartwatch } from "react-icons/bs";
+import { CiCamera } from "react-icons/ci";
+import { PiHeadphonesLight } from "react-icons/pi";
+import { VscGame } from "react-icons/vsc";
+
 export const filter = [
   { text: "Gaming Mice", value: "gaming-mice" },
   { text: "Keyboards", value: "keyboards" },
@@ -18,6 +27,15 @@ export const navbar = [
   { text: "Home", link: "/" },
   { text: "Contact", link: "/contact" },
   { text: "About", link: "/about" },
+];
+export const adminNavbar = [
+  { icon: CiPhone, text: "Dashboard", link: "/admin/dashboard" },
+  { icon: MdOutlineMail, text: "Orders", link: "/admin/orders" },
+  { icon: GiSmartphone, text: "Products", link: "/admin/products" },
+  { icon: HiOutlineComputerDesktop, text: "Category", link: "/admin/category" },
+  { icon: BsSmartwatch, text: "Customers", link: "/admin/customers" },
+  { icon: CiCamera, text: "Coupons", link: "/admin/coupons" },
+  { icon: PiHeadphonesLight, text: "inbox", link: "/admin/inbox" },
 ];
 
 export const categoriesLinks = [
@@ -114,12 +132,6 @@ export const categoriesLinks = [
     ],
   },
 ];
-import { GiSmartphone } from "react-icons/gi";
-import { HiOutlineComputerDesktop } from "react-icons/hi2";
-import { BsSmartwatch } from "react-icons/bs";
-import { CiCamera } from "react-icons/ci";
-import { PiHeadphonesLight } from "react-icons/pi";
-import { VscGame } from "react-icons/vsc";
 
 export const categoryCard = [
   { icon: GiSmartphone, text: "Phones", value: "phones" },
@@ -131,8 +143,6 @@ export const categoryCard = [
   { icon: VscGame, text: "Gaming2", value: "gaming2" },
   { icon: VscGame, text: "Gaming3", value: "gaming3" },
 ];
-import { CiPhone } from "react-icons/ci";
-import { MdOutlineMail } from "react-icons/md";
 
 export const CONTACT_INFO = [
   {
@@ -146,5 +156,71 @@ export const CONTACT_INFO = [
     description: "Fill out our form and we will contact you within 24 hours.",
     detail: "Emails: customer@exclusive.com",
     icon: MdOutlineMail,
+  },
+];
+
+export const footer = [
+  { title: "Exclusive", textArr: [{ text: "Subscribe", link: "" }] },
+  {
+    title: "Support",
+    textArr: [
+      { text: "111 Bijoy sarani, Dhaka, DH 1515, Bangladesh", link: "" },
+      { text: "exclusive@gmail.com", link: "" },
+      { text: "+88015-88888-9999", link: "" },
+    ],
+  },
+  {
+    title: "Account",
+    textArr: [
+      { text: "My Account", link: "/account" },
+      { text: "Login", link: "/log-in" },
+      { text: "Cart", link: "/cart" },
+      { text: "Wishlist", link: "/wishlist" },
+      // { text: "shop", link: '' },
+    ],
+  },
+  {
+    title: "Quick Link",
+    textArr: [
+      { text: "Privacy Policy", link: "" },
+      { text: "Terms Of Use", link: "" },
+      { text: "FAQ", link: "" },
+      { text: "Contact", link: "" },
+    ],
+  },
+];
+
+// About Page
+export const aboutCard = [
+  { icon: GiSmartphone, text: "10.5K", value: "Sallers active out site" },
+  {
+    icon: HiOutlineComputerDesktop,
+    text: "33K",
+    value: "Sallers active out site",
+  },
+  { icon: BsSmartwatch, text: "45.5K", value: "Sallers active out site" },
+  { icon: CiCamera, text: "25K", value: "Sallers active out site" },
+  {
+    icon: PiHeadphonesLight,
+    text: "50K",
+    value: "Sallers active out site",
+  },
+];
+
+export const homeIcons = [
+  {
+    icon: CiPhone,
+    text: "free and fast delivery",
+    description: "Free and fast delivery",
+  },
+  {
+    icon: MdOutlineMail,
+    text: "free and fast delivery",
+    description: "Free and fast delivery",
+  },
+  {
+    icon: CiPhone,
+    text: "free and fast delivery",
+    description: "Free and fast delivery",
   },
 ];

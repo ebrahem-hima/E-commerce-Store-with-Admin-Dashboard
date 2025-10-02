@@ -13,9 +13,7 @@ const TitleComponent = ({ titleComponent, parentRef }: Props) => {
     const parent = parentRef.current;
     if (!parent) return;
     const firstChild = parent?.children[0].firstChild as Element;
-    console.log("firstChild", firstChild);
     const lastChild = parent?.children[0].lastChild as Element;
-    console.log("lastChild", lastChild);
     const options = {
       root: parent,
       threshold: 1.0,
