@@ -22,33 +22,33 @@ interface Props {
   pathName: string;
 }
 
-const SignInSignOut = ({ session, onClick, pathName }: Props) => {
-  return (
-    <div>
-      {session ? (
-        <SheetClose asChild>
-          <span
-            onClick={onClick}
-            className="action:ml-5 font-poppins cursor-pointer !font-medium text-[16px] leading-[24px]"
-          >
-            SignOut
-          </span>
-        </SheetClose>
-      ) : (
-        <SheetClose asChild>
-          <Link
-            href={`/sign-up`}
-            className={`action:ml-5 max-md:hover:ml-5 duration-300 cursor-pointer font-medium text-[18px] ${
-              pathName === "/sign-up" && "md:border-b md:border-primary"
-            }`}
-          >
-            SignUp
-          </Link>
-        </SheetClose>
-      )}
-    </div>
-  );
-};
+// const SignInSignOut = ({ session, onClick, pathName }: Props) => {
+//   return (
+//     <div>
+//       {session ? (
+//         <SheetClose asChild>
+//           <span
+//             onClick={onClick}
+//             className="action:ml-5 font-poppins cursor-pointer !font-medium text-[16px] leading-[24px]"
+//           >
+//             SignOut
+//           </span>
+//         </SheetClose>
+//       ) : (
+//         <SheetClose asChild>
+//           <Link
+//             href={`/sign-up`}
+//             className={`action:ml-5 max-md:hover:ml-5 duration-300 cursor-pointer font-medium text-[18px] ${
+//               pathName === "/sign-up" && "md:border-b md:border-primary"
+//             }`}
+//           >
+//             SignUp
+//           </Link>
+//         </SheetClose>
+//       )}
+//     </div>
+//   );
+// };
 
 export function NavbarMobile({ session, onClick, pathName }: Props) {
   const [click, setClick] = useState(false);
@@ -103,7 +103,7 @@ export function NavbarMobile({ session, onClick, pathName }: Props) {
               ))}
             </div>
           ) : (
-            <div className="flex flex-col font-medium text-[18px] gap-1">
+            <div className="flex flex-col font-medium text-[17px] gap-1">
               {navbar.map((nav) => (
                 <SheetClose asChild key={nav.text}>
                   <Link
@@ -114,13 +114,7 @@ export function NavbarMobile({ session, onClick, pathName }: Props) {
                   </Link>
                 </SheetClose>
               ))}
-              <SheetClose asChild>
-                <SignInSignOut
-                  session={session}
-                  onClick={onClick}
-                  pathName={pathName}
-                />
-              </SheetClose>
+              <SheetClose asChild></SheetClose>
             </div>
           )}
         </div>

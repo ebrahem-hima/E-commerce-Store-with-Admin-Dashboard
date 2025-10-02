@@ -90,7 +90,7 @@ const Navbar = () => {
           onClick={() => push(`/wishlist`)}
         />
         <ShopCart />
-        <DropdownMenuDemo session={session} />
+        <DropdownMenuDemo session={session} handleSignOut={handleSignOut} />
         <NavbarMobile
           session={session}
           onClick={handleSignOut}
@@ -110,69 +110,72 @@ const Navbar = () => {
 
 export default Navbar;
 
-function DropdownMenuDemo({ session }: { session: string }) {
+function DropdownMenuDemo({
+  session,
+  handleSignOut,
+}: {
+  session: string;
+  handleSignOut: () => void;
+}) {
   const { setChooseComponent } = useProductContext();
   const { push } = useRouter();
+  // const
   return (
-    <div className="relative">
-      {" "}
-      {/* خلي الـ parent relative */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <IoPersonOutline size={22} className="cursor-pointer" />
-        </DropdownMenuTrigger>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <IoPersonOutline size={22} className="cursor-pointer" />
+      </DropdownMenuTrigger>
 
-        <DropdownMenuPortal>
-          {session ? (
-            <DropdownMenuContent className="w-56" align="start" sideOffset={4}>
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuGroup>
-                <Link
-                  href={`/account`}
-                  onClick={() => {
-                    push(`/account`);
-                    setChooseComponent("MyProfile");
-                  }}
-                >
-                  <DropdownMenuItem>Account</DropdownMenuItem>
-                </Link>
-                <Link
-                  href={`/account`}
-                  onClick={() => {
-                    setChooseComponent("Address");
-                    push(`/account`);
-                  }}
-                >
-                  <DropdownMenuItem>Address</DropdownMenuItem>
-                </Link>
-                <Link
-                  href={`/account`}
-                  onClick={() => {
-                    setChooseComponent("Orders");
-                    push(`/account`);
-                  }}
-                >
-                  <DropdownMenuItem>My Orders</DropdownMenuItem>
-                </Link>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Log Out</DropdownMenuItem>
-            </DropdownMenuContent>
-          ) : (
-            <DropdownMenuContent className="w-56" align="start" sideOffset={4}>
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuGroup>
-                <Link href={`/log-in`}>
-                  <DropdownMenuItem>LogIn</DropdownMenuItem>
-                </Link>
-                <Link href={`/sign-up`}>
-                  <DropdownMenuItem>SignUp</DropdownMenuItem>
-                </Link>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          )}
-        </DropdownMenuPortal>
-      </DropdownMenu>
-    </div>
+      <DropdownMenuPortal>
+        {session ? (
+          <DropdownMenuContent className="w-56" align="start" sideOffset={4}>
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuGroup>
+              <Link
+                href={`/account`}
+                onClick={() => {
+                  push(`/account`);
+                  setChooseComponent("MyProfile");
+                }}
+              >
+                <DropdownMenuItem>Account</DropdownMenuItem>
+              </Link>
+              <Link
+                href={`/account`}
+                onClick={() => {
+                  setChooseComponent("Address");
+                  push(`/account`);
+                }}
+              >
+                <DropdownMenuItem>Address</DropdownMenuItem>
+              </Link>
+              <Link
+                href={`/account`}
+                onClick={() => {
+                  setChooseComponent("Orders");
+                  push(`/account`);
+                }}
+              >
+                <DropdownMenuItem>My Orders</DropdownMenuItem>
+              </Link>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleSignOut}>Log Out</DropdownMenuItem>
+          </DropdownMenuContent>
+        ) : (
+          <DropdownMenuContent className="w-56" align="start" sideOffset={4}>
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuGroup>
+              <Link href={`/log-in`}>
+                <DropdownMenuItem>LogIn</DropdownMenuItem>
+              </Link>
+              <Link href={`/sign-up`}>
+                <DropdownMenuItem>SignUp</DropdownMenuItem>
+              </Link>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        )}
+      </DropdownMenuPortal>
+    </DropdownMenu>
   );
 }
