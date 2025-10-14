@@ -60,6 +60,7 @@
   /* breakpoints */
   --breakpoint-tablet: 56rem;
   --breakpoint-laptop: 50rem;
+  --breakpoint-400: 25rem;
   /* --breakpoint-lg: 1000px; */
 }
 /* End Global Colors */
@@ -103,6 +104,16 @@
   }
   .line-4 {
     @apply line-clamp-4 truncate;
+  }
+}
+
+@layer utilities {
+  .searchGrid {
+    @apply grid gap-2 grid-flow-col 
+      auto-cols-[calc((100%/4)-0.4rem)]
+      max-lg:auto-cols-[calc((100%/3)-0.37rem)] 
+      max-md:auto-cols-[calc((100%/2)-0.33rem)] 
+      max-400:auto-cols-[calc((100%/1)-0.28rem)];
   }
 }
 

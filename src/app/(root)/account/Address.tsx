@@ -1,19 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/supabase-client";
+import { useProductContext } from "../../../../context/productContext";
+import { useRouter } from "next/navigation";
+import { AddressType } from "../../../../types/profileFnTypes";
+import { updateAddress } from "@/lib/utilsProfile";
 
 const Address = () => {
-  const [formData, setFormData] = useState({
-    address1: "",
-    address2: "",
-    country: "",
-    state: "",
-  });
+  const {
+    profileData,
+    setProfileData,
+    userId,
+    isProfileChange,
+    setIsProfileChange,
+  } = useProductContext();
+
+  const originalAddress = useRef<AddressType | null>(null);
 
   const countries = ["Egypt", "Saudi Arabia", "UAE", "Kuwait"];
   const states = ["Cairo", "Alexandria", "Giza", "Aswan"];
+  const [changeInput, setChangeInput] = useState(true);
+  // const [submit, setSubmit] = useState(true);
+  const { push } = useRouter();
+  useEffect(() => {
+    const getAddress = async () => {
+      const { data, error } = await supabase
+        .from("user_profile")
+        .select()
+        .single();
+      if (error) {
+        console.log("error", error);
+        return false;
+      }
+      originalAddress.current = {
+        address1: data.address1,
+        address2: data.address2,
+        state: data.state,
+        country: data.country,
+      };
+    };
+    getAddress();
+  }, [isProfileChange]);
 
+  if (!userId) return false;
   return (
     <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {/* Address 1 */}
@@ -25,10 +56,11 @@ const Address = () => {
           id="address1"
           type="text"
           name="address1"
-          value={formData.address1}
-          onChange={(e) =>
-            setFormData({ ...formData, [e.target.name]: e.target.value })
-          }
+          value={profileData.address1}
+          onChange={(e) => {
+            setProfileData({ ...profileData, [e.target.name]: e.target.value });
+            setChangeInput(false);
+          }}
           placeholder="Address"
           className="border px-3 py-2 rounded"
         />
@@ -43,10 +75,11 @@ const Address = () => {
           id="address2"
           type="text"
           name="address2"
-          value={formData.address2}
-          onChange={(e) =>
-            setFormData({ ...formData, [e.target.name]: e.target.value })
-          }
+          value={profileData.address2}
+          onChange={(e) => {
+            setProfileData({ ...profileData, [e.target.name]: e.target.value });
+            setChangeInput(false);
+          }}
           placeholder="Address 2"
           className="border px-3 py-2 rounded"
         />
@@ -60,10 +93,11 @@ const Address = () => {
         <select
           id="country"
           name="country"
-          value={formData.country}
-          onChange={(e) =>
-            setFormData({ ...formData, [e.target.name]: e.target.value })
-          }
+          value={profileData.country}
+          onChange={(e) => {
+            setProfileData({ ...profileData, [e.target.name]: e.target.value });
+            setChangeInput(false);
+          }}
           className="border px-3 py-1 rounded"
         >
           <option value="">Select Country</option>
@@ -83,10 +117,11 @@ const Address = () => {
         <select
           id="state"
           name="state"
-          value={formData.state}
-          onChange={(e) =>
-            setFormData({ ...formData, [e.target.name]: e.target.value })
-          }
+          value={profileData.state}
+          onChange={(e) => {
+            setProfileData({ ...profileData, [e.target.name]: e.target.value });
+            setChangeInput(false);
+          }}
           className="border px-3 py-1 rounded"
         >
           <option value="">Select State</option>
@@ -98,10 +133,31 @@ const Address = () => {
         </select>
       </div>
       <div className="flex gap-2 justify-end col-start-2">
-        <Button className="hover:bg-[#bdbbbb93] w-fit px-6 py-3 rounded-[4px] text-black bg-white">
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            push(`/`);
+          }}
+          className="hover:bg-[#bdbbbb93] w-fit px-6 py-3 rounded-[4px] text-black bg-white"
+        >
           Cancel
         </Button>
-        <Button className="w-fit px-6 py-3 rounded-[4px]">Save Changes</Button>
+        <Button
+          onClick={(e) =>
+            updateAddress({
+              e,
+              profileData,
+              originalAddress,
+              userId,
+              setIsProfileChange,
+              setChangeInput,
+            })
+          }
+          disabled={changeInput}
+          className="w-fit px-6 py-3 rounded-[4px]"
+        >
+          Save Changes
+        </Button>
       </div>
     </form>
   );
