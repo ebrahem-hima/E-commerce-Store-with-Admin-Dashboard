@@ -1,114 +1,63 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import React from "react";
 
 const BankForm = () => {
-  const countries = ["Egypt", "USA", "France", "Germany"];
-  const states = ["Cairo", "Alexandria", "Giza", "Luxor"];
   return (
-    <div>
-      {/* Inputs */}
-      <form className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Email */}
-        <div className="flex flex-col gap-2">
-          <Label className="text-black" htmlFor="email">
-            Email
+    <>
+      <form className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-2">
+        <div className="flex flex-col">
+          <Label htmlFor="cardNumber" className="mb-2 font-medium">
+            Card Number
           </Label>
-          <Input id="email" name="email" placeholder="Email" />
+          <Input
+            type="text"
+            id="cardNumber"
+            placeholder="1234 5678 9012 3456"
+            className="border rounded px-3 py-2"
+            name=""
+          />
         </div>
 
-        {/* First Name */}
-        <div className="flex flex-col gap-2">
-          <Label className="text-black" htmlFor="first">
-            First Name
+        <div className="flex flex-col">
+          <Label htmlFor="cardHolder" className="mb-2 font-medium">
+            Card Holder Name
           </Label>
-          <Input id="first" name="first" placeholder="First Name" />
+          <Input
+            type="text"
+            id="cardHolder"
+            placeholder="John Doe"
+            className="border rounded px-3 py-2"
+            name=""
+          />
         </div>
 
-        {/* Last Name */}
-        <div className="flex flex-col gap-2">
-          <Label className="text-black" htmlFor="last">
-            Last Name
+        <div className="flex flex-col">
+          <Label htmlFor="expiry" className="mb-2 font-medium">
+            Expiry Date
           </Label>
-          <Input id="last" name="last" placeholder="Last Name" />
+          <Input
+            type="text"
+            id="expiry"
+            placeholder="MM/YY"
+            className="border rounded px-3 py-2"
+            name=""
+          />
         </div>
 
-        {/* Phone */}
-        <div className="flex flex-col gap-2">
-          <Label className="text-black" htmlFor="phone">
-            Phone
+        <div className="flex flex-col">
+          <Label htmlFor="cvv" className="mb-2 font-medium">
+            CVV / CVC
           </Label>
-          <Input id="phone" name="phone" placeholder="Phone" />
-        </div>
-
-        {/* Address 1 */}
-        <div className="flex flex-col gap-2">
-          <Label className="text-black" htmlFor="address1">
-            Address 1
-          </Label>
-          <Input id="address1" name="address1" placeholder="Address 1" />
-        </div>
-
-        {/* Address 2 */}
-        <div className="flex flex-col gap-2">
-          <Label className="text-black" htmlFor="address2">
-            Address 2
-          </Label>
-          <Input id="address2" name="address2" placeholder="Address 2" />
-        </div>
-
-        {/* Country */}
-        <div className="flex flex-col gap-2">
-          <Label className="text-black" htmlFor="country">
-            Country
-          </Label>
-          <Select>
-            <SelectTrigger
-              id="country"
-              className="w-full border border-[#646363a4] rounded-md"
-            >
-              <SelectValue placeholder="Country" />
-            </SelectTrigger>
-            <SelectContent>
-              {countries.map((country) => (
-                <SelectItem key={country} value={country}>
-                  {country}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* State */}
-        <div className="flex flex-col gap-2">
-          <Label className="text-black" htmlFor="state">
-            State
-          </Label>
-          <Select>
-            <SelectTrigger
-              id="state"
-              className="w-full border border-[#646363a4] rounded-md"
-            >
-              <SelectValue placeholder="State" />
-            </SelectTrigger>
-            <SelectContent>
-              {states.map((state) => (
-                <SelectItem key={state} value={state}>
-                  {state}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <Input
+            type="text"
+            id="cvv"
+            placeholder="123"
+            className="border rounded px-3 py-2"
+            name=""
+          />
         </div>
       </form>
-    </div>
+    </>
   );
 };
 
