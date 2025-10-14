@@ -103,7 +103,6 @@ function DropdownMenuDemo({
 }) {
   const { setChooseComponent } = useProductContext();
   const { push } = useRouter();
-  // const
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
