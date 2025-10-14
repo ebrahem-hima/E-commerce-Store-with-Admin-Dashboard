@@ -1,24 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Poppins, Inter } from "next/font/google";
+import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import { ProductProvider } from "../../context/productContext";
 import Navbar from "../../components/Navbar/Navbar";
 import { Toaster } from "sonner";
 import Footer from "../../components/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"], // حدد الأوزان اللي محتاجها
+  weight: ["400", "500", "600", "700"],
 });
 const inter = Inter({
   variable: "--font-inter",
@@ -37,16 +28,17 @@ export default function RootLayout({
   return (
     <ProductProvider>
       <html lang="en">
-        {/* ${geistMono.variable}  */}
         <body
-          className={`${poppins.variable} ${inter.variable} flex flex-col font-poppins antialiased`}
+          className={`${poppins.className} ${inter.variable} grid grid-rows-[auto_1fr_auto] antialiased`}
         >
           <Navbar />
-          <div className="pt-20 !px-10 max-md:!px-1 max-sm:px-0">
-            {children}
+          <div className="pt-20 flex flex-col min-h-screen">
+            <div className="grow !px-10 max-md:!px-1 max-sm:px-0">
+              {children}
+            </div>
+            <Toaster expand richColors />
+            <Footer />
           </div>
-          <Toaster expand richColors />
-          <Footer />
         </body>
       </html>
     </ProductProvider>

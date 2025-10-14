@@ -16,6 +16,7 @@ import { supabase } from "@/supabase-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { MESSAGES } from "@/lib/message";
+import { useProductContext } from "../../../../../context/productContext";
 
 interface userDataType {
   firstName: string;
@@ -33,7 +34,7 @@ const Page = () => {
     email: "",
     password: "",
   });
-
+  const { setUserId } = useProductContext();
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -47,10 +48,10 @@ const Page = () => {
 
       if (data.user) {
         localStorage.setItem("user_id", data.user?.id);
-        console.log("user_id signIn", localStorage.getItem("user_id"));
+        setUserId(data.user?.id);
       }
       const { error: insertError } = await supabase
-        .from("users_profile")
+        .from("user_profile")
         .insert([
           {
             id: data.user?.id,
@@ -79,7 +80,9 @@ const Page = () => {
       <CardHeader>
         <div>
           <CardTitle>Create an account</CardTitle>
-          <CardDescription>Enter your details below</CardDescription>
+          <CardDescription className="text-[13px] mt-1">
+            Enter your details below
+          </CardDescription>
         </div>
         <Link href={`/log-in`}>
           <Button variant="link">LogIn</Button>

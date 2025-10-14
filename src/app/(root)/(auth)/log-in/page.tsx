@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,6 +15,8 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { supabase } from "@/supabase-client";
 import { useRouter } from "next/navigation";
+import { useProductContext } from "../../../../../context/productContext";
+import { MESSAGES } from "@/lib/message";
 
 interface userDataType {
   email: string;
@@ -28,7 +30,8 @@ const Page = () => {
     email: "",
     password: "",
   });
-  const LogIn = async (e: React.FormEvent) => {
+  const { login } = useProductContext();
+  const LogIn = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
@@ -38,7 +41,7 @@ const Page = () => {
         password: userData.password,
       });
       if (Data.user) {
-        localStorage.setItem("user_id", Data.user?.id);
+        login(Data.user?.id);
       }
       if (error) {
         throw error;
@@ -55,13 +58,31 @@ const Page = () => {
       setLoading(false);
     }
   };
+  const resetPassword = async () => {
+    if (!userData.email) {
+      toast.error(MESSAGES.password.resetEnterEmail);
+      return;
+    }
+    toast.success(MESSAGES.password.resetCheckEmail);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(
+        userData.email,
+        {
+          redirectTo: "http://localhost:3000/reset-password",
+        }
+      );
+      if (error) throw error;
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
         <div>
           <CardTitle>Login to your account</CardTitle>
-          <CardDescription>
+          <CardDescription className="text-[13px] mt-1">
             Enter your email below to login to your account
           </CardDescription>
         </div>
@@ -100,7 +121,10 @@ const Page = () => {
                 }))
               }
             />
-            <p className="flex justify-end cursor-pointer mt-1 text-sm underline-offset-4 hover:underline">
+            <p
+              onClick={resetPassword}
+              className="flex justify-end cursor-pointer mt-1 text-sm underline-offset-4 hover:underline"
+            >
               Forgot your password?
             </p>
           </div>

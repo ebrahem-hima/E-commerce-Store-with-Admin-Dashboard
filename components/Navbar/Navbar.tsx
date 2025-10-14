@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { navbar } from "../../constant/filterNavbar";
 import NavbarSearch from "./NavbarSearch";
 import { IoIosHeartEmpty } from "react-icons/io";
@@ -27,32 +27,22 @@ import { useProductContext } from "../../context/productContext";
 
 const Navbar = () => {
   const [Loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
   const { push } = useRouter();
 
   const pathName = usePathname();
-  const [session, setSession] = useState("");
-  useEffect(() => {
-    const userId = localStorage.getItem("user_id");
-    if (userId) setSession(userId);
-  }, [session]);
+  const { userId, logout } = useProductContext();
 
   const handleSignOut = async () => {
     setLoading(true);
-    setProgress(30);
     try {
-      setProgress(50);
-      const { error } = await supabase.auth.signOut();
-      localStorage.removeItem("user_id");
-      if (error) throw error;
-      setProgress(70);
-      toast.success("Successfully signed out");
+      logout();
     } catch (err) {
       console.log(err instanceof Error ? err.message : err);
       toast.error(err instanceof Error ? err.message : "Error signing out");
     } finally {
-      setLoading(false);
-      setProgress(100);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
     }
   };
 
@@ -90,18 +80,12 @@ const Navbar = () => {
           onClick={() => push(`/wishlist`)}
         />
         <ShopCart />
-        <DropdownMenuDemo session={session} handleSignOut={handleSignOut} />
-        <NavbarMobile
-          session={session}
-          onClick={handleSignOut}
-          pathName={pathName}
-        />
+        <DropdownMenuDemo userId={userId || ""} handleSignOut={handleSignOut} />
+        <NavbarMobile />
       </div>
       {Loading && (
-        <div
-          className={`w-[${progress}%] h-2 bg-gray-200 mt-2 rounded absolute bottom-0 left-0 duration-300`}
-        >
-          <div className="h-2 bg-red-500 rounded w-full animate-pulse"></div>
+        <div className="absolute top-20 left-1/2 flex items-center justify-center">
+          <div className="h-8 w-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
     </nav>
@@ -111,10 +95,10 @@ const Navbar = () => {
 export default Navbar;
 
 function DropdownMenuDemo({
-  session,
+  userId,
   handleSignOut,
 }: {
-  session: string;
+  userId: string;
   handleSignOut: () => void;
 }) {
   const { setChooseComponent } = useProductContext();
@@ -125,9 +109,8 @@ function DropdownMenuDemo({
       <DropdownMenuTrigger asChild>
         <IoPersonOutline size={22} className="cursor-pointer" />
       </DropdownMenuTrigger>
-
       <DropdownMenuPortal>
-        {session ? (
+        {userId ? (
           <DropdownMenuContent className="w-56" align="start" sideOffset={4}>
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuGroup>

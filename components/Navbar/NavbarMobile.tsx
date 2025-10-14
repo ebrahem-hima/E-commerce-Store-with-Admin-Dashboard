@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import { categoriesLinks, navbar } from "../../constant/filterNavbar";
 import { IoMenu } from "react-icons/io5";
@@ -16,42 +14,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-interface Props {
-  onClick: () => void;
-  session: string | null;
-  pathName: string;
-}
-
-// const SignInSignOut = ({ session, onClick, pathName }: Props) => {
-//   return (
-//     <div>
-//       {session ? (
-//         <SheetClose asChild>
-//           <span
-//             onClick={onClick}
-//             className="action:ml-5 font-poppins cursor-pointer !font-medium text-[16px] leading-[24px]"
-//           >
-//             SignOut
-//           </span>
-//         </SheetClose>
-//       ) : (
-//         <SheetClose asChild>
-//           <Link
-//             href={`/sign-up`}
-//             className={`action:ml-5 max-md:hover:ml-5 duration-300 cursor-pointer font-medium text-[18px] ${
-//               pathName === "/sign-up" && "md:border-b md:border-primary"
-//             }`}
-//           >
-//             SignUp
-//           </Link>
-//         </SheetClose>
-//       )}
-//     </div>
-//   );
-// };
-
-export function NavbarMobile({ session, onClick, pathName }: Props) {
+export function NavbarMobile() {
   const [click, setClick] = useState(false);
+
   return (
     <Sheet>
       <SheetTrigger asChild className="hidden max-md:block">
@@ -114,7 +79,7 @@ export function NavbarMobile({ session, onClick, pathName }: Props) {
                   </Link>
                 </SheetClose>
               ))}
-              <SheetClose asChild></SheetClose>
+              {/* <SheetClose asChild></SheetClose> */}
             </div>
           )}
         </div>
