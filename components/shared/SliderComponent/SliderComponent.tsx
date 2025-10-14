@@ -14,6 +14,7 @@ const SliderComponent = ({
   titleComponent,
   Product,
   category,
+  search,
 }: SliderComponentType) => {
   const parentRef = useRef<HTMLDivElement | null>(null);
   return (
@@ -35,7 +36,7 @@ const SliderComponent = ({
         </Slider>
       ) : (
         <Slider parentRef={parentRef}>
-          <div className="productGrid">
+          <div className={search ? "searchGrid" : "productGrid"}>
             {Product.map((item) => (
               <ProductCard key={item.product_id} item={item} />
             ))}

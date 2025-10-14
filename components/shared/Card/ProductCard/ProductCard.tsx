@@ -9,17 +9,20 @@ import Link from "next/link";
 interface Props {
   item: typeProduct;
   type?: string;
+  isGrid?: boolean;
 }
 
-const ProductCard = ({ item, type }: Props) => {
+const ProductCard = ({ item, type, isGrid }: Props) => {
   return (
     <Link
       href={`/productDetails/${item.product_id}`}
-      className="h-[230px] group flex-center flex-col gap-2 cursor-pointer"
+      className={`h-[230px] group ${
+        isGrid ? "flex-row flex items-start" : "flex-col flex-center"
+      } gap-2 cursor-pointer`}
     >
       {/* Img + Icons */}
-      <ImgProduct item={item} type={type} />
-      <TextProduct item={item} />
+      <ImgProduct isGrid={isGrid} item={item} type={type} />
+      <TextProduct isGrid={isGrid} item={item} />
     </Link>
   );
 };

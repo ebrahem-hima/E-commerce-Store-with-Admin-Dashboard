@@ -7,9 +7,7 @@ const Slider = ({
 }>) => {
   return (
     <div
-      className="overflow-x-auto scrollbar-hide snap-x 
-      snap-mandatory
-      px-max-lg:px-4 max-md:px-3 max-sm:px-2 max-400:px-1"
+      className="overflow-x-auto scrollbar-hide snap-x snap-mandatory"
       ref={parentRef}
     >
       {children}

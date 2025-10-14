@@ -7,10 +7,10 @@
 @layer utilities {
   .categoryGrid {
     @apply grid gap-2 grid-flow-col 
-      auto-cols-[calc((100%/6))]
-      max-lg:auto-cols-[calc((100%/5))] 
-      max-md:auto-cols-[calc((100%/4))] 
-      max-sm:auto-cols-[calc((100%/3))]
+      auto-cols-[calc((100%/6)-0.49rem)]
+      max-lg:auto-cols-[calc((100%/5)-0.37rem)] 
+      max-md:auto-cols-[calc((100%/4)-0.33rem)] 
+      max-sm:auto-cols-[calc((100%/3)-0.4rem)]
       max-400:auto-cols-[calc((100%/2))];
   }
   .productGrid {

@@ -10,8 +10,9 @@ import { useProductContext } from "../../../context/productContext";
 import "../Card/Card.css";
 import { iconsDescription } from "../../../constant/product";
 import { usePathname, useRouter } from "next/navigation";
-import { AddToCart, addWishList } from "@/lib/utils";
 import { supabase } from "@/supabase-client";
+import { AddToCart } from "@/lib/userCartFn";
+import { addWishList, isInWishList } from "@/lib/userWishlistFn";
 
 type optionsType = { optionTitle: string; values: string[] };
 
@@ -31,6 +32,7 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
   const [heart, setHeart] = useState(false);
   const { replace } = useRouter();
   const pathName = usePathname();
+  const { userId, setIsCartDataUpdated } = useProductContext();
 
   const addOptions = (value: string, optionTitle: string) => {
     setGetOptions((prev) =>
@@ -51,17 +53,9 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
   };
 
   useEffect(() => {
-    const isInWishList = async (item: typeProduct) => {
-      const { data: exist } = await supabase
-        .from("user_wishlist")
-        .select()
-        .eq("product_id", item.product_id)
-        .maybeSingle();
-      setHeart(!!exist);
-    };
-    isInWishList(item);
+    isInWishList({ item, setHeart });
   }, [item]);
-
+  console.log("getOptions", getOptions);
   const Counter = () => {
     return (
       <div className="flex items-center gap-2">
@@ -89,7 +83,15 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
           size="sm"
           disabled={!active}
           className="w-fit text-[15px] px-6 rounded-[4px] hover:bg-hover duration-300"
-          onClick={() => AddToCart(item, count, getOptions)}
+          onClick={() =>
+            AddToCart({
+              item,
+              userId: userId || "",
+              count,
+              options: getOptions,
+              setIsCartDataUpdated,
+            })
+          }
         >
           Buy Now
         </Button>
@@ -98,13 +100,13 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
             <HiMiniHeart
               size={33}
               className="text-primary cursor-pointer border border-[#777] rounded-[4px] p-[4px]"
-              onClick={() => addWishList(item, "remove")}
+              onClick={() => addWishList(item, "remove", userId || "")}
             />
           ) : (
             <HiOutlineHeart
               size={33}
               className="cursor-pointer border border-[#777] rounded-[4px] p-[4px]"
-              onClick={() => addWishList(item, "add")}
+              onClick={() => addWishList(item, "add", userId || "")}
             />
           )}
         </button>

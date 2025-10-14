@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import { IoMdArrowForward } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
@@ -43,17 +45,14 @@ const TitleComponent = ({ titleComponent, parentRef }: Props) => {
     if (!parent) return;
     const firstChild = parentRef.current?.children[0].firstChild as Element;
     if (parent) {
-      if (direction === "right") {
-        parent.scrollBy({
-          left: firstChild.clientWidth,
-          behavior: "smooth",
-        });
-      } else {
-        parent.scrollBy({
-          left: -firstChild.clientWidth,
-          behavior: "smooth",
-        });
-      }
+      parent.scrollBy({
+        left:
+          direction === "right"
+            ? firstChild.clientWidth + 8
+            : -firstChild.clientWidth + 8,
+        behavior: "smooth",
+      });
+      // firstChild.scrollIntoView({ behavior: "smooth", inline: "start" });
     }
   };
   return (

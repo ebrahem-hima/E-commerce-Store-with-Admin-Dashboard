@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export interface typeProduct {
   product_id: string;
   name: string;
@@ -30,6 +32,13 @@ export interface typeIsOpen {
 export interface SliderComponentType {
   titleComponent: string;
   Product: typeProduct[];
-  category: string;
+  category?: string;
   type?: string;
+  search?: boolean;
+}
+
+export interface deleteProductCart {
+  ID: string;
+  name: string;
+  setIsCartDataUpdated: Dispatch<SetStateAction<boolean>>;
 }
