@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -8,29 +8,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import { IoIosClose } from "react-icons/io";
-import { Input } from "@/components/ui/input";
+import { useProductContext } from "../../../../context/productContext";
+import { userOrdersType } from "../../../../types/fetchType";
 
 const Orders = () => {
-  const cartData = [
-    {
-      product_id: "123",
-      img: "/images/productImages/Controller.webp",
-      name: "ProductName",
-      price: 1200,
-      count: 1,
-    },
-    {
-      product_id: "12345",
-      img: "/images/productImages/Controller.webp",
-      name: "ProductName2",
-      price: 1200,
-      count: 4,
-    },
-  ];
+  const { userOrders } = useProductContext();
+  const [userOrder, setUserOrder] = useState<userOrdersType[]>([]);
+
+  useEffect(() => {
+    setUserOrder(userOrders);
+  }, []);
+
   return (
     <div>
-      {cartData.length > 0 ? (
+      {userOrder.length > 0 ? (
         <Table className="w-full">
           <TableHeader>
             <TableRow>
@@ -41,8 +32,8 @@ const Orders = () => {
             </TableRow>
           </TableHeader>
           <TableBody className="w-full">
-            {cartData.map((item) => (
-              <TableRow key={item.product_id}>
+            {userOrder.map((item) => (
+              <TableRow key={item.id}>
                 <TableCell className="w-[200px] font-medium">
                   <div className="flex items-center gap-3">
                     <Image
