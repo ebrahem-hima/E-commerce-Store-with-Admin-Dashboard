@@ -174,7 +174,7 @@ export const footer = [
     textArr: [
       { text: "My Account", link: "/account" },
       { text: "Login", link: "/log-in" },
-      { text: "Cart", link: "/cart" },
+      { text: "Cart", link: "/Cart" },
       { text: "Wishlist", link: "/wishlist" },
       // { text: "shop", link: '' },
     ],
@@ -185,7 +185,7 @@ export const footer = [
       { text: "Privacy Policy", link: "" },
       { text: "Terms Of Use", link: "" },
       { text: "FAQ", link: "" },
-      { text: "Contact", link: "" },
+      { text: "Contact", link: "/contact" },
     ],
   },
 ];
