@@ -4,62 +4,21 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "../../../../components/shared/Card/ProductCard/ProductCard";
 import Link from "next/link";
 import { typeProduct } from "../../../../types/productTypes";
-import { supabase } from "@/supabase-client";
 import { Button } from "@/components/ui/button";
 import { useProductContext } from "../../../../context/productContext";
 import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "sonner";
-import { MESSAGES } from "@/lib/message";
+import { moveAllToBag } from "@/lib/userCartFn";
+import { getProductWishList } from "@/lib/userWishlistFn";
 
 const Page = () => {
   const [wishList, setWishList] = useState<typeProduct[]>([]);
-  const [isMove, setIsMove] = useState(false);
-  const [refresh, setRefresh] = useState(false);
-  const [Loading, setLoading] = useState(true);
-  const { wishListStatus, setWishListStatus } = useProductContext();
-  useEffect(() => {
-    const getProductWishList = async () => {
-      try {
-        const { data, error } = await supabase.from("user_wishlist").select();
-        if (error) {
-          console.error("Error fetching wishlist:", error);
-          return;
-        }
-        if (data) {
-          setWishList(data);
-        }
-      } catch (error) {
-        console.log("error", error);
-      } finally {
-        // setTimeout(() => {
-        setLoading(false);
-        // }, 3000);
-      }
-    };
-    getProductWishList();
-  }, [refresh, wishListStatus.isDeleted]);
+  // const [isMove, setIsMove] = useState(false);
+  const [Loading, setLoading] = useState(false);
+  const { setIsCartDataUpdated, cartData } = useProductContext();
 
-  const moveAllToBag = async () => {
-    setIsMove(false);
-    try {
-      const { error } = await supabase
-        .from("user_cart")
-        .upsert(wishList, { count: "exact" })
-        .select();
-      if (error) console.log(error);
-      setRefresh((prev) => !prev);
-      // to run useEffect in shop cart and update it instantly
-      setWishListStatus((prev) => ({
-        ...prev,
-        isAdded: !prev.isAdded,
-      }));
-      toast.success(MESSAGES.cart.added);
-    } catch (error) {
-      console.log("error", error);
-    } finally {
-      setIsMove(true);
-    }
-  };
+  useEffect(() => {
+    getProductWishList({ setWishList, setLoading });
+  }, []);
 
   return (
     <div>
@@ -68,8 +27,15 @@ const Page = () => {
         <Button
           variant={"white"}
           size={"default"}
-          disabled={isMove}
-          onClick={moveAllToBag}
+          // disabled={isMove}
+          onClick={() =>
+            moveAllToBag({
+              // setIsMove,
+              wishList,
+              setIsCartDataUpdated,
+              cartData,
+            })
+          }
           className=""
         >
           Move All to Bag
