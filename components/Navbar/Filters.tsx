@@ -24,7 +24,7 @@ function NavigationMenuDemo() {
                 <li key={category.name}>
                   <NavigationMenuLink asChild>
                     <Link
-                      href="#"
+                      href={`/search?query=${category.value}`}
                       className="font-bold cursor-pointer hover:opacity-75"
                     >
                       {category.name}
@@ -32,12 +32,19 @@ function NavigationMenuDemo() {
                   </NavigationMenuLink>
                   <div className="flex flex-col text-sm">
                     {category.values.map((value) => (
-                      <span
+                      <Link
+                        href={{
+                          pathname: "/search",
+                          query: {
+                            query: category.value,
+                            category: value.value,
+                          },
+                        }}
                         className="cursor-pointer hover:opacity-75"
                         key={value.name}
                       >
                         {value.name}
-                      </span>
+                      </Link>
                     ))}
                   </div>
                 </li>
@@ -56,8 +63,8 @@ const Filters = () => {
       <NavigationMenuDemo />
       {filter.map((filter) => (
         <Link
-          className="font-Inter text-[16px]"
-          href={`/search/${filter.value}`}
+          className="w-fit"
+          href={`/search?query=${filter.value}`}
           key={filter.text}
         >
           {filter.text}

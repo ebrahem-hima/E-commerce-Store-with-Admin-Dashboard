@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useState } from "react";
 import { navbar } from "../../constant/filterNavbar";
 import NavbarSearch from "./NavbarSearch";
 import { IoIosHeartEmpty } from "react-icons/io";
@@ -8,8 +7,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { IoPersonOutline } from "react-icons/io5";
 import Link from "next/link";
 
-import { supabase } from "@/supabase-client";
-import { toast } from "sonner";
 import NavbarMobile from "./NavbarMobile";
 import ShopCart from "../shared/ShopCart";
 
@@ -24,27 +21,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useProductContext } from "../../context/productContext";
+import { logout } from "@/app/(root)/(auth)/authActions/logout";
 
 const Navbar = () => {
-  const [Loading, setLoading] = useState(false);
   const { push } = useRouter();
-
   const pathName = usePathname();
-  const { userId, logout } = useProductContext();
-
-  const handleSignOut = async () => {
-    setLoading(true);
-    try {
-      logout();
-    } catch (err) {
-      console.log(err instanceof Error ? err.message : err);
-      toast.error(err instanceof Error ? err.message : "Error signing out");
-    } finally {
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-    }
-  };
 
   return (
     <nav className="fixed flex-between left-0 py-3 px-10 bg-[#F5F5F5] w-full border-b border-b-[#00000017] z-50 max-md:px-1 max-sm:px-0">
@@ -80,29 +61,17 @@ const Navbar = () => {
           onClick={() => push(`/wishlist`)}
         />
         <ShopCart />
-        <DropdownMenuDemo userId={userId || ""} handleSignOut={handleSignOut} />
+        <DropdownMenuDemo />
         <NavbarMobile />
       </div>
-      {Loading && (
-        <div className="absolute top-20 left-1/2 flex items-center justify-center">
-          <div className="h-8 w-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      )}
     </nav>
   );
 };
 
 export default Navbar;
 
-function DropdownMenuDemo({
-  userId,
-  handleSignOut,
-}: {
-  userId: string;
-  handleSignOut: () => void;
-}) {
-  const { setChooseComponent } = useProductContext();
-  const { push } = useRouter();
+function DropdownMenuDemo() {
+  const { userId, setIsAuth, setUser, setCartData } = useProductContext();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -113,36 +82,31 @@ function DropdownMenuDemo({
           <DropdownMenuContent className="w-56" align="start" sideOffset={4}>
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuGroup>
-              <Link
-                href={`/account`}
-                onClick={() => {
-                  push(`/account`);
-                  setChooseComponent("MyProfile");
-                }}
-              >
+              <Link href={`/account/MyProfile`}>
                 <DropdownMenuItem>Account</DropdownMenuItem>
               </Link>
-              <Link
-                href={`/account`}
-                onClick={() => {
-                  setChooseComponent("Address");
-                  push(`/account`);
-                }}
-              >
+              <Link href={`/account/Address`}>
                 <DropdownMenuItem>Address</DropdownMenuItem>
               </Link>
-              <Link
-                href={`/account`}
-                onClick={() => {
-                  setChooseComponent("Orders");
-                  push(`/account`);
-                }}
-              >
+              <Link href={`/account/orders`}>
                 <DropdownMenuItem>My Orders</DropdownMenuItem>
               </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleSignOut}>Log Out</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                setIsAuth((prev) => !prev);
+                setUser("");
+                localStorage.clear();
+                // localStorage.removeItem("cart_user");
+                // localStorage.removeItem("cart_guest");
+                // localStorage.removeItem("user_profile");
+                setCartData([]);
+                logout();
+              }}
+            >
+              Log Out
+            </DropdownMenuItem>
           </DropdownMenuContent>
         ) : (
           <DropdownMenuContent className="w-56" align="start" sideOffset={4}>

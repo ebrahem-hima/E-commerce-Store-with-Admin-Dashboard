@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { categoriesLinks, navbar } from "../../constant/filterNavbar";
 import { IoMenu } from "react-icons/io5";
@@ -13,10 +15,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useProductContext } from "../../context/productContext";
+import { logout } from "@/app/(root)/(auth)/authActions/logout";
 
 export function NavbarMobile() {
   const [click, setClick] = useState(false);
-
+  const { setUser, setIsAuth, setCartData } = useProductContext();
   return (
     <Sheet>
       <SheetTrigger asChild className="hidden max-md:block">
@@ -79,7 +83,22 @@ export function NavbarMobile() {
                   </Link>
                 </SheetClose>
               ))}
-              {/* <SheetClose asChild></SheetClose> */}
+              {/* <SheetClose asChild>
+                <span
+                  onClick={() => {
+                    setIsAuth((prev) => !prev);
+                    setUser("");
+                    localStorage.clear();
+                    // localStorage.removeItem("cart_user");
+                    // localStorage.removeItem("cart_guest");
+                    // localStorage.removeItem("user_profile");
+                    setCartData([]);
+                    logout();
+                  }}
+                >
+                  log out
+                </span>
+              </SheetClose> */}
             </div>
           )}
         </div>

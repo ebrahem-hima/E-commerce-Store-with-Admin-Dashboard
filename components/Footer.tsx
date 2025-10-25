@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { footer } from "../constant/filterNavbar";
 import Link from "next/link";
 import { useProductContext } from "../context/productContext";
@@ -8,6 +7,7 @@ import { useProductContext } from "../context/productContext";
 const Footer = () => {
   const register = "Register";
   const { userId } = useProductContext();
+
   return (
     <div className="mt-10 py-10 bg-black text-white grid grid-cols-1 max-md:text-center md:grid-cols-2 lg:grid-cols-4 gap-4 !px-10 max-md:!px-1 max-sm:px-0">
       {footer.map((foot) => (
