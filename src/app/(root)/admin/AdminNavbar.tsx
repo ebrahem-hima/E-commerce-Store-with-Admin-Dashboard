@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const AdminNavbar = () => {
   return (
-    <nav className="fixe left-0 top-[57px] pt-4 px-3 bg-blue-600 h-screen flex flex-col gap-2 text-white">
+    <nav className="fixe left-0 top-[57px] pt-4 px-3 bg-blue-600 h-screen flex flex-col gap-2 text-white max-md:hidden">
       {adminNavbar.map((nav) => (
         <Link
           key={nav.text}

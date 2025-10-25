@@ -2,7 +2,7 @@ import { DollarSign } from "lucide-react";
 
 const Info = () => {
   return (
-    <div className="flex-between  rounded-[4px] px-4 py-2">
+    <div className="flex-between rounded-[4px] px-4 py-2 border border-blue-600">
       <div className="flex flex-col gap-1">
         <span className="font-medium text-[20px]">$10.54</span>
         <span className="text-[12px] text-[#777]">Total Reven</span>

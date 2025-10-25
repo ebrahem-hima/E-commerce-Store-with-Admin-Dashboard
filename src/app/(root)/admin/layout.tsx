@@ -9,7 +9,7 @@ export default function RootLayout({
 }>) {
   return (
     // <ProductProvider>
-    <div className="grid grid-cols-[250px_1fr] gap-4">
+    <div className="grid grid-cols-[250px_1fr] max-md:grid-cols-1 gap-4">
       <AdminNavbar />
       {/* <div>a</div> */}
       <div>{children}</div>

@@ -3,9 +3,9 @@ import { homeIcons } from "../../constant/filterNavbar";
 
 const HomeIcons = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      {homeIcons.map((icon) => (
-        <div className="flex-center flex-col gap-1" key={icon.text}>
+    <div className="grid grid-cols-1 sm:grid-cols-3 max-sm:gap-3">
+      {homeIcons.map((icon, id) => (
+        <div className="flex-center flex-col gap-1" key={id}>
           <icon.icon
             size={45}
             className="bg-black mb-2 p-1 text-white border-6 border-[#999] rounded-full"
