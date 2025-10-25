@@ -1,10 +1,72 @@
-import React from "react";
+"use client";
+
+import React, { MouseEvent, useEffect, useRef, useState } from "react";
 import { CONTACT_INFO } from "../../../../constant/filterNavbar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useProductContext } from "../../../../context/productContext";
+import { supabase } from "@/supabase-client";
+import { toast } from "sonner";
+import { contactSchema } from "../../../../validation";
+import { MESSAGES } from "@/lib/message";
 
-const page = () => {
+interface InputValueType {
+  userName: string;
+  email: string;
+  phone: string;
+  message: string;
+}
+
+const Page = () => {
+  const { profileData } = useProductContext();
+  const [inputValue, setInputValue] = useState<InputValueType>({
+    userName: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+  const messageRef = useRef<HTMLTextAreaElement | null>(null);
+
+  useEffect(() => {
+    setInputValue({
+      userName: profileData.firstName + " " + profileData.lastName,
+      email: profileData.email,
+      phone: profileData.phone,
+      message: "",
+    });
+  }, [profileData]);
+
+  const handleSendMessage = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    try {
+      const result = contactSchema.safeParse({
+        userName: inputValue.userName,
+        email: inputValue.email,
+        phone: inputValue.phone,
+        message: inputValue.message,
+      });
+      if (!result.success) {
+        console.log(result.error.issues);
+        toast.error(result.error.issues[0].message);
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+    // const { error } = await supabase.from('contact').insert(inputValue)
+    // if (error) {
+    //   console.log(error)
+    //   return false
+    // }
+    setInputValue((prev) => ({
+      ...prev,
+      message: "",
+    }));
+    if (messageRef.current) messageRef.current.value = "";
+    toast.success(MESSAGES.contact.success);
+  };
   return (
     <div className="grid grid-cols-[300px_1fr] max-md:grid-cols-1 gap-6">
       <div className="flex flex-col gap-3 max-md:mx-auto max-md:text-center">
@@ -26,10 +88,10 @@ const page = () => {
                 {item.title}
               </span>
             </div>
-            <span className="font-poppins font-medium text-[14px]">
+            <span className="font-inter font-medium text-[12px]">
               {item.description}
             </span>
-            <span className="font-poppins font-medium text-[14px]">
+            <span className="font-inter font-medium text-[12px]">
               {item.detail}
             </span>
           </div>
@@ -42,21 +104,56 @@ const page = () => {
             <Label htmlFor="name" className="text-black">
               Name
             </Label>
-            <Input id="name" placeholder="Enter your name" />
+            <Input
+              value={inputValue.userName}
+              onChange={(e) => {
+                setInputValue((prev) => ({
+                  ...prev,
+                  [e.target.name]: e.target.value,
+                }));
+              }}
+              name="userName"
+              id="name"
+              placeholder="Enter your name"
+            />
           </div>
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="email" className="text-black">
               Email
             </Label>
-            <Input id="email" type="email" placeholder="Enter your email" />
+            <Input
+              value={inputValue.email}
+              onChange={(e) => {
+                setInputValue((prev) => ({
+                  ...prev,
+                  [e.target.name]: e.target.value,
+                }));
+              }}
+              name="email"
+              id="email"
+              type="email"
+              placeholder="Enter your email"
+            />
           </div>
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="phone" className="text-black">
               Phone
             </Label>
-            <Input id="phone" type="tel" placeholder="Enter your phone" />
+            <Input
+              value={inputValue.phone}
+              name="phone"
+              onChange={(e) => {
+                setInputValue((prev) => ({
+                  ...prev,
+                  [e.target.name]: e.target.value,
+                }));
+              }}
+              id="phone"
+              type="tel"
+              placeholder="Enter your phone"
+            />
           </div>
         </div>
 
@@ -66,12 +163,23 @@ const page = () => {
             Message
           </Label>
           <textarea
+            ref={messageRef}
+            name="message"
+            onChange={(e) => {
+              setInputValue((prev) => ({
+                ...prev,
+                [e.target.name]: e.target.value,
+              }));
+            }}
             className="h-[150px] p-2 border border-[#646363a4] rounded-[4px]"
             id="message"
             placeholder="Write your message..."
           />
         </div>
-        <Button className="ml-auto flex flex-end max-sm:mx-auto px-6 max-sm:mb-2">
+        <Button
+          onClick={handleSendMessage}
+          className="ml-auto flex flex-end max-sm:mx-auto px-6 max-sm:mb-2"
+        >
           Send Message
         </Button>
       </form>
@@ -79,4 +187,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
