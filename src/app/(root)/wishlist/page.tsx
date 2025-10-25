@@ -12,13 +12,13 @@ import { getProductWishList } from "@/lib/userWishlistFn";
 
 const Page = () => {
   const [wishList, setWishList] = useState<typeProduct[]>([]);
-  // const [isMove, setIsMove] = useState(false);
   const [Loading, setLoading] = useState(false);
-  const { setIsCartDataUpdated, cartData } = useProductContext();
+  const { setIsCartDataUpdated, cartData, wishListStatus } =
+    useProductContext();
 
   useEffect(() => {
     getProductWishList({ setWishList, setLoading });
-  }, []);
+  }, [wishListStatus]);
 
   return (
     <div>
@@ -27,10 +27,8 @@ const Page = () => {
         <Button
           variant={"white"}
           size={"default"}
-          // disabled={isMove}
           onClick={() =>
             moveAllToBag({
-              // setIsMove,
               wishList,
               setIsCartDataUpdated,
               cartData,
