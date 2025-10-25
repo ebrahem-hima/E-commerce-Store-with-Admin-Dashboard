@@ -215,12 +215,12 @@ export const homeIcons = [
   },
   {
     icon: MdOutlineMail,
-    text: "free and fast delivery",
+    text: "free and fast delivery2",
     description: "Free and fast delivery",
   },
   {
     icon: CiPhone,
-    text: "free and fast delivery",
+    text: "free and fast delivery3",
     description: "Free and fast delivery",
   },
 ];
