@@ -1,15 +1,13 @@
 import React from "react";
 import { useProductContext } from "../../../context/productContext";
-import useUserCart from "../../FetchData/useUserCart";
 
 interface Props {
   someDiscount: number;
 }
 
 const TotalComponent = ({ someDiscount }: Props) => {
-  const { isCartDataUpdated } = useProductContext();
+  const { total } = useProductContext();
 
-  const { total } = useUserCart(isCartDataUpdated);
   return (
     <div className="flex flex-col gap-2 font-medium">
       <p className="flex-between text-sm">

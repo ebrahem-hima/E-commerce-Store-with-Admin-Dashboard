@@ -1,7 +1,8 @@
 import HeroImageFilter from "../../../../components/shared/HeroImageFilter";
+import HomeIcons from "../../../../components/shared/HomeIcons";
 import SliderComponent from "../../../../components/shared/SliderComponent/SliderComponent";
 import { components } from "../../../../constant/product";
-const page = () => {
+const Page = () => {
   return (
     <div className="grid gap-y-18">
       {/* Filter And Hero Image */}
@@ -22,8 +23,10 @@ const page = () => {
           category={component.category}
         />
       ))}
+
+      <HomeIcons />
     </div>
   );
 };
 
-export default page;
+export default Page;

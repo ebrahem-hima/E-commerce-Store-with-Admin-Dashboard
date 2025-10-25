@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { MouseEvent, useEffect, useRef, useState } from "react";
+import React, { MouseEvent, useEffect, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 import BankForm from "./BankForm";
@@ -17,6 +17,9 @@ import { handleDeleteAllProductCart } from "@/lib/userCartFn";
 import useUserCart from "../../../../components/FetchData/useUserCart";
 import CouponComponent from "../../../../components/shared/checkoutComponent/couponComponent";
 import TotalComponent from "../../../../components/shared/checkoutComponent/totalComponent";
+import { getTodayDate } from "@/lib/utils";
+import { nanoid } from "nanoid";
+import { IconBank } from "../../../../constant/index";
 
 const Page = () => {
   const [checkOut, setCheckOut] = useState<"bank" | "delivery">("delivery");
@@ -26,18 +29,23 @@ const Page = () => {
     userId,
     cartData,
     setIsCartDataUpdated,
-    isCartDataUpdated,
+    // isCartDataUpdated,
     getCoupon,
     setGetCoupon,
     isCouponApplied,
     setIsCouponApplied,
+    setIsUserOrderUpdated,
+    total,
+    Loading,
   } = useProductContext();
 
   const { push } = useRouter();
-  const { Loading } = useUserCart(isCartDataUpdated);
   const someDiscount = getCoupon.reduce((acc, curr) => acc + curr.value, 0);
+
   const placeOrder = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    const currentDate = getTodayDate();
+    const code = nanoid(8);
     if (cartData.length === 0) {
       toast.error(MESSAGES.buy.no_products);
       return false;
@@ -62,14 +70,44 @@ const Page = () => {
       console.log("error", error);
       return false;
     }
-    const { error: orderError } = await supabase
-      .from("user_orders")
-      .insert(cartData)
-      .eq("user_id", userId);
+
+    const { data: orderData, error: orderError } = await supabase
+      .from("user_order")
+      .insert({
+        user_id: userId,
+        total: total - someDiscount,
+        status: checkOut === "delivery" ? "pending" : "paid",
+        created_at: currentDate,
+        order_code: code,
+      })
+      .select();
     if (orderError) {
       console.log("orderError", orderError);
       return false;
     }
+    // to get data without id of row and add order_id
+    const getData = cartData.map((item) => ({
+      user_id: userId,
+      order_id: orderData[0].id,
+      product_id: item.product_id,
+      img: item.img,
+      name: item.name,
+      price: item.price,
+      discount: item.discount,
+      discount_type: item.discount_type,
+      count: item.count,
+      options: item.options,
+    }));
+
+    const { data, error: orderItemsError } = await supabase
+      .from("user_ordersItems")
+      .insert(getData)
+      .select();
+    if (orderItemsError) {
+      console.log("orderError", orderItemsError);
+      return false;
+    }
+    console.log("user_ordersItems", data);
     // Delete All Product Cart
     await handleDeleteAllProductCart({ cartData });
 
@@ -87,6 +125,7 @@ const Page = () => {
     setIsCartDataUpdated((prev) => !prev);
     toast.success(MESSAGES.buy.success);
     setIsCouponApplied(false);
+    setIsUserOrderUpdated((prev) => !prev);
     setGetCoupon([]);
     push(`/thankyou`);
   };
@@ -161,7 +200,17 @@ const Page = () => {
               </RadioGroup>
 
               {/* Bank icons */}
-              <div className="flex items-center">Icon</div>
+              {/* <div className="flex items-center">
+                {IconBank.map((img) => (
+                  <Image
+                    key={img.img}
+                    src={img.img}
+                    alt={"Bank icon"}
+                    width={25}
+                    height={25}
+                  />
+                ))}
+              </div> */}
             </fieldset>
           </form>
           <CouponComponent />

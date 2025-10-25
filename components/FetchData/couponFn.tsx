@@ -64,28 +64,32 @@ const CouponFn = ({ total }: Props) => {
 
   const applyCoupon = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    const code = couponRef.current?.value?.trim();
+    if (!code) return false;
     if (couponRef.current?.value === "") return false;
     const { data, error } = await supabase
       .from("coupons")
       .select()
-      .eq("coupon_id", couponRef.current?.value)
+      .eq("coupon_id", code)
       .single();
+
     if (error) {
-      console.log(error);
-      // toast.error(MESSAGES.coupon.notFound);
-      return false;
-    }
-    if (data.coupon_id !== couponRef.current?.value) {
-      toast.error(MESSAGES.coupon.notFound);
+      // PGRST116 => code from supabase mean error because code.id !== any code in database (No rows found)
+      if (error.code === "PGRST116") {
+        toast.error(MESSAGES.coupon.notFound);
+      } else {
+        console.log(error);
+        toast.error("something went wrong");
+      }
       return false;
     }
     if (!data.is_active) {
       toast.error(MESSAGES.coupon.invalid);
       return false;
     }
-    if (couponRef.current?.value) {
-      getValue.current = couponRef.current.value;
-    }
+
+    getValue.current = code;
+
     const check = await checkTotal({
       discount: data.discount,
       discountType: data.discount_type,

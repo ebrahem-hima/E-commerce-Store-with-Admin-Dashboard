@@ -16,24 +16,36 @@ import Image from "next/image";
 import { Trash2 } from "lucide-react";
 import { useProductContext } from "../../context/productContext";
 import { handleDeleteProductCart } from "@/lib/userCartFn";
+import { useEffect, useState } from "react";
 
 export function ShopCart() {
-  const { cartData, setIsCartDataUpdated } = useProductContext();
+  const { cartData, setCartData, setIsCartDataUpdated, userId } =
+    useProductContext();
+  const { total } = useProductContext();
 
-  const subtotal = cartData.reduce(
-    (acc, curr) => acc + (curr.count || 1) * curr.price,
-    0
-  );
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    const count = cartData.length;
+    setCount(count);
+  }, [cartData]);
+  // console.log("cartData in ShopCart:", cartData);
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <IoCartOutline size={25} className="cursor-pointer" />
+        <div className="relative inline-block">
+          <IoCartOutline size={25} className="cursor-pointer" />
+          {count > 0 && (
+            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-white text-[10px] shadow-sm">
+              {count}
+            </span>
+          )}
+        </div>
       </SheetTrigger>
       <SheetContent isStrongOverlay>
         <SheetHeader>
           <SheetTitle>Your Cart</SheetTitle>
         </SheetHeader>
-        <div className="flex flex-col gap-4 h-[360px] mt-3 overflow-y-auto scrollbar-hide mb-1">
+        <div className="flex flex-col gap-4 h-[415px] mt-3 overflow-y-auto scrollbar-hide mb-1">
           {cartData.length > 0 ? (
             cartData.map((item) => (
               <div
@@ -78,12 +90,17 @@ export function ShopCart() {
                 <Trash2
                   className="duration-300 p-1 hover:duration-300 hover:text-white active:text-white rounded-sm hover:bg-primary active:bg-primary cursor-pointer"
                   size={30}
-                  onClick={() =>
-                    handleDeleteProductCart({
-                      ID: item.product_id,
-                      name: item.name,
-                      setIsCartDataUpdated,
-                    })
+                  onClick={
+                    () =>
+                      // userId
+                      handleDeleteProductCart({
+                        ID: item.product_id,
+                        name: item.name,
+                        setIsCartDataUpdated,
+                        userId: userId || "",
+                        setCartData,
+                      })
+                    // : deleteGuestCart(item.product_id)
                   }
                 />
               </div>
@@ -97,7 +114,7 @@ export function ShopCart() {
         <SheetFooter className="flex !flex-col gap-2 border-t border-[#77777754] pt-1">
           <div className="flex-between">
             <span className="font-poppins text-[18px]">Subtotal:</span>
-            <span>${subtotal}</span>
+            <span>${total}</span>
           </div>
           <Link href="/Cart" className="w-full">
             <SheetClose asChild>
