@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -5,13 +7,13 @@ import { MESSAGES } from "@/lib/message";
 import { supabase } from "@/supabase-client";
 import React, { MouseEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { useProductContext } from "../../../../context/productContext";
 import { useRouter } from "next/navigation";
 import { updateEmail, updatePassword, updateProfile } from "@/lib/utilsProfile";
-import { myProfileType } from "../../../../types/profileFnTypes";
-import { profileSchema } from "../../../../validation";
+import { useProductContext } from "../../../../../context/productContext";
+import { myProfileType } from "../../../../../types/profileFnTypes";
+import { profileSchema } from "../../../../../validation";
 
-const MyProfile = () => {
+const Page = () => {
   const {
     userId,
     profileData,
@@ -21,13 +23,18 @@ const MyProfile = () => {
   } = useProductContext();
   const originalProfile = useRef<myProfileType | null>(null);
   const [changeInput, setChangeInput] = useState(true);
+  const [password, setPassword] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
 
   const { push } = useRouter();
   const isEmailChange = originalProfile.current?.email !== profileData.email;
   const isPasswordChanged =
-    profileData.currentPassword ||
-    profileData.newPassword ||
-    profileData.confirmPassword;
+    password.currentPassword ||
+    password.newPassword ||
+    password.confirmPassword;
 
   // store data in originalProfile to check data change
   useEffect(() => {
@@ -66,10 +73,9 @@ const MyProfile = () => {
   }, [isProfileChange]);
 
   if (!userId) return;
-
   const updateAccount = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const checkField = ["firstName", "lastName", "phone"];
+    const checkField = ["firstName", "lastName", "phone", "email"];
     const hasChanges = checkField.some(
       (field) =>
         profileData[field as keyof myProfileType] !==
@@ -95,22 +101,21 @@ const MyProfile = () => {
       toast.info(MESSAGES.account.noChanges);
       return false;
     }
-
+    if (isPasswordChanged) {
+      const success = await updatePassword({
+        password,
+        setPassword,
+        setChangeInput,
+      });
+      if (!success) return false;
+    }
     // Handle Update Email, Password
     if (isEmailChange) {
       const success = await updateEmail({
         isPasswordChanged,
         isEmailChange,
         setChangeInput,
-        profileData,
-      });
-      if (!success) return false;
-    }
-    if (isPasswordChanged) {
-      const success = await updatePassword({
-        profileData,
-        setProfileData,
-        setChangeInput,
+        userEmail: profileData.email,
       });
       if (!success) return false;
     }
@@ -119,10 +124,10 @@ const MyProfile = () => {
       await updateProfile({ profileData, userId, setChangeInput });
     }
     if (hasChanges || isPasswordChanged) {
-      setIsProfileChange((prev) => ({
-        ...prev,
-        profile: !prev.profile,
-      }));
+      // setIsProfileChange((prev) => ({
+      //   ...prev,
+      //   profile: !prev.profile,
+      // }));
       toast.success(MESSAGES.account.update);
       return false;
     }
@@ -233,10 +238,10 @@ const MyProfile = () => {
             id="currentPassword"
             type="password"
             name="currentPassword"
-            value={profileData.currentPassword}
+            value={password.currentPassword}
             onChange={(e) => {
-              setProfileData({
-                ...profileData,
+              setPassword({
+                ...password,
                 [e.target.name]: e.target.value,
               });
               setChangeInput(false);
@@ -251,10 +256,10 @@ const MyProfile = () => {
             id="newPassword"
             type="password"
             name="newPassword"
-            value={profileData.newPassword}
+            value={password.newPassword}
             onChange={(e) => {
-              setProfileData({
-                ...profileData,
+              setPassword({
+                ...password,
                 [e.target.name]: e.target.value,
               });
               setChangeInput(false);
@@ -268,10 +273,10 @@ const MyProfile = () => {
             id="confirmPassword"
             type="password"
             name="confirmPassword"
-            value={profileData.confirmPassword}
+            value={password.confirmPassword}
             onChange={(e) => {
-              setProfileData({
-                ...profileData,
+              setPassword({
+                ...password,
                 [e.target.name]: e.target.value,
               });
               setChangeInput(false);
@@ -303,4 +308,4 @@ const MyProfile = () => {
   );
 };
 
-export default MyProfile;
+export default Page;

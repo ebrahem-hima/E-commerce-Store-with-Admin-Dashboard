@@ -1,7 +1,6 @@
 import { supabase } from "@/supabase-client";
 import {
   AddressType,
-  profileType,
   updateAddressType,
   updateEmailType,
   updatePasswordType,
@@ -11,10 +10,21 @@ import { toast } from "sonner";
 import { MESSAGES } from "./message";
 import { addressSchema } from "../../validation";
 
-export const signIn = async ({ profileData }: { profileData: profileType }) => {
+interface signInType {
+  password: string;
+  // email: string;
+}
+
+export const signIn = async ({ password }: signInType) => {
+  const { data } = await supabase.auth.getUser();
+  if (data.user?.email === null) {
+    toast.error("User email not found");
+    return false;
+  }
+  const email = data.user?.email || "";
   const { error: signInError } = await supabase.auth.signInWithPassword({
-    email: profileData.email,
-    password: profileData.currentPassword || "",
+    email,
+    password,
   });
   if (signInError) {
     toast.error("Invalid email or password");
@@ -27,14 +37,14 @@ export const updateEmail = async ({
   isPasswordChanged,
   isEmailChange,
   setChangeInput,
-  profileData,
-}: // originalProfile,
-updateEmailType) => {
+  userEmail,
+}: updateEmailType) => {
   const { error: authError } = await supabase.auth.updateUser({
-    email: profileData.email,
+    email: userEmail,
   });
   if (authError) {
     console.error(authError.message);
+    console.log("securityemail");
     toast.error(authError.message || "Failed to update Email");
     return false;
   }
@@ -56,42 +66,44 @@ updateEmailType) => {
     </div>
   );
   setChangeInput(true);
+  return true;
 };
 
 export const updatePassword = async ({
-  profileData,
-  setProfileData,
+  password,
+  setPassword,
   setChangeInput,
 }: updatePasswordType) => {
   if (
-    !profileData.currentPassword ||
-    !profileData.newPassword ||
-    !profileData.confirmPassword
+    !password.currentPassword ||
+    !password.newPassword ||
+    !password.confirmPassword
   ) {
     toast.error("All Password Inputs required");
     return false;
   }
-  if (profileData.confirmPassword === profileData.currentPassword) {
+  if (password.confirmPassword === password.currentPassword) {
     toast.info(MESSAGES.password.passwordSame);
     return false;
   }
-  const isSign = await signIn({ profileData });
+  const isSign = await signIn({
+    password: password.currentPassword,
+  });
   if (!isSign) return false;
   const { error: authError } = await supabase.auth.updateUser({
-    password: profileData.confirmPassword,
+    password: password.confirmPassword,
   });
   if (authError) {
     console.error(authError.message);
+    console.log("securityPassword");
     toast.error(authError.message || "Failed to update password");
     return false;
   }
-  // toast.success("Password has been successfully updated");
-  setProfileData((prev) => ({
-    ...prev,
+  setPassword({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
-  }));
+  });
   setChangeInput(true);
   return true;
 };
@@ -112,10 +124,12 @@ export const updateProfile = async ({
     .select();
   if (error) {
     console.error(error);
+    console.log("securityProfile");
     toast.error(error.message || "Something went wrong");
     return false;
   }
   setChangeInput(true);
+  return true;
 };
 
 export const updateAddress = async ({

@@ -1,14 +1,16 @@
+"use client";
+
 import React, { useEffect, useRef, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/supabase-client";
-import { useProductContext } from "../../../../context/productContext";
 import { useRouter } from "next/navigation";
-import { AddressType } from "../../../../types/profileFnTypes";
 import { updateAddress } from "@/lib/utilsProfile";
+import { AddressType } from "../../../../../types/profileFnTypes";
+import { useProductContext } from "../../../../../context/productContext";
 
-const Address = () => {
+const Page = () => {
   const {
     profileData,
     setProfileData,
@@ -163,4 +165,4 @@ const Address = () => {
   );
 };
 
-export default Address;
+export default Page;
