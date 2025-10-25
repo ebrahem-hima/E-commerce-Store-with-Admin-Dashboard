@@ -1,14 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
 import Badge from "../Badge";
 import CouponFn from "../../FetchData/couponFn";
 import { useProductContext } from "../../../context/productContext";
-import useUserCart from "../../FetchData/useUserCart";
 
 const CouponComponent = () => {
-  const { isCartDataUpdated, setGetCoupon } = useProductContext();
-  const { total } = useUserCart(isCartDataUpdated);
+  const { total, setGetCoupon } = useProductContext();
   const { applyCoupon, couponRef, getCoupon } = CouponFn({
     total,
   });
