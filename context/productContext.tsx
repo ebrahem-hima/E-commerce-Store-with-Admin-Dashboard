@@ -7,35 +7,26 @@ import React, {
   ReactNode,
   Dispatch,
   SetStateAction,
-  useEffect,
 } from "react";
-import { typeIsOpen, typeProduct } from "../types/productTypes";
-import { chooseComponentType, typeGetCoupon } from "../types/typeAliases";
-import { supabase } from "@/supabase-client";
+import { typeIsOpen, typeProduct, typeUserOrder } from "../types/productTypes";
+import { typeGetCoupon } from "../types/typeAliases";
 import { profileType } from "../types/profileFnTypes";
 import useUserCart from "../components/FetchData/useUserCart";
 import AuthFn from "../components/FetchData/authFn";
 import UserOrdersFn from "../components/FetchData/userOrdersFn";
-import { userOrdersType } from "../types/fetchType";
+import GetProfile from "../components/FetchData/getProfile";
 
 interface ProductContextType {
   isOpen: typeIsOpen;
   setIsOpen: React.Dispatch<React.SetStateAction<typeIsOpen>>;
 
-  chooseComponent: chooseComponentType;
-  setChooseComponent: Dispatch<SetStateAction<chooseComponentType>>;
-
   wishListStatus: boolean;
   setWishListStatus: Dispatch<SetStateAction<boolean>>;
 
   userId: string | null;
-  setUserId: Dispatch<SetStateAction<string | null>>;
 
   profileData: profileType;
   setProfileData: Dispatch<SetStateAction<profileType>>;
-
-  login: (id: string) => void;
-  logout: () => void;
 
   isProfileChange: { address: boolean; profile: boolean };
   setIsProfileChange: Dispatch<
@@ -46,17 +37,29 @@ interface ProductContextType {
   setIsCartDataUpdated: Dispatch<SetStateAction<boolean>>;
 
   cartData: typeProduct[];
+  setCartData: Dispatch<SetStateAction<typeProduct[]>>;
 
   isUserOrderUpdated: boolean;
   setIsUserOrderUpdated: Dispatch<SetStateAction<boolean>>;
 
-  userOrders: userOrdersType[];
+  userOrders: typeUserOrder[];
 
   getCoupon: typeGetCoupon[];
   setGetCoupon: Dispatch<SetStateAction<typeGetCoupon[]>>;
 
   isCouponApplied: boolean;
   setIsCouponApplied: Dispatch<SetStateAction<boolean>>;
+
+  isAuth: boolean;
+  setIsAuth: Dispatch<SetStateAction<boolean>>;
+
+  setUser: Dispatch<SetStateAction<string | null>>;
+
+  total: number;
+  Loading: boolean;
+
+  // cartGuest: typeProduct[];
+  // setCartGuest: Dispatch<SetStateAction<typeProduct[]>>;
 }
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
@@ -66,10 +69,13 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
     filter: false,
     searchNavbar: false,
   });
-  // to switch between profile, address, orders
-  const [chooseComponent, setChooseComponent] =
-    useState<chooseComponentType>("MyProfile");
   const [wishListStatus, setWishListStatus] = useState(false);
+
+  // -------------- Start UserId --------------
+  const [user, setUser] = useState<string | null>(null);
+  const [isAuth, setIsAuth] = useState(false);
+  const { user: userId } = AuthFn({ user, setUser, isAuth });
+  // -------------- End UserId --------------
 
   // -------------- Start UserOrders --------------
   const [isUserOrderUpdated, setIsUserOrderUpdated] = useState(false);
@@ -80,76 +86,28 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
   // -------------- Start CartShop --------------
 
   const [isCartDataUpdated, setIsCartDataUpdated] = useState(false);
-  const { cartData } = useUserCart(isCartDataUpdated);
+  // const [cartGuest, setCartGuest] = useState<typeProduct[]>([]);
+  const { cartData, setCartData, total, Loading } = useUserCart({
+    isCartDataUpdated,
+    userId: userId || "",
+    isAuth,
+    // cartGuest,
+    // setCartGuest,
+  });
 
   // -------------- End CartShop --------------
 
-  // -------------- Start UserId --------------
-  const [userId, setUserId] = useState<string | null>(null);
-
-  const { login, logout } = AuthFn({ userId, setUserId });
-  // -------------- End UserId --------------
-
   // -------------- Start  Fetch User Profile --------------
-  const saved =
-    typeof window !== "undefined" ? localStorage.getItem("user_profile") : null;
 
-  const getData = saved
-    ? JSON.parse(saved)
-    : {
-        firstName: "",
-        lastName: "",
-        phone: "",
-        address1: "",
-        address2: "",
-        state: "",
-        country: "",
-        email: "",
-      };
-
-  const [profileData, setProfileData] = useState<profileType>(getData);
   const [isProfileChange, setIsProfileChange] = useState({
     address: false,
     profile: false,
   });
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const { data: accountData, error: accountError } = await supabase
-          .from("user_profile")
-          .select();
-        if (accountError) throw accountError;
 
-        const account = accountData?.[0] || {};
-
-        const { data: userData, error: userError } =
-          await supabase.auth.getUser();
-        if (userError) throw userError;
-
-        const email = userData?.user?.email || "";
-
-        const profile = {
-          id: account.id || "",
-          firstName: account.first_name || "",
-          lastName: account.last_name || "",
-          phone: account.phone || "",
-          address1: account.address1 || "",
-          address2: account.address2 || "",
-          state: account.state || "",
-          country: account.country || "",
-          email,
-        };
-
-        setProfileData(profile);
-
-        localStorage.setItem("user_profile", JSON.stringify(profile));
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    fetchProfile();
-  }, [isProfileChange.address, isProfileChange.profile]);
+  const { profileData, setProfileData } = GetProfile({
+    isProfileChange,
+    isAuth,
+  });
 
   // -------------- End Fetch User Profile --------------
 
@@ -157,26 +115,26 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
   const [getCoupon, setGetCoupon] = useState<typeGetCoupon[]>([]);
   const [isCouponApplied, setIsCouponApplied] = useState(false);
   // -------------- End Coupon --------------
+
   const values = {
     isOpen,
     setIsOpen,
     wishListStatus,
     setWishListStatus,
-    chooseComponent,
-    setChooseComponent,
     userId,
-    setUserId,
+    setUser,
     profileData,
     setProfileData,
-    login,
-    logout,
+    // login,
     isProfileChange,
     setIsProfileChange,
 
     // to update cartData instantly
     isCartDataUpdated,
     setIsCartDataUpdated,
+
     cartData,
+    setCartData,
 
     // to update userOrder instantly
     isUserOrderUpdated,
@@ -190,6 +148,15 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
     // to allow function to increase time_used by 1
     isCouponApplied,
     setIsCouponApplied,
+
+    isAuth,
+    setIsAuth,
+
+    total,
+    Loading,
+
+    // cartGuest,
+    // setCartGuest,
   };
   return (
     <ProductContext.Provider value={values}>{children}</ProductContext.Provider>
