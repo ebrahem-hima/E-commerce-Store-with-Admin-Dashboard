@@ -10,6 +10,8 @@ interface AddToCartType {
   count?: number;
   options?: { optionTitle: string; values: string[] }[];
   setIsCartDataUpdated: Dispatch<SetStateAction<boolean>>;
+  setCartData: Dispatch<SetStateAction<typeProduct[]>>;
+  cartData: typeProduct[];
 }
 
 export const AddToCart = async ({
@@ -18,45 +20,89 @@ export const AddToCart = async ({
   count,
   options,
   setIsCartDataUpdated,
+  setCartData,
+  cartData,
 }: AddToCartType) => {
-  const { data: exist } = await supabase
-    .from("user_cart")
-    .select()
-    .eq("product_id", item.product_id)
-    .maybeSingle();
-  if (exist) {
-    toast.info(MESSAGES.cart.alreadyExists(item.name));
-    return;
-  }
-
   if (!item.active) {
     toast.info(MESSAGES.cart.outOfStock(item.name));
     return;
   }
-  try {
-    const { error } = await supabase.from("user_cart").insert({
-      product_id: item.product_id,
+  const isExist = cartData.find(
+    (cartItem: typeProduct) => cartItem.product_id === item.product_id
+  );
+  if (isExist) {
+    toast.info(MESSAGES.cart.alreadyExists(item.name));
+    return;
+  }
+  setCartData((prev) => [
+    ...prev,
+    {
+      ...item,
+      count: item.count ? item.count : 1,
       user_id: userId,
-      name: item.name,
-      img: item.img,
-      description: item.description,
-      rate: item.rate,
-      count: count || item.count,
-      stock: item.stock,
-      imgGallery: item.imgGallery,
-      discount: item.discount,
-      discount_type: item.discount_type,
-      price: item.price,
-      options: options || [],
-      active: item.active,
-      reviews: item.reviews,
-    });
-    toast.success(MESSAGES.cart.added(item.name));
-    if (error) throw error;
-  } catch (error) {
-    console.log("error", error);
+    },
+  ]);
+
+  const { error } = await supabase.from("user_cart").insert({
+    product_id: item.product_id,
+    user_id: userId,
+    name: item.name,
+    img: item.img,
+    description: item.description,
+    rate: item.rate,
+    count: count || item.count,
+    stock: item.stock,
+    imgGallery: item.imgGallery,
+    discount: item.discount,
+    discount_type: item.discount_type,
+    price: item.price,
+    options: options || [],
+    active: item.active,
+    reviews: item.reviews,
+  });
+  toast.success(MESSAGES.cart.added(item.name));
+  if (error) {
+    console.log("errorAdd To Cart", error);
+    return;
   }
   setIsCartDataUpdated((prev) => !prev);
+};
+
+interface addGuestCartItemsType {
+  cartData: typeProduct[];
+  setCartData: Dispatch<SetStateAction<typeProduct[]>>;
+  item: typeProduct;
+  setIsCartDataUpdated: Dispatch<SetStateAction<boolean>>;
+  count?: number;
+}
+export const addGuestCartItems = ({
+  cartData,
+  setCartData,
+  item,
+  setIsCartDataUpdated,
+  count,
+}: addGuestCartItemsType) => {
+  if (!item.active) {
+    toast.info(MESSAGES.cart.outOfStock(item.name));
+    return;
+  }
+  const isExist = cartData.find(
+    (cartItem: typeProduct) => cartItem.product_id === item.product_id
+  );
+  if (isExist) {
+    toast.info(MESSAGES.cart.alreadyExists(item.name));
+    return;
+  }
+  setCartData((prev) => [
+    ...prev,
+    {
+      ...item,
+      count: count ? count : item.count ? item.count : 1,
+    },
+  ]);
+
+  setIsCartDataUpdated((prev) => !prev);
+  toast.success(MESSAGES.cart.added(item.name));
 };
 
 interface updateProductCount {
@@ -90,18 +136,24 @@ export const handleDeleteProductCart = async ({
   ID,
   name,
   setIsCartDataUpdated,
+  setCartData,
+  userId,
 }: deleteProductCart) => {
-  try {
-    const { error } = await supabase
-      .from("user_cart")
-      .delete()
-      .eq("product_id", ID);
-    if (error) throw error;
-    toast.success(MESSAGES.cart.removed(name));
-    setIsCartDataUpdated((prev) => !prev);
-  } catch (error) {
-    console.log("error", error);
+  setCartData((prev) => prev.filter((item) => item.product_id !== ID));
+  toast.success(MESSAGES.cart.removed(name));
+  if (!userId) {
+    console.log("deleteGuestCart called");
+    return false;
   }
+  console.log("ID", ID);
+  const { error } = await supabase
+    .from("user_cart")
+    .delete()
+    .eq("product_id", ID);
+  if (error) throw error;
+
+  // toast.success(MESSAGES.cart.removed(name));
+  setIsCartDataUpdated((prev) => !prev);
 };
 
 interface deleteAllProductCartType {

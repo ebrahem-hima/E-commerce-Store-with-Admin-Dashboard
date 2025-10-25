@@ -12,7 +12,7 @@ import {
 import { Trash2 } from "lucide-react";
 import { useProductContext } from "../../../../context/productContext";
 import { useEffect, useState } from "react";
-import { AddToCart } from "@/lib/userCartFn";
+import { addGuestCartItems, AddToCart } from "@/lib/userCartFn";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
 
 interface Props {
@@ -24,8 +24,14 @@ interface Props {
 const ImgProduct = ({ item, type, isGrid }: Props) => {
   const { name, discount, price, discount_type, img } = item;
   const discountPercentage = ((discount! / price) * 100).toFixed(0);
-  const { setWishListStatus, userId, setIsCartDataUpdated } =
-    useProductContext();
+  const {
+    setWishListStatus,
+    userId,
+    setIsCartDataUpdated,
+    setCartData,
+    cartData,
+    // isCartDataUpdated,
+  } = useProductContext();
   const [isWishList, setIsWishList] = useState(false);
 
   useEffect(() => {
@@ -93,6 +99,8 @@ const ImgProduct = ({ item, type, isGrid }: Props) => {
               item,
               userId: userId || "",
               setIsCartDataUpdated,
+              cartData,
+              setCartData,
             });
           }}
           size={27}
@@ -112,7 +120,22 @@ const ImgProduct = ({ item, type, isGrid }: Props) => {
       <div
         onClick={async (e) => {
           e.preventDefault();
-          await AddToCart({ item, userId: userId || "", setIsCartDataUpdated });
+          if (userId) {
+            await AddToCart({
+              item,
+              userId: userId || "",
+              setIsCartDataUpdated,
+              cartData,
+              setCartData,
+            });
+          } else {
+            addGuestCartItems({
+              cartData,
+              setCartData,
+              item,
+              setIsCartDataUpdated,
+            });
+          }
         }}
         className="addProduct group-hover:bottom-0"
       >

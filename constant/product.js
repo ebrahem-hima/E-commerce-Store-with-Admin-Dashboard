@@ -132,8 +132,8 @@ export const firstProduct = [
     imgGallery: ["/images/productImages/TV.webp"],
     rate: 4.9,
     stock: 5,
-    discount: 20,
-    discount_type: "percentage",
+    discount: 0,
+    discount_type: "",
     price: 7000,
     options: [{ optionTitle: "Size", values: ["55 inch", "65 inch"] }],
     active: true,
@@ -478,21 +478,5 @@ export const components = [
     products: thirdProduct,
     component_id: "3",
     category: "entertainment",
-  },
-];
-
-import { TbTruckDelivery } from "react-icons/tb";
-import { BsRepeat } from "react-icons/bs";
-
-export const iconsDescription = [
-  {
-    icon: TbTruckDelivery,
-    text: "Free Delivery",
-    description: "Enter your postal code for Delivery Availability",
-  },
-  {
-    icon: BsRepeat,
-    text: "Return Delivery",
-    description: "Free 30 Days Delivery Returns. Details",
   },
 ];

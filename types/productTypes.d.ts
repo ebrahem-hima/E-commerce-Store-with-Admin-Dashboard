@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
 export interface typeProduct {
+  id?: string;
   product_id: string;
   name: string;
   img: string;
@@ -23,6 +24,13 @@ export interface typeProduct {
   }[];
 }
 
+export interface typeUserOrder {
+  status: "paid" | "pending";
+  order_code: string;
+  total: number;
+  created_at: string;
+}
+
 // check if searchNavbar or filter open
 export interface typeIsOpen {
   filter: boolean;
@@ -40,5 +48,7 @@ export interface SliderComponentType {
 export interface deleteProductCart {
   ID: string;
   name: string;
+  userId: string;
   setIsCartDataUpdated: Dispatch<SetStateAction<boolean>>;
+  setCartData: Dispatch<SetStateAction<typeProduct[]>>;
 }

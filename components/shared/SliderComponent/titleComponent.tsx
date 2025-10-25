@@ -43,18 +43,25 @@ const TitleComponent = ({ titleComponent, parentRef }: Props) => {
   const handleClickArrow = (direction: string) => {
     const parent = parentRef.current;
     if (!parent) return;
-    const firstChild = parentRef.current?.children[0].firstChild as Element;
-    if (parent) {
-      parent.scrollBy({
-        left:
-          direction === "right"
-            ? firstChild.clientWidth + 8
-            : -firstChild.clientWidth + 8,
-        behavior: "smooth",
-      });
-      // firstChild.scrollIntoView({ behavior: "smooth", inline: "start" });
-    }
+
+    const firstChild = parent?.children[0].firstChild as HTMLElement;
+    if (!firstChild) return;
+
+    // احسب قيمة الـ gap من الـ CSS
+    const computedStyle = window.getComputedStyle(parent.children[0]);
+    const gapValue = parseFloat(computedStyle.columnGap || "0"); // لأنك بتستخدم grid-flow-col
+
+    const scrollAmount =
+      direction === "right"
+        ? firstChild.clientWidth + gapValue
+        : -(firstChild.clientWidth + gapValue);
+
+    parent.scrollBy({
+      left: scrollAmount,
+      behavior: "smooth",
+    });
   };
+
   return (
     <div className="flex-between">
       <div className="font-inter not-italic font-medium text-[25px]">

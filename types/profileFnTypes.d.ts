@@ -37,11 +37,19 @@ export interface updateEmailType {
   isPasswordChanged: string | undefined;
   isEmailChange: boolean;
   setChangeInput: Dispatch<SetStateAction<boolean>>;
-  profileData: profileType;
+  userEmail: string;
 }
 
-export interface updatePasswordType extends profileAndDisabled {
-  setProfileData: Dispatch<SetStateAction<profileType>>;
+export interface PasswordType {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface updatePasswordType {
+  password: PasswordType;
+  setPassword: Dispatch<SetStateAction<PasswordType>>;
+  setChangeInput: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface updateProfileType extends profileAndDisabled {

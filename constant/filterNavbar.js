@@ -172,7 +172,7 @@ export const footer = [
   {
     title: "Account",
     textArr: [
-      { text: "My Account", link: "/account" },
+      { text: "My Account", link: "/account/MyProfile" },
       { text: "Login", link: "/log-in" },
       { text: "Cart", link: "/Cart" },
       { text: "Wishlist", link: "/wishlist" },

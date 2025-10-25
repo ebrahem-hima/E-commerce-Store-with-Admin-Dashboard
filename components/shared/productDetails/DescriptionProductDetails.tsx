@@ -8,11 +8,10 @@ import { HiOutlineHeart } from "react-icons/hi2";
 import { HiMiniHeart } from "react-icons/hi2";
 import { useProductContext } from "../../../context/productContext";
 import "../Card/Card.css";
-import { iconsDescription } from "../../../constant/product";
 import { usePathname, useRouter } from "next/navigation";
-import { supabase } from "@/supabase-client";
-import { AddToCart } from "@/lib/userCartFn";
+import { addGuestCartItems, AddToCart } from "@/lib/userCartFn";
 import { addWishList, isInWishList } from "@/lib/userWishlistFn";
+import { iconsDescription } from "../../../constant/index";
 
 type optionsType = { optionTitle: string; values: string[] };
 
@@ -32,7 +31,8 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
   const [heart, setHeart] = useState(false);
   const { replace } = useRouter();
   const pathName = usePathname();
-  const { userId, setIsCartDataUpdated } = useProductContext();
+  const { userId, setIsCartDataUpdated, cartData, setCartData } =
+    useProductContext();
 
   const addOptions = (value: string, optionTitle: string) => {
     setGetOptions((prev) =>
@@ -55,7 +55,6 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
   useEffect(() => {
     isInWishList({ item, setHeart });
   }, [item]);
-  console.log("getOptions", getOptions);
   const Counter = () => {
     return (
       <div className="flex items-center gap-2">
@@ -83,15 +82,27 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
           size="sm"
           disabled={!active}
           className="w-fit text-[15px] px-6 rounded-[4px] hover:bg-hover duration-300"
-          onClick={() =>
-            AddToCart({
-              item,
-              userId: userId || "",
-              count,
-              options: getOptions,
-              setIsCartDataUpdated,
-            })
-          }
+          onClick={async (e) => {
+            e.preventDefault();
+            if (userId) {
+              await AddToCart({
+                item,
+                userId: userId || "",
+                count,
+                setIsCartDataUpdated,
+                cartData,
+                setCartData,
+              });
+            } else {
+              addGuestCartItems({
+                cartData,
+                setCartData,
+                item,
+                count,
+                setIsCartDataUpdated,
+              });
+            }
+          }}
         >
           Buy Now
         </Button>
