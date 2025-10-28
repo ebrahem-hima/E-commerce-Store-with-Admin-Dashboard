@@ -24,7 +24,6 @@ const Page = () => {
   const countries = ["Egypt", "Saudi Arabia", "UAE", "Kuwait"];
   const states = ["Cairo", "Alexandria", "Giza", "Aswan"];
   const [changeInput, setChangeInput] = useState(true);
-  // const [submit, setSubmit] = useState(true);
   const { push } = useRouter();
   useEffect(() => {
     const getAddress = async () => {

@@ -72,9 +72,9 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
   const [wishListStatus, setWishListStatus] = useState(false);
 
   // -------------- Start UserId --------------
-  const [user, setUser] = useState<string | null>(null);
+
   const [isAuth, setIsAuth] = useState(false);
-  const { user: userId } = AuthFn({ user, setUser, isAuth });
+  const { user: userId, setUser } = AuthFn({ isAuth });
   // -------------- End UserId --------------
 
   // -------------- Start UserOrders --------------

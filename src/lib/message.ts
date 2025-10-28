@@ -9,7 +9,10 @@ export const MESSAGES = {
     alreadyExists: (name: string) => `${name} is already in your cart.`,
     added: (name?: string) => `${name || "Items"} has been added to your cart.`,
     removed: (name: string) => `${name} has been removed from your cart.`,
-    outOfStock: (name: string) => `${name} is currently out of stock.`,
+    outOfStock: (names: string) =>
+      names.includes(",")
+        ? `Some products (${names}) are currently out of stock.`
+        : `${names} is currently out of stock.`,
   },
   auth: {
     loginSuccess: "You have logged in successfully.",

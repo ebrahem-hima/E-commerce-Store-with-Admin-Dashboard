@@ -34,7 +34,6 @@ const Page = () => {
               cartData,
             })
           }
-          className=""
         >
           Move All to Bag
         </Button>

@@ -28,7 +28,6 @@ export function ShopCart() {
     const count = cartData.length;
     setCount(count);
   }, [cartData]);
-  // console.log("cartData in ShopCart:", cartData);
   return (
     <Sheet>
       <SheetTrigger asChild>

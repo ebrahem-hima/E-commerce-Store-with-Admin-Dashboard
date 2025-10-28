@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { firstProduct } from "../../../../constant/product";
 import ProductCard from "../../../../components/shared/Card/ProductCard/ProductCard";
 import {
@@ -27,9 +27,6 @@ const Page = () => {
   const { push } = useRouter();
   const searchParams = useSearchParams();
   const query = searchParams.get("query") || "";
-
-  console.log("query", query);
-  console.log("pathName", pathName);
 
   const [filters, setFilters] = useState<filterType[]>([]);
   const filter = [
@@ -99,7 +96,7 @@ const Page = () => {
   }, [filters, pathName, push, query]);
 
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-4">
         {/* Filter Component */}
         <div className="hidden lg:block">
@@ -173,7 +170,7 @@ const Page = () => {
         handleOpenFilter={handleOpenFilter}
         openFilter={openFilter}
       />
-    </>
+    </Suspense>
   );
 };
 

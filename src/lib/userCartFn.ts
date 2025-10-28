@@ -12,6 +12,7 @@ interface AddToCartType {
   setIsCartDataUpdated: Dispatch<SetStateAction<boolean>>;
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
   cartData: typeProduct[];
+  getOptions: { optionTitle: string; values: string[] }[];
 }
 
 export const AddToCart = async ({
@@ -22,6 +23,7 @@ export const AddToCart = async ({
   setIsCartDataUpdated,
   setCartData,
   cartData,
+  getOptions,
 }: AddToCartType) => {
   if (!item.active) {
     toast.info(MESSAGES.cart.outOfStock(item.name));
@@ -40,6 +42,7 @@ export const AddToCart = async ({
       ...item,
       count: item.count ? item.count : 1,
       user_id: userId,
+      options: getOptions || [],
     },
   ]);
 
@@ -56,7 +59,7 @@ export const AddToCart = async ({
     discount: item.discount,
     discount_type: item.discount_type,
     price: item.price,
-    options: options || [],
+    options: getOptions || [],
     active: item.active,
     reviews: item.reviews,
   });
@@ -74,6 +77,7 @@ interface addGuestCartItemsType {
   item: typeProduct;
   setIsCartDataUpdated: Dispatch<SetStateAction<boolean>>;
   count?: number;
+  getOptions: { optionTitle: string; values: string[] }[];
 }
 export const addGuestCartItems = ({
   cartData,
@@ -81,6 +85,7 @@ export const addGuestCartItems = ({
   item,
   setIsCartDataUpdated,
   count,
+  getOptions,
 }: addGuestCartItemsType) => {
   if (!item.active) {
     toast.info(MESSAGES.cart.outOfStock(item.name));
@@ -98,6 +103,7 @@ export const addGuestCartItems = ({
     {
       ...item,
       count: count ? count : item.count ? item.count : 1,
+      options: getOptions || [],
     },
   ]);
 
@@ -141,18 +147,12 @@ export const handleDeleteProductCart = async ({
 }: deleteProductCart) => {
   setCartData((prev) => prev.filter((item) => item.product_id !== ID));
   toast.success(MESSAGES.cart.removed(name));
-  if (!userId) {
-    console.log("deleteGuestCart called");
-    return false;
-  }
-  console.log("ID", ID);
+  if (!userId) return false;
   const { error } = await supabase
     .from("user_cart")
     .delete()
     .eq("product_id", ID);
   if (error) throw error;
-
-  // toast.success(MESSAGES.cart.removed(name));
   setIsCartDataUpdated((prev) => !prev);
 };
 
@@ -182,15 +182,21 @@ interface moveAllBagType {
 }
 
 export const moveAllToBag = async ({
-  // setIsMove,
   wishList,
   setIsCartDataUpdated,
   cartData,
 }: moveAllBagType) => {
-  // setIsMove(false);
-  const addWishList = wishList.filter(
-    (wish) => !cartData.some((cart) => cart.product_id === wish.product_id)
-  );
+  const addWishList = wishList
+    .filter(
+      (wish) => !cartData.some((cart) => cart.product_id === wish.product_id)
+    )
+    .filter((item) => item.active);
+  const isNotActive = wishList.filter((item) => !item.active);
+  if (isNotActive.length > 0) {
+    toast.info(
+      MESSAGES.cart.outOfStock(isNotActive.map((item) => item.name).join(", "))
+    );
+  }
   if (addWishList.length === 0) {
     toast.info(MESSAGES.wishlist.ExistCartShop);
     return false;
@@ -206,5 +212,4 @@ export const moveAllToBag = async ({
   // to run useEffect in shop cart and update it instantly
   setIsCartDataUpdated((prev) => !prev);
   toast.success(MESSAGES.cart.added);
-  // setIsMove(true);
 };

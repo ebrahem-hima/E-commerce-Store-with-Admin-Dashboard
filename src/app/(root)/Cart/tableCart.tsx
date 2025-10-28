@@ -16,6 +16,7 @@ import { deleteProductCart, typeProduct } from "../../../../types/productTypes";
 import { IoIosClose } from "react-icons/io";
 import PriceDisplay from "../../../../components/shared/priceDisplay";
 import { Input } from "@/components/ui/input";
+import { useProductContext } from "../../../../context/productContext";
 
 type typeCount = { count: number; id: string }[];
 
@@ -48,6 +49,7 @@ export function TableCart({
   setIsCartDataUpdated,
 }: Props) {
   const { push } = useRouter();
+  const { userId, setCartData } = useProductContext();
   const [userData, setUserData] = useState<typeProduct[]>([]);
 
   useEffect(() => {
@@ -109,6 +111,8 @@ export function TableCart({
                             ID: item.product_id,
                             name: item.name,
                             setIsCartDataUpdated,
+                            userId: userId || "",
+                            setCartData,
                           })
                         }
                         className="absolute rounded-full top-0 left-0 bg-primary text-white cursor-pointer"

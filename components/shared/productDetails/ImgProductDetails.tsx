@@ -6,8 +6,8 @@ import Image from "next/image";
 const ImgProductDetails = ({ item }: { item: typeProduct }) => {
   const [getImg, setGetImg] = useState(item.img);
   return (
-    <div className="grid grid-cols-[100px_minmax(0,550px)] max-md:grid-cols-1 max-md:grid-flow-dense justify-center gap-3">
-      <div className="max-md:order-2 flex-center max-sm:overflow-x-auto h-fit">
+    <div className="grid grid-cols-[100px_minmax(0,550px)] max-md:grid-cols-1 max-md:grid-flow-dense justify-center items-center gap-3">
+      <div className="max-md:order-2 flex-center items-center max-sm:overflow-x-auto h-fit">
         {item.imgGallery?.map((img) => (
           <div key={img} className="max-md:flex gap-2">
             <Image

@@ -14,13 +14,8 @@ import { myProfileType } from "../../../../../types/profileFnTypes";
 import { profileSchema } from "../../../../../validation";
 
 const Page = () => {
-  const {
-    userId,
-    profileData,
-    setProfileData,
-    isProfileChange,
-    setIsProfileChange,
-  } = useProductContext();
+  const { userId, profileData, setProfileData, isProfileChange } =
+    useProductContext();
   const originalProfile = useRef<myProfileType | null>(null);
   const [changeInput, setChangeInput] = useState(true);
   const [password, setPassword] = useState({
@@ -124,10 +119,6 @@ const Page = () => {
       await updateProfile({ profileData, userId, setChangeInput });
     }
     if (hasChanges || isPasswordChanged) {
-      // setIsProfileChange((prev) => ({
-      //   ...prev,
-      //   profile: !prev.profile,
-      // }));
       toast.success(MESSAGES.account.update);
       return false;
     }

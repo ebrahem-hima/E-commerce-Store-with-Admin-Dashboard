@@ -11,6 +11,7 @@ interface Props {
 
 const TitleComponent = ({ titleComponent, parentRef }: Props) => {
   const [isDisabled, setIsDisabled] = useState({ left: false, right: false });
+
   useEffect(() => {
     const parent = parentRef.current;
     if (!parent) return;
@@ -40,6 +41,7 @@ const TitleComponent = ({ titleComponent, parentRef }: Props) => {
       if (lastChild) observe.unobserve(lastChild);
     };
   }, [parentRef]);
+
   const handleClickArrow = (direction: string) => {
     const parent = parentRef.current;
     if (!parent) return;
@@ -47,9 +49,8 @@ const TitleComponent = ({ titleComponent, parentRef }: Props) => {
     const firstChild = parent?.children[0].firstChild as HTMLElement;
     if (!firstChild) return;
 
-    // احسب قيمة الـ gap من الـ CSS
     const computedStyle = window.getComputedStyle(parent.children[0]);
-    const gapValue = parseFloat(computedStyle.columnGap || "0"); // لأنك بتستخدم grid-flow-col
+    const gapValue = parseFloat(computedStyle.columnGap || "0");
 
     const scrollAmount =
       direction === "right"

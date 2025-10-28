@@ -1,14 +1,13 @@
 import { getUser } from "@/app/(root)/(auth)/authActions/getUser";
 import { supabase } from "@/supabase-client";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
-  setUser: Dispatch<SetStateAction<string | null>>;
-  user: string | null;
   isAuth: boolean;
 }
 
-const AuthFn = ({ setUser, user, isAuth }: Props) => {
+const AuthFn = ({ isAuth }: Props) => {
+  const [user, setUser] = useState<string | null>(null);
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -28,7 +27,7 @@ const AuthFn = ({ setUser, user, isAuth }: Props) => {
       listener.subscription.unsubscribe();
     };
   }, [isAuth]);
-  return { user };
+  return { user, setUser };
 };
 
 export default AuthFn;

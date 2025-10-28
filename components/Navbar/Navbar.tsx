@@ -97,10 +97,10 @@ function DropdownMenuDemo() {
               onClick={() => {
                 setIsAuth((prev) => !prev);
                 setUser("");
-                localStorage.clear();
-                // localStorage.removeItem("cart_user");
-                // localStorage.removeItem("cart_guest");
-                // localStorage.removeItem("user_profile");
+                localStorage.removeItem("cart_user");
+                localStorage.removeItem("cart_guest");
+                localStorage.removeItem("user_profile");
+                // localStorage.clear();
                 setCartData([]);
                 logout();
               }}

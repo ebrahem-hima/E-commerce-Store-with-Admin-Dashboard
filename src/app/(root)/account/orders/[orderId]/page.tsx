@@ -48,15 +48,15 @@ const Page = () => {
         .from("user_ordersItems")
         .select(
           `
-    product_id,
-    img,
-    name,
-    price,
-    discount,
-    discount_type,
-    count,
-    options
-  `
+            product_id,
+            img,
+            name,
+            price,
+            discount,
+            discount_type,
+            count,
+            options
+          `
         )
         .eq("order_id", orderData[0].id);
       console.log("data", data);
@@ -67,7 +67,7 @@ const Page = () => {
       if (data) setProducts(data);
     };
     getOrderItems();
-  }, []);
+  }, [orderId]);
   return (
     <div>
       {products.length > 0 ? (

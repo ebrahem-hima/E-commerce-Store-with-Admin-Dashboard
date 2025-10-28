@@ -1,17 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { typeProduct } from "../../../types/productTypes";
-import { Minus, Plus, Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Star } from "lucide-react";
 
-import { HiOutlineHeart } from "react-icons/hi2";
-import { HiMiniHeart } from "react-icons/hi2";
 import { useProductContext } from "../../../context/productContext";
 import "../Card/Card.css";
 import { usePathname, useRouter } from "next/navigation";
-import { addGuestCartItems, AddToCart } from "@/lib/userCartFn";
-import { addWishList, isInWishList } from "@/lib/userWishlistFn";
+import { isInWishList } from "@/lib/userWishlistFn";
 import { iconsDescription } from "../../../constant/index";
+import Counter from "./Counter";
+import Options from "./Options";
 
 type optionsType = { optionTitle: string; values: string[] };
 
@@ -34,124 +32,9 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
   const { userId, setIsCartDataUpdated, cartData, setCartData } =
     useProductContext();
 
-  const addOptions = (value: string, optionTitle: string) => {
-    setGetOptions((prev) =>
-      prev.some((item) => item.optionTitle === optionTitle)
-        ? prev.map((item) =>
-            item.optionTitle === optionTitle
-              ? { ...item, values: [value] }
-              : item
-          )
-        : [
-            ...prev,
-            {
-              optionTitle: optionTitle,
-              values: [value],
-            },
-          ]
-    );
-  };
-
   useEffect(() => {
     isInWishList({ item, setHeart });
   }, [item]);
-  const Counter = () => {
-    return (
-      <div className="flex items-center gap-2">
-        <div className="flex items-center gap- w-fit rounded-[4px]">
-          <button
-            onClick={() => setCount((c) => Math.max(1, c - 1))}
-            className="cursor-pointer active:text-white active:border-primary active:bg-primary hover:text-white flex-center h-8 w-8 border border-[#777] hover:bg-primary hover:border-primary rounded-l-[3px] duration-200"
-          >
-            <Minus size={17} />
-          </button>
-
-          <span className="flex-center w-13 text-center border-t border-b h-8  border-[#777]">
-            {count}
-          </span>
-          <button
-            className="cursor-pointer active:text-white active:border-primary active:bg-primary hover:text-white flex-center h-8 w-8 border border-[#777] hover:bg-primary hover:border-primary rounded-r-[3px] duration-200"
-            onClick={() => {
-              setCount((c) => (c < item.stock ? c + 1 : c));
-            }}
-          >
-            <Plus size={17} />
-          </button>
-        </div>
-        <Button
-          size="sm"
-          disabled={!active}
-          className="w-fit text-[15px] px-6 rounded-[4px] hover:bg-hover duration-300"
-          onClick={async (e) => {
-            e.preventDefault();
-            if (userId) {
-              await AddToCart({
-                item,
-                userId: userId || "",
-                count,
-                setIsCartDataUpdated,
-                cartData,
-                setCartData,
-              });
-            } else {
-              addGuestCartItems({
-                cartData,
-                setCartData,
-                item,
-                count,
-                setIsCartDataUpdated,
-              });
-            }
-          }}
-        >
-          Buy Now
-        </Button>
-        <button onClick={() => setHeart((prev) => !prev)}>
-          {heart ? (
-            <HiMiniHeart
-              size={33}
-              className="text-primary cursor-pointer border border-[#777] rounded-[4px] p-[4px]"
-              onClick={() => addWishList(item, "remove", userId || "")}
-            />
-          ) : (
-            <HiOutlineHeart
-              size={33}
-              className="cursor-pointer border border-[#777] rounded-[4px] p-[4px]"
-              onClick={() => addWishList(item, "add", userId || "")}
-            />
-          )}
-        </button>
-      </div>
-    );
-  };
-  const Options = () => {
-    return (
-      <div className="flex flex-col gap-3">
-        {options?.map((option, idx) => (
-          <div key={idx} className="flex gap-2">
-            <span className="font-inter font-normal text-[20px]  tracking-[0.03em]">
-              {option.optionTitle}:
-            </span>
-            <div className="flex gap-2">
-              {option.values.map((value, idx) => (
-                <span
-                  key={idx}
-                  className={`${
-                    getOptions.some((item) => item.values[0] === value)
-                      ? "bg-primary text-white !border-primary"
-                      : ""
-                  } cursor-pointer duration-200 py-0.5 px-3 border border-gray-400 hover:border-primary hover:text-white hover:bg-primary rounded-[4px] active:bg-primary active:border-primary active:text-white`}
-                  onClick={() => addOptions(value, option.optionTitle)}
-                >
-                  {value}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  };
 
   useEffect(() => {
     const getURl = getOptions.map(
@@ -206,9 +89,25 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
       <div className="font-poppins font-normal text-sm">{description}</div>
       <div className="w-full h-[1px] bg-[#777] rounded-[4px]" />
       {/* Options */}
-      <Options />
+      <Options
+        options={options || []}
+        getOptions={getOptions}
+        setGetOptions={setGetOptions}
+      />
       {/* Counter + buy + wishlist */}
-      <Counter />
+      <Counter
+        setCount={setCount}
+        count={count}
+        item={item}
+        userId={userId || ""}
+        setHeart={setHeart}
+        heart={heart}
+        setIsCartDataUpdated={setIsCartDataUpdated}
+        cartData={cartData}
+        setCartData={setCartData}
+        getOptions={getOptions}
+      />
+
       {/* Free delivery */}
       <div className="border border-[rgba(0, 0, 0, 0.5)] rounded-[4px]">
         {iconsDescription.map((icons) => (
