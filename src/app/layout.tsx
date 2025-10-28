@@ -5,6 +5,7 @@ import { ProductProvider } from "../../context/productContext";
 import Navbar from "../../components/Navbar/Navbar";
 import { Toaster } from "sonner";
 import Footer from "../../components/Footer";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -36,9 +37,10 @@ export default function RootLayout({
             <div className="grow !px-10 max-md:!px-1 max-sm:px-0">
               {children}
             </div>
-            <Toaster expand richColors />
             <Footer />
           </div>
+          <Toaster expand richColors />
+          <SpeedInsights />
         </body>
       </html>
     </ProductProvider>

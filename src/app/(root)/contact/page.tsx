@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useProductContext } from "../../../../context/productContext";
-import { supabase } from "@/supabase-client";
 import { toast } from "sonner";
 import { contactSchema } from "../../../../validation";
 import { MESSAGES } from "@/lib/message";

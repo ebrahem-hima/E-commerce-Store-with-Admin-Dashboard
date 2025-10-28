@@ -13,7 +13,6 @@ const SliderComponent = ({
   type,
   titleComponent,
   Product,
-  category,
   search,
 }: SliderComponentType) => {
   const parentRef = useRef<HTMLDivElement | null>(null);

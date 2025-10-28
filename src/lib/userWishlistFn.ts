@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { deleteProductCart, typeProduct } from "../../types/productTypes";
+import { typeProduct } from "../../types/productTypes";
 import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
 import { MESSAGES } from "./message";

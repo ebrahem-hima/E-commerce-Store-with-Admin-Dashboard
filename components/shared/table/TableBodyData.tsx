@@ -1,12 +1,10 @@
 import { TableBody, TableCell, TableRow } from "@/components/ui/table";
-import Image from "next/image";
 import React from "react";
 import { tableBodyType } from "../../../types/tabletypes";
 import { TopMemberType, TopProductType } from "../../../types/admintypes";
 
 interface Prop {
   dataBody: tableBodyType;
-  // dataBody: tableBodyType
 }
 
 function isTopMember(value: tableBodyType): value is TopMemberType[] {

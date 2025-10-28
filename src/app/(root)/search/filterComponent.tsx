@@ -1,9 +1,7 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@radix-ui/react-label";
 import React from "react";
 
 import { IoIosArrowDown } from "react-icons/io";
-// import { IoIosArrowUp } from "react-icons/io";
 
 interface filterType {
   filterName: string;

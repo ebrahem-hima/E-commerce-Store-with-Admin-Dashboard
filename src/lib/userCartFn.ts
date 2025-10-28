@@ -12,14 +12,13 @@ interface AddToCartType {
   setIsCartDataUpdated: Dispatch<SetStateAction<boolean>>;
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
   cartData: typeProduct[];
-  getOptions: { optionTitle: string; values: string[] }[];
+  getOptions?: { optionTitle: string; values: string[] }[];
 }
 
 export const AddToCart = async ({
   item,
   userId,
   count,
-  options,
   setIsCartDataUpdated,
   setCartData,
   cartData,
@@ -77,7 +76,7 @@ interface addGuestCartItemsType {
   item: typeProduct;
   setIsCartDataUpdated: Dispatch<SetStateAction<boolean>>;
   count?: number;
-  getOptions: { optionTitle: string; values: string[] }[];
+  getOptions?: { optionTitle: string; values: string[] }[];
 }
 export const addGuestCartItems = ({
   cartData,

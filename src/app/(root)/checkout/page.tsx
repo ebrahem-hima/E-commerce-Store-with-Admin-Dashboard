@@ -14,12 +14,10 @@ import { useRouter } from "next/navigation";
 import { MESSAGES } from "@/lib/message";
 import PriceDisplay from "../../../../components/shared/priceDisplay";
 import { handleDeleteAllProductCart } from "@/lib/userCartFn";
-import useUserCart from "../../../../components/FetchData/useUserCart";
 import CouponComponent from "../../../../components/shared/checkoutComponent/couponComponent";
 import TotalComponent from "../../../../components/shared/checkoutComponent/totalComponent";
 import { getTodayDate } from "@/lib/utils";
 import { nanoid } from "nanoid";
-import { IconBank } from "../../../../constant/index";
 
 const Page = () => {
   const [checkOut, setCheckOut] = useState<"bank" | "delivery">("delivery");
