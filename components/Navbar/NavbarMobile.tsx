@@ -51,17 +51,31 @@ export function NavbarMobile() {
               {categoriesLinks.map((category) => (
                 <div key={category.name}>
                   <ul>
-                    <span className="font-bold cursor-pointer hover:opacity-75">
-                      {category.name}
-                    </span>
+                    <SheetClose asChild>
+                      <Link
+                        href={`/search?query=${category.value}`}
+                        className="font-bold cursor-pointer hover:opacity-75"
+                      >
+                        {category.name}
+                      </Link>
+                    </SheetClose>
                     <li className="flex flex-col">
                       {category.values.map((value) => (
-                        <span
-                          className="cursor-pointer hover:opacity-75"
-                          key={value.name}
-                        >
-                          {value.name}
-                        </span>
+                        <SheetClose asChild key={value.value}>
+                          <Link
+                            href={{
+                              pathname: "/search",
+                              query: {
+                                query: category.value,
+                                category: value.value,
+                              },
+                            }}
+                            className="cursor-pointer hover:opacity-75"
+                            key={value.name}
+                          >
+                            {value.name}
+                          </Link>
+                        </SheetClose>
                       ))}
                     </li>
                   </ul>
@@ -84,11 +98,7 @@ export function NavbarMobile() {
           )}
         </div>
         <SheetFooter className="flex items-end">
-          <Input
-            type="text"
-            className=""
-            placeholder="What are you looking for ?"
-          />
+          <Input type="text" placeholder="What are you looking for ?" />
         </SheetFooter>
       </SheetContent>
     </Sheet>

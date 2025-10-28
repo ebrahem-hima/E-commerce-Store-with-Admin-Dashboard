@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useState } from "react";
 import { firstProduct } from "../../../../constant/product";
 import ProductCard from "../../../../components/shared/Card/ProductCard/ProductCard";
 import {
@@ -15,7 +15,7 @@ import { SlGrid } from "react-icons/sl";
 import FilterComponent from "./filterComponent";
 import SliderComponent from "../../../../components/shared/SliderComponent/SliderComponent";
 import SearchFilterMobile from "./searchFilterMobile";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 interface filterType {
   filterName: string;
@@ -24,9 +24,6 @@ interface filterType {
 
 const Page = () => {
   const pathName = usePathname();
-  const { push } = useRouter();
-  const searchParams = useSearchParams();
-  const query = searchParams.get("query") || "";
 
   const [filters, setFilters] = useState<filterType[]>([]);
   const filter = [
@@ -78,35 +75,23 @@ const Page = () => {
     window.history.replaceState({}, "", newUrl);
   };
 
-  useEffect(() => {
-    if (!query) return;
-    const searchParams = new URLSearchParams(window.location.search);
-
-    searchParams.set("query", query);
-
-    filters.forEach(({ filterName, items }) => {
-      if (items.length > 0) {
-        searchParams.set(filterName, items.join(","));
-      } else {
-        searchParams.delete(filterName);
-      }
-    });
-
-    push(`${pathName}?${decodeURIComponent(searchParams.toString())}`);
-  }, [filters, pathName, push, query]);
-
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <>
       <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-4">
         {/* Filter Component */}
         <div className="hidden lg:block">
-          <FilterComponent
-            filter={filter}
-            handleReset={handleReset}
-            handleFilter={handleFilter}
-            handleOpenFilter={handleOpenFilter}
-            openFilter={openFilter}
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <FilterComponent
+              setFilters={setFilters}
+              openFilter={openFilter}
+              handleOpenFilter={handleOpenFilter}
+              handleFilter={handleFilter}
+              handleReset={handleReset}
+              filter={filter}
+              filters={filters}
+              pathName={pathName}
+            />
+          </Suspense>
         </div>
         {/* Best Sellers */}
         <div className="flex flex-col gap-4">
@@ -163,14 +148,19 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <SearchFilterMobile
-        filter={filter}
-        handleReset={handleReset}
-        handleFilter={handleFilter}
-        handleOpenFilter={handleOpenFilter}
-        openFilter={openFilter}
-      />
-    </Suspense>
+      <Suspense fallback={<div>Loading...</div>}>
+        <SearchFilterMobile
+          filter={filter}
+          handleReset={handleReset}
+          handleFilter={handleFilter}
+          handleOpenFilter={handleOpenFilter}
+          openFilter={openFilter}
+          filters={filters}
+          setFilters={setFilters}
+          pathName={pathName}
+        />
+      </Suspense>
+    </>
   );
 };
 

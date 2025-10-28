@@ -1,5 +1,6 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect } from "react";
 
 import { IoIosArrowDown } from "react-icons/io";
 
@@ -14,15 +15,39 @@ interface Props {
   handleFilter: (name: string, item: string) => void;
   filter: filterType[];
   openFilter: { [key: string]: boolean };
+  filters: filterType[];
+  setFilters: React.Dispatch<React.SetStateAction<filterType[]>>;
+  pathName: string;
 }
 
 const FilterComponent = ({
-  handleReset,
+  filters,
+  pathName,
   filter,
   handleOpenFilter,
   handleFilter,
   openFilter,
+  handleReset,
 }: Props) => {
+  const { push } = useRouter();
+  const searchParams = useSearchParams();
+  const query = searchParams.get("query") || "";
+  useEffect(() => {
+    if (!query) return;
+    const searchParams = new URLSearchParams(window.location.search);
+
+    searchParams.set("query", query);
+
+    filters.forEach(({ filterName, items }) => {
+      if (items.length > 0) {
+        searchParams.set(filterName, items.join(","));
+      } else {
+        searchParams.delete(filterName);
+      }
+    });
+
+    push(`${pathName}?${decodeURIComponent(searchParams.toString())}`);
+  }, [filters, pathName, push, query]);
   return (
     <div className="px-4">
       <div className="flex-between mb-4">

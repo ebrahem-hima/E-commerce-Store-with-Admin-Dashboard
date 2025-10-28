@@ -38,9 +38,9 @@ export default function RootLayout({
               {children}
             </div>
             <Footer />
+            <Toaster expand richColors />
+            <SpeedInsights />
           </div>
-          <Toaster expand richColors />
-          <SpeedInsights />
         </body>
       </html>
     </ProductProvider>

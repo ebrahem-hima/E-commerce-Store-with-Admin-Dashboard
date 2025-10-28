@@ -15,11 +15,14 @@ interface filterType {
 }
 
 interface Props {
-  filter: filterType[];
-  handleFilter: (Name: string, item: string) => void;
-  handleOpenFilter: (ID: number) => void;
   handleReset: () => void;
+  handleOpenFilter: (idx: number) => void;
+  handleFilter: (name: string, item: string) => void;
+  filter: filterType[];
   openFilter: { [key: string]: boolean };
+  filters: filterType[];
+  setFilters: React.Dispatch<React.SetStateAction<filterType[]>>;
+  pathName: string;
 }
 
 const SearchFilterMobile = ({
@@ -28,6 +31,9 @@ const SearchFilterMobile = ({
   handleOpenFilter,
   handleReset,
   openFilter,
+  setFilters,
+  pathName,
+  filters,
 }: Props) => {
   return (
     <Sheet>
@@ -53,6 +59,9 @@ const SearchFilterMobile = ({
             handleFilter={handleFilter}
             handleOpenFilter={handleOpenFilter}
             openFilter={openFilter}
+            setFilters={setFilters}
+            pathName={pathName}
+            filters={filters}
           />
         </div>
       </SheetContent>

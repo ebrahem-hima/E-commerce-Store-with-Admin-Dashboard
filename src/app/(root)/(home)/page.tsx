@@ -7,7 +7,6 @@ const Page = () => {
     <div className="grid gap-y-18">
       {/* Filter And Hero Image */}
       <HeroImageFilter />
-      {/* <div className="mb-60"></div> */}
       {/* Component Category */}
       <SliderComponent
         type="category"
