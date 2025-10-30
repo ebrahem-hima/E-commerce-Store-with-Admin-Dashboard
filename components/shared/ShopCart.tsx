@@ -17,9 +17,10 @@ import { Trash2 } from "lucide-react";
 import { useProductContext } from "../../context/productContext";
 import { handleDeleteProductCart } from "@/lib/userCartFn";
 import { useEffect, useState } from "react";
+import PriceDisplay from "./priceDisplay";
 
 export function ShopCart() {
-  const { cartData, setCartData, setIsCartDataUpdated, userId } =
+  const { cartData, setCartData, userId, setIsCartDataUpdated } =
     useProductContext();
   const { total } = useProductContext();
 
@@ -49,13 +50,14 @@ export function ShopCart() {
             cartData.map((item) => (
               <div
                 key={item.product_id}
-                className="grid grid-cols-[80px_1fr_auto] gap-3 border-t border-[#d4d3d3] pt-3"
+                className="grid grid-cols-[80px_1fr_auto] items-center gap-3 border-t border-[#d4d3d3] pt-3"
               >
                 <div className="relative">
                   <Image
                     src={item.img}
                     alt={`img` + item.name}
-                    fill
+                    height={100}
+                    width={100}
                     className="object-contain"
                   />
                 </div>
@@ -64,7 +66,11 @@ export function ShopCart() {
                     {item.name}
                   </span>
                   <span>
-                    <span className="font-medium">Price:</span> ${item.price}{" "}
+                    <PriceDisplay
+                      price={item.price}
+                      discount={item.discount}
+                      discountType={item.discount_type}
+                    />
                     <span>x</span> {item.count || 1}
                   </span>
                   {/* Options */}

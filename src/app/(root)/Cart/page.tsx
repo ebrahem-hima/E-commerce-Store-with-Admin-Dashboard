@@ -15,8 +15,7 @@ type typeCount = { count: number; id: string }[];
 
 const Page = () => {
   const [count, setCount] = useState<typeCount>([]);
-  const { cartData, setIsCartDataUpdated, isCartDataUpdated, getCoupon } =
-    useProductContext();
+  const { cartData, getCoupon, setIsCartDataUpdated } = useProductContext();
   const [disableBtn, setDisableBtn] = useState(true);
   const { push } = useRouter();
   const someDiscount = getCoupon.reduce((acc, curr) => acc + curr.value, 0);
@@ -51,7 +50,7 @@ const Page = () => {
           handleDeleteProductCart={handleDeleteProductCart}
           setDisableBtn={setDisableBtn}
           setIsCartDataUpdated={setIsCartDataUpdated}
-          isCartDataUpdated={isCartDataUpdated}
+          // isCartDataUpdated={isCartDataUpdated}
           disableBtn={disableBtn}
         />
         <div className="flex-between mt-6">

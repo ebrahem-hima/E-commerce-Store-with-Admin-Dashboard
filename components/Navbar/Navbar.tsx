@@ -95,14 +95,14 @@ function DropdownMenuDemo() {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
-                setIsAuth((prev) => !prev);
                 setUser("");
-                localStorage.removeItem("cart_user");
+                localStorage.removeItem("user_cart");
                 localStorage.removeItem("cart_guest");
                 localStorage.removeItem("user_profile");
                 // localStorage.clear();
                 setCartData([]);
                 logout();
+                setIsAuth(false);
               }}
             >
               Log Out

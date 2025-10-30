@@ -39,6 +39,7 @@ const Page = () => {
       [ID]: !prev[ID],
     }));
   };
+
   const handleFilter = (Name: string, item: string) => {
     const exist = filters.some((filter) => filter.filterName === Name);
     setFilters((prev) =>
@@ -56,6 +57,7 @@ const Page = () => {
         : [...prev, { filterName: Name, items: [item] }]
     );
   };
+
   const handleReset = () => {
     setFilters([]);
     setOpenFilter({});
@@ -63,13 +65,15 @@ const Page = () => {
     const searchParams = new URLSearchParams(window.location.search);
 
     const queryValue = searchParams.get("query");
+    const categoryValue = searchParams.get("category");
 
     searchParams.forEach((_, key) => {
       if (key !== "query") searchParams.delete(key);
     });
-
     const newUrl = queryValue
-      ? `${pathName}?query=${encodeURIComponent(queryValue)}`
+      ? `${pathName}?query=${encodeURIComponent(
+          queryValue
+        )}&category=${categoryValue}`
       : pathName;
 
     window.history.replaceState({}, "", newUrl);

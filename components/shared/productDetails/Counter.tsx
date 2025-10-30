@@ -89,7 +89,7 @@ const Counter = ({
               setCartData,
               item,
               count,
-              setIsCartDataUpdated,
+              // setIsCartDataUpdated,
               getOptions,
             });
           }

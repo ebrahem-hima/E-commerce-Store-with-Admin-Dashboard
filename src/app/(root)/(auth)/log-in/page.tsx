@@ -38,7 +38,8 @@ const Page = () => {
       const result = await login(formData);
       if (result?.success) {
         toast.success("Successfully Logged In");
-        setIsAuth((prev) => !prev);
+        setIsAuth(true);
+        // setIsAuth((prev) => !prev);
         push("/");
       } else if (result?.error) {
         toast.error(result.error);

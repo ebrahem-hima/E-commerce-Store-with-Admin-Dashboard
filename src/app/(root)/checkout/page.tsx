@@ -27,7 +27,6 @@ const Page = () => {
     userId,
     cartData,
     setIsCartDataUpdated,
-    // isCartDataUpdated,
     getCoupon,
     setGetCoupon,
     isCouponApplied,
@@ -97,15 +96,13 @@ const Page = () => {
       options: item.options,
     }));
 
-    const { data, error: orderItemsError } = await supabase
+    const { error: orderItemsError } = await supabase
       .from("user_ordersItems")
-      .insert(getData)
-      .select();
+      .insert(getData);
     if (orderItemsError) {
       console.log("orderError", orderItemsError);
       return false;
     }
-    console.log("user_ordersItems", data);
     // Delete All Product Cart
     await handleDeleteAllProductCart({ cartData });
 
@@ -120,12 +117,14 @@ const Page = () => {
         return false;
       }
     }
-    setIsCartDataUpdated((prev) => !prev);
     toast.success(MESSAGES.buy.success);
     setIsCouponApplied(false);
     setIsUserOrderUpdated((prev) => !prev);
+    setIsCartDataUpdated((prev) => !prev);
     setGetCoupon([]);
-    push(`/thankyou`);
+    setTimeout(() => {
+      push(`/thankyou`);
+    }, 100);
   };
 
   const [isClient, setIsClient] = useState(false);
@@ -134,7 +133,7 @@ const Page = () => {
     setIsClient(true);
   }, []);
 
-  if (!isClient || Loading) {
+  if (!isClient) {
     return <div>Loading....</div>;
   }
   return (
@@ -196,19 +195,6 @@ const Page = () => {
                   <label htmlFor="delivery">Cash on delivery</label>
                 </div>
               </RadioGroup>
-
-              {/* Bank icons */}
-              {/* <div className="flex items-center">
-                {IconBank.map((img) => (
-                  <Image
-                    key={img.img}
-                    src={img.img}
-                    alt={"Bank icon"}
-                    width={25}
-                    height={25}
-                  />
-                ))}
-              </div> */}
             </fieldset>
           </form>
           <CouponComponent />

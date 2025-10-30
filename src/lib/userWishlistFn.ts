@@ -10,23 +10,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 interface Props {
-  setLoading?: Dispatch<SetStateAction<boolean>>;
   item: typeProduct;
 }
-export const handleDeleteItemWishList = async ({ setLoading, item }: Props) => {
-  setLoading?.(true);
-  try {
-    const { error } = await supabase
-      .from("user_wishlist")
-      .delete()
-      .eq("product_id", item.product_id);
-    toast.success(MESSAGES.wishlist.removed(item.name));
-    if (error) throw error;
-  } catch (error) {
-    console.log(error);
-  } finally {
-    setLoading?.(false);
-  }
+export const handleDeleteItemWishList = async ({ item }: Props) => {
+  const { error } = await supabase
+    .from("user_wishlist")
+    .delete()
+    .eq("product_id", item.product_id);
+  toast.success(MESSAGES.wishlist.removed(item.name));
+  if (error) throw error;
 };
 
 export const addWishList = async (
@@ -100,14 +92,11 @@ export const isProductWishList = async ({
 
 interface getProductWishListType {
   setWishList: Dispatch<SetStateAction<typeProduct[]>>;
-  setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 export const getProductWishList = async ({
   setWishList,
-  setLoading,
 }: getProductWishListType) => {
-  setLoading(true);
   const { data, error } = await supabase.from("user_wishlist").select();
   if (error) {
     console.error("Error fetching wishlist:", error);
@@ -116,7 +105,6 @@ export const getProductWishList = async ({
   if (data) {
     setWishList(data);
   }
-  setLoading(false);
 };
 
 interface isInWishListType {

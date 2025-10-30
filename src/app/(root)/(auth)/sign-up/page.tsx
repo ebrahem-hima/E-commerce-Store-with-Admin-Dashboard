@@ -24,7 +24,8 @@ const Page = () => {
       action={(formData) => {
         startTransition(() => signup(formData));
         toast.success("SignUp successfully");
-        setIsAuth((prev) => !prev);
+        setIsAuth(true);
+        // setIsAuth((prev) => !prev);
       }}
       className="w-full max-w-sm"
     >

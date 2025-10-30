@@ -20,30 +20,21 @@ export const AddToCart = async ({
   userId,
   count,
   setIsCartDataUpdated,
-  setCartData,
-  cartData,
   getOptions,
 }: AddToCartType) => {
   if (!item.active) {
     toast.info(MESSAGES.cart.outOfStock(item.name));
     return;
   }
-  const isExist = cartData.find(
+  const getUserCart = JSON.parse(localStorage.getItem("user_cart") || "[]");
+  console.log("cartData", getUserCart);
+  const isExist = getUserCart.find(
     (cartItem: typeProduct) => cartItem.product_id === item.product_id
   );
   if (isExist) {
     toast.info(MESSAGES.cart.alreadyExists(item.name));
     return;
   }
-  setCartData((prev) => [
-    ...prev,
-    {
-      ...item,
-      count: item.count ? item.count : 1,
-      user_id: userId,
-      options: getOptions || [],
-    },
-  ]);
 
   const { error } = await supabase.from("user_cart").insert({
     product_id: item.product_id,
@@ -74,15 +65,14 @@ interface addGuestCartItemsType {
   cartData: typeProduct[];
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
   item: typeProduct;
-  setIsCartDataUpdated: Dispatch<SetStateAction<boolean>>;
   count?: number;
   getOptions?: { optionTitle: string; values: string[] }[];
 }
+
 export const addGuestCartItems = ({
   cartData,
   setCartData,
   item,
-  setIsCartDataUpdated,
   count,
   getOptions,
 }: addGuestCartItemsType) => {
@@ -106,7 +96,6 @@ export const addGuestCartItems = ({
     },
   ]);
 
-  setIsCartDataUpdated((prev) => !prev);
   toast.success(MESSAGES.cart.added(item.name));
 };
 
@@ -144,9 +133,11 @@ export const handleDeleteProductCart = async ({
   setCartData,
   userId,
 }: deleteProductCart) => {
-  setCartData((prev) => prev.filter((item) => item.product_id !== ID));
   toast.success(MESSAGES.cart.removed(name));
-  if (!userId) return false;
+  if (!userId) {
+    setCartData((prev) => prev.filter((item) => item.product_id !== ID));
+    return false;
+  }
   const { error } = await supabase
     .from("user_cart")
     .delete()
@@ -195,6 +186,8 @@ export const moveAllToBag = async ({
     toast.info(
       MESSAGES.cart.outOfStock(isNotActive.map((item) => item.name).join(", "))
     );
+    // when there is only one product and it is out of stock
+    if (wishList.length === 1) return;
   }
   if (addWishList.length === 0) {
     toast.info(MESSAGES.wishlist.ExistCartShop);

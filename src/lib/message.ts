@@ -11,8 +11,8 @@ export const MESSAGES = {
     removed: (name: string) => `${name} has been removed from your cart.`,
     outOfStock: (names: string) =>
       names.includes(",")
-        ? `Some products (${names}) are currently out of stock.`
-        : `${names} is currently out of stock.`,
+        ? `Some products (${names}) are currently out of stock and cannot be added to your cart..`
+        : `${names} is currently out of stock and cannot be added to your cart..`,
   },
   auth: {
     loginSuccess: "You have logged in successfully.",

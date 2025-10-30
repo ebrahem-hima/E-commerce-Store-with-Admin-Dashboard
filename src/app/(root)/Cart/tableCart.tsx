@@ -21,17 +21,13 @@ import { useProductContext } from "../../../../context/productContext";
 type typeCount = { count: number; id: string }[];
 
 interface Props {
-  handleDeleteProductCart: ({
-    ID,
-    name,
-    setIsCartDataUpdated,
-  }: deleteProductCart) => void;
+  handleDeleteProductCart: ({ ID, name }: deleteProductCart) => void;
   cartData: typeProduct[];
   count: typeCount;
   setCount: Dispatch<SetStateAction<typeCount>>;
   setDisableBtn: Dispatch<SetStateAction<boolean>>;
   setIsCartDataUpdated: Dispatch<SetStateAction<boolean>>;
-  isCartDataUpdated: boolean;
+  // isCartDataUpdated: boolean;
   disableBtn: boolean;
 }
 
@@ -55,8 +51,6 @@ export function TableCart({
   useEffect(() => {
     setUserData(cartData);
   }, [cartData]);
-
-  // console.log("count", count);
 
   if (!userData) return null;
   const handleCount = ({ item, e }: handleCountType) => {

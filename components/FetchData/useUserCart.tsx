@@ -7,11 +7,10 @@ import { getUser } from "@/app/(root)/(auth)/authActions/getUser";
 
 interface Props {
   isCartDataUpdated: boolean;
-  userId: string;
   isAuth: boolean;
 }
 
-const useUserCart = ({ isCartDataUpdated, isAuth }: Props) => {
+const useUserCart = ({ isAuth, isCartDataUpdated }: Props) => {
   const saved =
     typeof window !== "undefined" ? localStorage.getItem("user_cart") : "";
   const getCartData = saved ? JSON.parse(saved) : [];
@@ -33,11 +32,18 @@ const useUserCart = ({ isCartDataUpdated, isAuth }: Props) => {
       return;
     };
     const handleUserCart = async (userId: string) => {
+      // console.log("start Sync CartData");
       try {
+        // console.log("start Sync CartData");
         setLoading(true);
         const getCartGuest = JSON.parse(
           localStorage.getItem("cart_guest") || "[]"
         );
+        // localStorage.setItem("user_cart", JSON.stringify(cartData));
+        // console.log("cartData", cartData);
+        // const getUserCart = JSON.parse(
+        //   localStorage.getItem("user_cart") || "[]"
+        // );
 
         const { data, error: selectError } = await supabase
           .from("user_cart")
@@ -46,6 +52,7 @@ const useUserCart = ({ isCartDataUpdated, isAuth }: Props) => {
         if (selectError) throw selectError;
 
         const collectData = mergeUnique(data, getCartGuest);
+        // console.log("data", data);
         localStorage.setItem("user_cart", JSON.stringify(collectData));
         setCartData(collectData);
         localStorage.removeItem("cart_guest");
@@ -58,7 +65,10 @@ const useUserCart = ({ isCartDataUpdated, isAuth }: Props) => {
         const getNewData =
           data.length > 0
             ? addUserIdToCartData.filter(
-                (item) => !data.some((d) => item.product_id === d.product_id)
+                (item) =>
+                  !data.some(
+                    (d: typeProduct) => item.product_id === d.product_id
+                  )
               )
             : addUserIdToCartData;
 
@@ -74,11 +84,13 @@ const useUserCart = ({ isCartDataUpdated, isAuth }: Props) => {
     };
     const syncCart = async () => {
       const user = await getUser();
+      // console.log("user?.id", user?.id);
       if (!user?.id && cartData.length > 0) return handleGuestCart();
       if (user?.id) await handleUserCart(user?.id);
     };
     syncCart();
-  }, [isAuth, isCartDataUpdated, cartData]);
+  }, [isAuth, cartData, isCartDataUpdated]);
+  // console.log("isCartDataUpdated", isCartDataUpdated);
 
   useEffect(() => {
     const getTotal = cartData.reduce((acc, curr) => {
@@ -95,7 +107,7 @@ const useUserCart = ({ isCartDataUpdated, isAuth }: Props) => {
     }, 0);
 
     setTotal(getTotal);
-  }, [cartData, isCartDataUpdated]);
+  }, [cartData]);
 
   return { cartData, Loading, total, setCartData };
 };

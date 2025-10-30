@@ -57,9 +57,6 @@ interface ProductContextType {
 
   total: number;
   Loading: boolean;
-
-  // cartGuest: typeProduct[];
-  // setCartGuest: Dispatch<SetStateAction<typeProduct[]>>;
 }
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
@@ -86,13 +83,10 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
   // -------------- Start CartShop --------------
 
   const [isCartDataUpdated, setIsCartDataUpdated] = useState(false);
-  // const [cartGuest, setCartGuest] = useState<typeProduct[]>([]);
   const { cartData, setCartData, total, Loading } = useUserCart({
-    isCartDataUpdated,
-    userId: userId || "",
+    // userId: userId || "",
     isAuth,
-    // cartGuest,
-    // setCartGuest,
+    isCartDataUpdated,
   });
 
   // -------------- End CartShop --------------
@@ -125,7 +119,6 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
     setUser,
     profileData,
     setProfileData,
-    // login,
     isProfileChange,
     setIsProfileChange,
 
@@ -154,9 +147,6 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
 
     total,
     Loading,
-
-    // cartGuest,
-    // setCartGuest,
   };
   return (
     <ProductContext.Provider value={values}>{children}</ProductContext.Provider>

@@ -133,7 +133,7 @@ const ImgProduct = ({ item, type, isGrid }: Props) => {
               cartData,
               setCartData,
               item,
-              setIsCartDataUpdated,
+              // setIsCartDataUpdated,
             });
           }
         }}

@@ -29,7 +29,7 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
   const [heart, setHeart] = useState(false);
   const { replace } = useRouter();
   const pathName = usePathname();
-  const { userId, setIsCartDataUpdated, cartData, setCartData } =
+  const { userId, cartData, setCartData, setIsCartDataUpdated } =
     useProductContext();
 
   useEffect(() => {
