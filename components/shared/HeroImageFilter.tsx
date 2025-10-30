@@ -8,13 +8,12 @@ const HeroImageFilter = () => {
       <Filters />
       <div className="relative">
         <Image
-          src={`/images/Frame560.webp`}
+          src={`/images/Frame 560.webp`}
           alt="Hero-Image"
           priority
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
           className="object-fill rounded-md"
-          unoptimized
         />
       </div>
     </div>
