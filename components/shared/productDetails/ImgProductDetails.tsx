@@ -10,7 +10,7 @@ const ImgProductDetails = ({ item }: { item: typeProduct }) => {
       <div className="max-md:order-2 flex-center items-center max-sm:overflow-x-auto h-fit">
         {item.imgGallery?.map((img) => (
           <div key={img} className="max-md:flex gap-2">
-            <Image
+            {/* <Image
               src={img}
               alt="img-gallery"
               width={120}
@@ -45,20 +45,20 @@ const ImgProductDetails = ({ item }: { item: typeProduct }) => {
               onClick={() => setGetImg(img)}
               className="border-1 border-gray-50 cursor-pointer hover:border-primary rounded-[4px] p-1"
               priority
-            />
+            /> */}
           </div>
         ))}
       </div>
       {/* bigImg */}
       <div className="flex-center max-md:order-1">
-        <Image
+        {/* <Image
           priority
           className="w-[300px] h-[300px] max-sm:w-[250px] max-sm:h-[250px]"
           src={getImg}
           alt={"img" + item.name}
           width={300}
           height={300}
-        />
+        /> */}
       </div>
     </div>
   );
