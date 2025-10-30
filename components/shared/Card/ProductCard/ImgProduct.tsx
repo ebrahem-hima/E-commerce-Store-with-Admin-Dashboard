@@ -48,11 +48,13 @@ const ImgProduct = ({ item, type, isGrid }: Props) => {
       }`}
     >
       <Image
+        // src={`/images/productImages/pexels-tuurt-812264.jpg`}
         src={img}
         alt={`img-${name}`}
         className="object-cover w-auto h-auto"
-        width={110}
-        height={110}
+        width={80}
+        height={80}
+        unoptimized
         priority
       />
       <div className="flex flex-col absolute top-2 right-2">

@@ -18,6 +18,7 @@ const ImgProductDetails = ({ item }: { item: typeProduct }) => {
               onClick={() => setGetImg(img)}
               className="border-1 border-gray-50 cursor-pointer hover:border-primary rounded-[4px] p-1"
               priority
+              unoptimized
             />
             <Image
               src={img}
@@ -27,6 +28,7 @@ const ImgProductDetails = ({ item }: { item: typeProduct }) => {
               onClick={() => setGetImg(img)}
               className="border-1 border-gray-50 cursor-pointer hover:border-primary rounded-[4px] p-1"
               priority
+              unoptimized
             />
             <Image
               src={img}
@@ -36,6 +38,7 @@ const ImgProductDetails = ({ item }: { item: typeProduct }) => {
               onClick={() => setGetImg(img)}
               className="border-1 border-gray-50 cursor-pointer hover:border-primary rounded-[4px] p-1"
               priority
+              unoptimized
             />
             <Image
               src={img}
@@ -45,6 +48,7 @@ const ImgProductDetails = ({ item }: { item: typeProduct }) => {
               onClick={() => setGetImg(img)}
               className="border-1 border-gray-50 cursor-pointer hover:border-primary rounded-[4px] p-1"
               priority
+              unoptimized
             />
           </div>
         ))}
@@ -58,6 +62,7 @@ const ImgProductDetails = ({ item }: { item: typeProduct }) => {
           alt={"img" + item.name}
           width={300}
           height={300}
+          unoptimized
         />
       </div>
     </div>
