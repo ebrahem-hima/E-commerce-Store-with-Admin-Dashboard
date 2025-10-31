@@ -14,7 +14,7 @@ const HeroImageFilter = () => {
         {isLoading && <div>...Loading</div>}
         <Image
           // src={`/kari-shea-1SAnrIxw5OY-unsplash.jpg`}
-          src={`/images/Frame_560.webp`}
+          src={`/kari-shea-1SAnrIxw5OY-unsplash.jpg`}
           // src={`/images/pexels-tuurt-812264.webp`}
           alt="Hero-Image"
           priority
