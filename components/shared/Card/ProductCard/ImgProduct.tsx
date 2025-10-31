@@ -47,14 +47,15 @@ const ImgProduct = ({ item, type, isGrid }: Props) => {
         isGrid && "w-1/2"
       }`}
     >
-      {/* <Image
+      <Image
+        // src={`/images/pexels-tuurt-812264.webp`}
         src={img}
         alt={`img-${name}`}
         className="object-cover w-auto h-auto"
-        width={80}
-        height={80}
+        width={100}
+        height={100}
         priority
-      /> */}
+      />
       <div className="flex flex-col absolute top-2 right-2">
         {type === "wishList" ? (
           <Trash2
