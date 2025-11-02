@@ -12,7 +12,7 @@ interface Props {
 
 const UseUserCart = ({ isAuth, isCartDataUpdated }: Props) => {
   const saved =
-    typeof window !== "undefined" ? localStorage.getItem("user_cart") : "";
+    typeof window !== "undefined" ? localStorage.getItem("cart_guest") : "";
   const getCartData = saved ? JSON.parse(saved) : [];
   const [cartData, setCartData] = useState<typeProduct[]>(getCartData);
 
@@ -84,7 +84,8 @@ const UseUserCart = ({ isAuth, isCartDataUpdated }: Props) => {
     const syncCart = async () => {
       const user = await getUser();
       // console.log("user?.id", user?.id);
-      if (!user?.id && cartData.length > 0) return handleGuestCart();
+      if (!user?.id) return handleGuestCart();
+      // if (!user?.id && cartData.length > 0) return handleGuestCart();
       if (user?.id) await handleUserCart(user?.id);
     };
     syncCart();

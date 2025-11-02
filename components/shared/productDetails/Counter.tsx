@@ -85,11 +85,9 @@ const Counter = ({
             });
           } else {
             addGuestCartItems({
-              cartData,
               setCartData,
               item,
               count,
-              // setIsCartDataUpdated,
               getOptions,
             });
           }
@@ -101,13 +99,13 @@ const Counter = ({
         {heart ? (
           <HiMiniHeart
             size={33}
-            className="text-primary cursor-pointer border border-[#777] rounded-sm p-[4px]"
+            className="text-primary cursor-pointer border border-[#777] rounded-sm p-1"
             onClick={() => addWishList(item, "remove", userId || "")}
           />
         ) : (
           <HiOutlineHeart
             size={33}
-            className="cursor-pointer border border-[#777] rounded-sm p-[4px]"
+            className="cursor-pointer border border-[#777] rounded-sm p-1"
             onClick={() => addWishList(item, "add", userId || "")}
           />
         )}

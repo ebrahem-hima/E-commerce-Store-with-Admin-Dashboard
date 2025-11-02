@@ -61,7 +61,7 @@ const Navbar = () => {
           onClick={() => push(`/wishlist`)}
         />
         <ShopCart />
-        <DropdownMenuDemo />
+        <Account />
         <NavbarMobile />
       </div>
     </nav>
@@ -70,7 +70,7 @@ const Navbar = () => {
 
 export default Navbar;
 
-function DropdownMenuDemo() {
+function Account() {
   const { userId, setIsAuth, setUser, setCartData } = useProductContext();
   return (
     <DropdownMenu>
@@ -100,9 +100,9 @@ function DropdownMenuDemo() {
                 localStorage.removeItem("cart_guest");
                 localStorage.removeItem("user_profile");
                 // localStorage.clear();
-                setCartData([]);
+                // setCartData([]);
                 logout();
-                setIsAuth(false);
+                // setIsAuth(false);
               }}
             >
               Log Out

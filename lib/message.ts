@@ -6,7 +6,6 @@ export const MESSAGES = {
     ExistCartShop: "These products are already in your cart.",
   },
   cart: {
-    alreadyExists: (name: string) => `${name} is already in your cart.`,
     added: (name?: string) => `${name || "Items"} has been added to your cart.`,
     removed: (name: string) => `${name} has been removed from your cart.`,
     outOfStock: (names: string) =>

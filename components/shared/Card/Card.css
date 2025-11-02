@@ -22,10 +22,8 @@
       max-400:auto-cols-[calc((100%/1))];
   }
   .addProduct {
-    @apply absolute w-full flex items-center justify-center 
-    bottom-[-35px] h-[35px] 
-    rounded-b-[4px] transition-[bottom] duration-300 
-    bg-black text-white font-medium;
+    @apply mt-1 flex items-center justify-center 
+    h-[35px] hover:opacity-85 duration-200 rounded-sm text-white font-medium;
   }
   .btnStyles {
     @apply cursor-pointer active:text-white active:border-[#DB4444] active:bg-[#DB4444] hover:text-white flex justify-center items-center h-8 w-8 border border-[#777] hover:bg-[#DB4444] hover:border-[#DB4444] rounded-l-[3px] duration-200;

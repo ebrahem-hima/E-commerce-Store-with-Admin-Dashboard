@@ -26,15 +26,6 @@ export const AddToCart = async ({
     toast.info(MESSAGES.cart.outOfStock(item.name));
     return;
   }
-  const getUserCart = JSON.parse(localStorage.getItem("user_cart") || "[]");
-  console.log("cartData", getUserCart);
-  const isExist = getUserCart.find(
-    (cartItem: typeProduct) => cartItem.product_id === item.product_id
-  );
-  if (isExist) {
-    toast.info(MESSAGES.cart.alreadyExists(item.name));
-    return;
-  }
 
   const { error } = await supabase.from("user_cart").insert({
     product_id: item.product_id,
@@ -62,7 +53,6 @@ export const AddToCart = async ({
 };
 
 interface addGuestCartItemsType {
-  cartData: typeProduct[];
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
   item: typeProduct;
   count?: number;
@@ -70,7 +60,6 @@ interface addGuestCartItemsType {
 }
 
 export const addGuestCartItems = ({
-  cartData,
   setCartData,
   item,
   count,
@@ -80,13 +69,7 @@ export const addGuestCartItems = ({
     toast.info(MESSAGES.cart.outOfStock(item.name));
     return;
   }
-  const isExist = cartData.find(
-    (cartItem: typeProduct) => cartItem.product_id === item.product_id
-  );
-  if (isExist) {
-    toast.info(MESSAGES.cart.alreadyExists(item.name));
-    return;
-  }
+
   setCartData((prev) => [
     ...prev,
     {
