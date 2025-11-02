@@ -33,14 +33,14 @@ export default function RootLayout({
           className={`${poppins.className} ${inter.variable} grid grid-rows-[auto_1fr_auto] antialiased`}
         >
           <Navbar />
-          <div className="pt-20 flex flex-col min-h-screen">
+          <main className="pt-20 flex flex-col min-h-screen">
             <div className="grow px-10! max-md:px-1! max-sm:px-0">
               {children}
             </div>
             <Footer />
-            <Toaster expand richColors />
-            <SpeedInsights />
-          </div>
+          </main>
+          <Toaster expand richColors />
+          <SpeedInsights />
         </body>
       </html>
     </ProductProvider>
