@@ -6,10 +6,10 @@ import Filters from "../Navbar/Filters";
 const HeroImageFilter = () => {
   return (
     <div className="grid gap-10 grid-cols-[300px_1fr] h-[340px] max-md:grid-cols-1">
-      {/* <Filters /> */}
+      <Filters />
       <div className="relative">
         <Image
-          src={`/Frame_560.webp`}
+          src={`/images/Frame_560.webp`}
           alt="Hero-Image"
           priority
           fill
@@ -17,13 +17,6 @@ const HeroImageFilter = () => {
           className="object-cover rounded-md"
         />
       </div>
-      <img
-        src={`/Frame_560.webp`}
-        alt="Hero-Image"
-        width={500}
-        height={500}
-        className="object-cover rounded-md"
-      />
     </div>
   );
 };
