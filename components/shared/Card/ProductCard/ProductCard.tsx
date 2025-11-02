@@ -1,4 +1,3 @@
-import React from "react";
 import { typeProduct } from "../../../../types/productTypes";
 import "../Card.css";
 
