@@ -22,7 +22,3 @@ const HeroImageFilter = () => {
 };
 
 export default HeroImageFilter;
-
-/*
-
-*/
