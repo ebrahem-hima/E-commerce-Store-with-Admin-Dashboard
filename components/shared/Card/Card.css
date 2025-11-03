@@ -28,6 +28,10 @@
   .btnStyles {
     @apply cursor-pointer active:text-white active:border-[#DB4444] active:bg-[#DB4444] hover:text-white flex justify-center items-center h-8 w-8 border border-[#777] hover:bg-[#DB4444] hover:border-[#DB4444] rounded-l-[3px] duration-200;
   }
+  .slider.dragging {
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+  }
 }
 
 .scrollbar-hide::-webkit-scrollbar {

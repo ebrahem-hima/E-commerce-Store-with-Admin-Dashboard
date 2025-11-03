@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { MouseEvent, useRef, useState } from "react";
 
 const Slider = ({
   children,
@@ -7,34 +7,41 @@ const Slider = ({
   children: React.ReactNode;
   parentRef: React.RefObject<HTMLDivElement | null>;
 }>) => {
+  const slider = parentRef.current;
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-
   const isDragging = useRef(false);
 
-  const handleMouseUp = () => {};
-
-  const handleMouseDown = (e: MouseEvent) => {
+  const startDragging = (e: MouseEvent<HTMLDivElement>) => {
     isDragging.current = true;
+    slider?.classList.add("dragging");
+
     setStartX(e.pageX);
-    setScrollLeft(parentRef.current?.scrollLeft || 0);
+    setScrollLeft(slider?.scrollLeft || 0);
   };
 
-  const handleMouseMove = () => {
-    if (isDragging) {
-    }
+  const stopDragging = (e: MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    isDragging.current = false;
+    slider?.classList.remove("dragging");
   };
 
-  useEffect(() => {
-    const slider = parentRef.current;
-  }, []);
+  const Dragging = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDragging.current) return false;
+    if (slider) slider.scrollLeft = scrollLeft - (e.pageX - startX);
+  };
 
   return (
     <div
-      onMouseUp={handleMouseUp}
-      // onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      className="overflow-x-auto scrollbar-hide snap-x snap-mandatory"
+      onMouseDown={startDragging}
+      onMouseUp={stopDragging}
+      onMouseMove={Dragging}
+      onMouseLeave={stopDragging}
+      onDragStart={(e) => {
+        e.preventDefault();
+      }}
+      className={`slider scroll-smooth overflow-x-auto scrollbar-hide snap-x snap-mandatory`}
       ref={parentRef}
     >
       {children}

@@ -13,7 +13,7 @@ const CardCategory = ({ icon: Icon, text, value, type }: Props) => {
   return (
     <Link
       href={`/search?query=${text}`}
-      className="snap-start group cursor-pointer flex-center flex-col gap-1 border border-[rgba(0,0,0,0.3)] rounded-sm h-[130px] hover:bg-primary hover:border-primary duration-300"
+      className="categoryCard snap-start group cursor-pointer flex-center flex-col gap-1 border border-[rgba(0,0,0,0.3)] rounded-sm h-[130px] hover:bg-primary hover:border-primary duration-300"
     >
       <span>
         <Icon className="duration-300 group-hover:text-white" size={30} />

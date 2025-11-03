@@ -15,7 +15,7 @@ const ProductCard = ({ item, type, isGrid }: Props) => {
   return (
     <Link
       href={`/productDetails/${item.product_id}`}
-      className={`h-[230px] group ${
+      className={`h-[230px] productCard snap-start group ${
         isGrid ? "flex-row flex items-start" : "flex-col flex-center"
       } gap-2 cursor-pointer`}
     >

@@ -36,7 +36,7 @@ const ImgProduct = ({ item, type, isGrid }: Props) => {
     <div
       className={`group relative h-full w-full overflow-hidden flex-center ${
         isGrid && "w-1/2"
-      } pointer-events-none`}
+      } `}
     >
       <Image
         src={img}
@@ -45,6 +45,7 @@ const ImgProduct = ({ item, type, isGrid }: Props) => {
         width={100}
         height={100}
         priority
+        draggable={false}
       />
       <div className="flex flex-col absolute items-center top-2 right-2">
         {type === "wishList" ? (
