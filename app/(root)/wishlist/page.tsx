@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import ProductCard from "@/components/shared/Card/ProductCard/ProductCard";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -80,7 +80,7 @@ const Page = () => {
       ) : wishList.length > 0 ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {wishList.map((item) => (
-            <ProductCard type="wishList" key={item.product_id} item={item} />
+            <ProductCard key={item.product_id} item={item} />
           ))}
         </div>
       ) : (

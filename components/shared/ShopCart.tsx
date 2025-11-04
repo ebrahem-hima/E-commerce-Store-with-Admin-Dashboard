@@ -26,8 +26,7 @@ export function ShopCart() {
 
   const [count, setCount] = useState(0);
   useEffect(() => {
-    const count = cartData.length;
-    setCount(count);
+    setCount(cartData.length);
   }, [cartData]);
   return (
     <Sheet>

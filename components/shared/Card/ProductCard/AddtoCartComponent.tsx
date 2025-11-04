@@ -42,6 +42,7 @@ const AddToCartComponent = ({ isExist, item }: Props) => {
       addGuestCartItems({
         setCartData,
         item,
+        setIsCartDataUpdated,
       });
     }
   };

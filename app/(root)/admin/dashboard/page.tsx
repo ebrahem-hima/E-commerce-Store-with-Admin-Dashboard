@@ -17,9 +17,9 @@ const Page = () => {
         <Info />
         <Info />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="font-medium">
-          <p>Top Products by Units Sold</p>
+          <p>Top Member by Units Sold</p>
           <CustomTable dataBody={bodyTopMember} titles={headTopMember} />
         </div>
         <div>

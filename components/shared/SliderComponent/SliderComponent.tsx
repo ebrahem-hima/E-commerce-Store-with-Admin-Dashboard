@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import { useRef } from "react";
 import TitleComponent from "./titleComponent";
 import { SliderComponentType } from "../../../types/productTypes";
 import Slider from "./Slider";
@@ -16,13 +16,13 @@ const SliderComponent = ({
   search,
 }: SliderComponentType) => {
   const parentRef = useRef<HTMLDivElement | null>(null);
+
   return (
     <div className="w-full flex flex-col gap-3 overflow-hidden red">
       <TitleComponent parentRef={parentRef} titleComponent={titleComponent} />
       {type === "category" ? (
         <Slider parentRef={parentRef}>
           <div className="categoryGrid">
-            {/* <div className="categoryGrid"> */}
             {categoryCard.map((category) => (
               <CardCategory
                 key={category.text}

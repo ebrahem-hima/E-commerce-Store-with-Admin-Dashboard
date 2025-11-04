@@ -29,8 +29,13 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
   const [heart, setHeart] = useState(false);
   const { replace } = useRouter();
   const pathName = usePathname();
-  const { userId, cartData, setCartData, setIsCartDataUpdated } =
-    useProductContext();
+  const {
+    userId,
+    cartData,
+    setCartData,
+    setIsCartDataUpdated,
+    setWishListStatus,
+  } = useProductContext();
 
   useEffect(() => {
     isInWishList({ item, setHeart });
@@ -106,6 +111,7 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
         cartData={cartData}
         setCartData={setCartData}
         getOptions={getOptions}
+        setWishListStatus={setWishListStatus}
       />
 
       {/* Free delivery */}

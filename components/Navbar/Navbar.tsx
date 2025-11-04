@@ -41,10 +41,10 @@ const Navbar = () => {
           <Link
             href={nav.link}
             key={nav.text}
-            className={`font-poppins relative cursor-pointer font-normal text-[16px] leading-[24px] ${
+            className={`font-poppins relative cursor-pointer font-normal text-[16px] leading-6 ${
               pathName === nav.link
                 ? "border-b-2 border-primary"
-                : "before:content-[''] before:absolute before:bottom-0 before:bg-primary before:h-[2px] before:w-0 hover:before:w-full before:duration-300"
+                : "before:content-[''] before:absolute before:bottom-0 before:bg-primary before:h-0.5 before:w-0 hover:before:w-full before:duration-300"
             }`}
           >
             {nav.text}
@@ -71,7 +71,7 @@ const Navbar = () => {
 export default Navbar;
 
 function Account() {
-  const { userId, setIsAuth, setUser, setCartData } = useProductContext();
+  const { userId, setUser, setCartData, cartData } = useProductContext();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -96,12 +96,13 @@ function Account() {
             <DropdownMenuItem
               onClick={() => {
                 setUser("");
+                setCartData([]);
                 localStorage.removeItem("user_cart");
                 localStorage.removeItem("cart_guest");
                 localStorage.removeItem("user_profile");
                 // localStorage.clear();
-                // setCartData([]);
                 logout();
+                console.log("cartData", cartData);
                 // setIsAuth(false);
               }}
             >

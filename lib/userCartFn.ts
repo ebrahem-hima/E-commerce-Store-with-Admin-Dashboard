@@ -44,11 +44,11 @@ export const AddToCart = async ({
     active: item.active,
     reviews: item.reviews,
   });
-  toast.success(MESSAGES.cart.added(item.name));
   if (error) {
     console.log("errorAdd To Cart", error);
     return;
   }
+  toast.success(MESSAGES.cart.added(item.name));
   setIsCartDataUpdated((prev) => !prev);
 };
 
@@ -57,6 +57,7 @@ interface addGuestCartItemsType {
   item: typeProduct;
   count?: number;
   getOptions?: { optionTitle: string; values: string[] }[];
+  setIsCartDataUpdated: Dispatch<SetStateAction<boolean>>;
 }
 
 export const addGuestCartItems = ({
@@ -64,12 +65,12 @@ export const addGuestCartItems = ({
   item,
   count,
   getOptions,
+  setIsCartDataUpdated,
 }: addGuestCartItemsType) => {
   if (!item.active) {
     toast.info(MESSAGES.cart.outOfStock(item.name));
     return;
   }
-
   setCartData((prev) => [
     ...prev,
     {
@@ -80,6 +81,7 @@ export const addGuestCartItems = ({
   ]);
 
   toast.success(MESSAGES.cart.added(item.name));
+  setIsCartDataUpdated((prev) => !prev);
 };
 
 interface updateProductCount {
@@ -93,15 +95,20 @@ export const updateProduct = async ({
   count,
   setIsCartDataUpdated,
 }: updateProductCount) => {
-  for (const product of count) {
-    const { error } = await supabase
+  console.log("count", count);
+  const updatePromises = count.map((product) =>
+    supabase
       .from("user_cart")
       .update({ count: product.count })
-      .eq("product_id", product.id);
-    if (error) {
-      console.log(error);
-      return false;
-    }
+      .eq("product_id", product.id)
+  );
+
+  const results = await Promise.all(updatePromises);
+
+  const errors = results.filter((r) => r.error);
+  if (errors.length) {
+    console.log(errors);
+    return false;
   }
 
   toast.success(MESSAGES.table.tableUpdate);
@@ -116,16 +123,21 @@ export const handleDeleteProductCart = async ({
   setCartData,
   userId,
 }: deleteProductCart) => {
-  toast.success(MESSAGES.cart.removed(name));
   if (!userId) {
     setCartData((prev) => prev.filter((item) => item.product_id !== ID));
-    return false;
+    setIsCartDataUpdated((prev) => !prev);
+    toast.success(MESSAGES.cart.removed(name));
+    return;
   }
   const { error } = await supabase
     .from("user_cart")
     .delete()
     .eq("product_id", ID);
-  if (error) throw error;
+  if (error) {
+    console.log("error", error);
+    return;
+  }
+  toast.success(MESSAGES.cart.removed(name));
   setIsCartDataUpdated((prev) => !prev);
 };
 

@@ -16,6 +16,7 @@ interface Props {
   userId?: string;
   heart: boolean;
   setIsCartDataUpdated: React.Dispatch<React.SetStateAction<boolean>>;
+  setWishListStatus: React.Dispatch<React.SetStateAction<boolean>>;
   cartData: typeProduct[];
   setCartData: React.Dispatch<React.SetStateAction<typeProduct[]>>;
   getOptions: { optionTitle: string; values: string[] }[];
@@ -32,6 +33,7 @@ const Counter = ({
   cartData,
   setCartData,
   getOptions,
+  setWishListStatus,
 }: Props) => {
   const { active, stock } = item;
   const handleMaxCount = () => {
@@ -89,6 +91,7 @@ const Counter = ({
               item,
               count,
               getOptions,
+              setIsCartDataUpdated,
             });
           }
         }}
@@ -100,13 +103,17 @@ const Counter = ({
           <HiMiniHeart
             size={33}
             className="text-primary cursor-pointer border border-[#777] rounded-sm p-1"
-            onClick={() => addWishList(item, "remove", userId || "")}
+            onClick={() =>
+              addWishList({ item, userId: userId || "", setWishListStatus })
+            }
           />
         ) : (
           <HiOutlineHeart
             size={33}
             className="cursor-pointer border border-[#777] rounded-sm p-1"
-            onClick={() => addWishList(item, "add", userId || "")}
+            onClick={() =>
+              addWishList({ item, userId: userId || "", setWishListStatus })
+            }
           />
         )}
       </button>

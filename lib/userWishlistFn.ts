@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { typeProduct } from "@/types/productTypes";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, MouseEvent, SetStateAction } from "react";
 import { toast } from "sonner";
 import { MESSAGES } from "./message";
 import { supabase } from "@/supabase-client";
@@ -11,57 +11,72 @@ export function cn(...inputs: ClassValue[]) {
 }
 interface Props {
   item: typeProduct;
+  setWishListStatus: Dispatch<SetStateAction<boolean>>;
+  setIsWishList: Dispatch<SetStateAction<boolean>>;
+  e: MouseEvent;
 }
-export const handleDeleteItemWishList = async ({ item }: Props) => {
+export const handleDeleteItemWishList = async ({
+  e,
+  item,
+  setWishListStatus,
+  setIsWishList,
+}: Props) => {
+  e.stopPropagation();
+  e.preventDefault();
   const { error } = await supabase
     .from("user_wishlist")
     .delete()
     .eq("product_id", item.product_id);
   toast.success(MESSAGES.wishlist.removed(item.name));
-  if (error) throw error;
-};
-
-export const addWishList = async (
-  item: typeProduct,
-  Action: string,
-  userId: string
-) => {
-  const { data: exist } = await supabase
-    .from("user_wishlist")
-    .select()
-    .eq("product_id", item.product_id)
-    .eq("user_id", userId)
-    .maybeSingle();
-  if (exist) {
-    if (Action === "remove") {
-      handleDeleteItemWishList({ item });
-    } else if (Action === "add") {
-      toast.info(MESSAGES.wishlist.alreadyExists(item.name));
-    }
+  if (error) {
+    console.log("error", error);
     return;
   }
-  try {
-    const { error } = await supabase.from("user_wishlist").insert({
-      product_id: item.product_id,
-      user_id: userId,
-      name: item.name,
-      img: item.img,
-      description: item.description,
-      rate: item.rate,
-      stock: item.stock,
-      imgGallery: item.imgGallery,
-      discount: item.discount,
-      discount_type: item.discount_type,
-      price: item.price,
-      options: item.options,
-      active: item.active,
-      reviews: item.reviews,
-    });
-    toast.success(MESSAGES.wishlist.added(item.name));
-    if (error) throw error;
-  } catch (error) {
-    console.log("error", error);
-  }
+  setIsWishList(false);
+  setWishListStatus((prev) => !prev);
+};
+
+interface addWishListType {
+  e?: MouseEvent<SVGElement>;
+  item: typeProduct;
+  userId: string;
+  setWishListStatus: Dispatch<SetStateAction<boolean>>;
+  setIsWishList?: Dispatch<SetStateAction<boolean>>;
+}
+
+export const addWishList = async ({
+  e,
+  item,
+  userId,
+  setWishListStatus,
+  setIsWishList,
+}: addWishListType) => {
+  e?.stopPropagation();
+  e?.preventDefault();
+  const { error } = await supabase.from("user_wishlist").insert({
+    product_id: item.product_id,
+    user_id: userId,
+    name: item.name,
+    img: item.img,
+    description: item.description,
+    rate: item.rate,
+    stock: item.stock,
+    imgGallery: item.imgGallery,
+    discount: item.discount,
+    discount_type: item.discount_type,
+    price: item.price,
+    options: item.options,
+    active: item.active,
+    reviews: item.reviews,
+  });
+  toast.success(MESSAGES.wishlist.added(item.name));
+  if (error)
+    if (error) {
+      console.log("error", error);
+      return;
+    }
+  setWishListStatus((prev) => !prev);
+  setIsWishList?.(true);
 };
 
 interface isProductWishListType {

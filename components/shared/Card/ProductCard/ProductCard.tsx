@@ -7,11 +7,10 @@ import Link from "next/link";
 
 interface Props {
   item: typeProduct;
-  type?: string;
   isGrid?: boolean;
 }
 
-const ProductCard = ({ item, type, isGrid }: Props) => {
+const ProductCard = ({ item, isGrid }: Props) => {
   return (
     <Link
       href={`/productDetails/${item.product_id}`}
@@ -20,7 +19,7 @@ const ProductCard = ({ item, type, isGrid }: Props) => {
       } gap-2 cursor-pointer`}
     >
       {/* Img + Icons */}
-      <ImgProduct isGrid={isGrid} item={item} type={type} />
+      <ImgProduct isGrid={isGrid} item={item} />
       <TextProduct isGrid={isGrid} item={item} />
     </Link>
   );

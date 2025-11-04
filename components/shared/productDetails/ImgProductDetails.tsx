@@ -52,21 +52,12 @@ const ImgProductDetails = ({ item }: { item: typeProduct }) => {
       {/* bigImg */}
       <div className="flex-center max-md:order-1">
         <Image
-          // priority
-          // className="w-[300px] h-[300px] max-sm:w-[250px] max-sm:h-[250px]"
-          // src={getImg}
-          // alt={"img" + item.name}
-          width={128}
-          height={128}
-          // sizes="(max-width: 768px) 100vw, 178px"
+          width={270}
+          height={270}
+          // width={128}
+          // height={128}
           src={getImg}
           alt="img-gallery"
-          // unoptimized
-          // sizes="(max-width: 768px) 100vw, 300px"
-          // width={120}
-          // height={120}
-          // onClick={() => setGetImg(img)}
-          className="border border-gray-50 cursor-pointer hover:border-primary rounded-sm p-1"
           priority
         />
       </div>

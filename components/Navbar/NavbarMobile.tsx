@@ -15,7 +15,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { logout } from "@/app/(root)/(auth)/authActions/logout";
 
 export function NavbarMobile() {
   const [click, setClick] = useState(false);
@@ -86,32 +85,14 @@ export function NavbarMobile() {
           ) : (
             <div className="flex flex-col font-medium text-[17px] gap-1">
               {navbar.map((nav) => (
-                <>
-                  <SheetClose asChild key={nav.text}>
-                    <Link
-                      className="action:ml-5 hover:ml-5 duration-300"
-                      href={nav.link}
-                    >
-                      {nav.text}
-                    </Link>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <span
-                      onClick={() => {
-                        // setUser("");
-                        localStorage.removeItem("user_cart");
-                        localStorage.removeItem("cart_guest");
-                        localStorage.removeItem("user_profile");
-                        // localStorage.clear();
-                        // setCartData([]);
-                        logout();
-                        // setIsAuth(false);
-                      }}
-                    >
-                      Log Out
-                    </span>
-                  </SheetClose>
-                </>
+                <SheetClose asChild key={nav.text}>
+                  <Link
+                    className="action:ml-5 hover:ml-5 duration-300"
+                    href={nav.link}
+                  >
+                    {nav.text}
+                  </Link>
+                </SheetClose>
               ))}
             </div>
           )}

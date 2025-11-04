@@ -31,6 +31,7 @@ export async function signup(formData: FormData) {
       first_name: dataAccount.firstName,
       last_name: dataAccount.lastName,
       email: dataAccount.email,
+      role: "user",
     });
     if (error) {
       console.log(error);

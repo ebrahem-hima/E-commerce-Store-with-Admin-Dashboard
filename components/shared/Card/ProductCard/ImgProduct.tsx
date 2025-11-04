@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { HiMiniHeart, HiOutlineHeart } from "react-icons/hi2";
 import "../Card.css";
-import { Trash2 } from "lucide-react";
 import { useProductContext } from "../../../../context/productContext";
 import { useEffect, useState } from "react";
 import {
@@ -14,17 +13,15 @@ import {
 import { typeProduct } from "@/types/productTypes";
 
 interface Props {
-  type?: string;
   item: typeProduct;
   isGrid?: boolean;
 }
 
-const ImgProduct = ({ item, type, isGrid }: Props) => {
+const ImgProduct = ({ item, isGrid }: Props) => {
   const { name, discount, price, discount_type, img } = item;
   const discountPercentage = ((discount! / price) * 100).toFixed(0);
-  const { setWishListStatus, userId } = useProductContext();
+  const { userId, setWishListStatus } = useProductContext();
   const [isWishList, setIsWishList] = useState(false);
-
   useEffect(() => {
     isProductWishList({
       setIsWishList,
@@ -38,35 +35,28 @@ const ImgProduct = ({ item, type, isGrid }: Props) => {
         isGrid && "w-1/2"
       } `}
     >
-      <Image
-        src={img}
-        alt={`img-${name}`}
-        className="object-cover w-auto h-auto"
-        width={100}
-        height={100}
-        priority
-        draggable={false}
-      />
+      <div className="relative w-[130px] h-[130px]">
+        <Image
+          src={img}
+          alt={`img-${name}`}
+          fill
+          className="object-contain"
+          priority
+          draggable={false}
+        />
+      </div>
+
       <div className="flex flex-col absolute items-center top-2 right-2">
-        {type === "wishList" ? (
-          <Trash2
-            onClick={async (e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              await handleDeleteItemWishList({ item });
-              setWishListStatus((prev) => !prev);
-            }}
-            className="iconImg hover:bg-primary hover:text-white duration-300 p-0.5 rounded-sm"
-            size={28}
-          />
-        ) : isWishList ? (
+        {isWishList ? (
           <HiMiniHeart
-            onClick={async (e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              await addWishList(item, "remove", userId || "");
-              setIsWishList(false);
-            }}
+            onClick={(e) =>
+              handleDeleteItemWishList({
+                e,
+                item,
+                setWishListStatus,
+                setIsWishList,
+              })
+            }
             size={28}
             className={`${
               isWishList ? "text-primary" : "hover:bg-primary hover:text-white"
@@ -74,11 +64,14 @@ const ImgProduct = ({ item, type, isGrid }: Props) => {
           />
         ) : (
           <HiOutlineHeart
-            onClick={async (e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              await addWishList(item, "add", userId || "");
-              setIsWishList(true);
+            onClick={(e) => {
+              addWishList({
+                e,
+                item,
+                userId: userId || "",
+                setWishListStatus,
+                setIsWishList,
+              });
             }}
             size={28}
             className="iconImg hover:bg-primary hover:text-white duration-300 p-0.5 rounded-sm"

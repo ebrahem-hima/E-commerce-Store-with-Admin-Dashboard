@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { typeProduct } from "../../types/productTypes";
 import { supabase } from "@/supabase-client";
 import { getUser } from "@/app/(root)/(auth)/authActions/getUser";
@@ -24,25 +24,22 @@ const UseUserCart = ({ isAuth, isCartDataUpdated }: Props) => {
       (item, index, self) =>
         index === self.findIndex((t) => t.product_id === item.product_id)
     );
+  const data = useRef(cartData);
+  useEffect(() => {
+    data.current = cartData;
+  }, [cartData]);
 
   useEffect(() => {
     const handleGuestCart = () => {
-      localStorage.setItem("cart_guest", JSON.stringify(cartData));
+      localStorage.setItem("cart_guest", JSON.stringify(data.current));
       return;
     };
     const handleUserCart = async (userId: string) => {
-      // console.log("start Sync CartData");
       try {
-        // console.log("start Sync CartData");
         setLoading(true);
         const getCartGuest = JSON.parse(
           localStorage.getItem("cart_guest") || "[]"
         );
-        // localStorage.setItem("user_cart", JSON.stringify(cartData));
-        // console.log("cartData", cartData);
-        // const getUserCart = JSON.parse(
-        //   localStorage.getItem("user_cart") || "[]"
-        // );
 
         const { data, error: selectError } = await supabase
           .from("user_cart")
@@ -83,16 +80,14 @@ const UseUserCart = ({ isAuth, isCartDataUpdated }: Props) => {
     };
     const syncCart = async () => {
       const user = await getUser();
-      // console.log("user?.id", user?.id);
       if (!user?.id) return handleGuestCart();
-      // if (!user?.id && cartData.length > 0) return handleGuestCart();
       if (user?.id) await handleUserCart(user?.id);
     };
     syncCart();
-  }, [isAuth, cartData]);
+  }, [isAuth, isCartDataUpdated]);
 
   useEffect(() => {
-    const getTotal = cartData.reduce((acc, curr) => {
+    const getTotal = data.current.reduce((acc, curr) => {
       let price = curr.price;
 
       if (curr.discount && curr.discount_type) {
@@ -106,7 +101,7 @@ const UseUserCart = ({ isAuth, isCartDataUpdated }: Props) => {
     }, 0);
 
     setTotal(getTotal);
-  }, [cartData]);
+  }, [isCartDataUpdated, data]);
 
   return { cartData, Loading, total, setCartData };
 };
