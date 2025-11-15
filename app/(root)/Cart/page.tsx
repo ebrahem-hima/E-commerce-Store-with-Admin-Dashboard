@@ -18,15 +18,15 @@ const Page = () => {
   const { cartData, getCoupon, setIsCartDataUpdated } = useProductContext();
   const [disableBtn, setDisableBtn] = useState(true);
   const { push } = useRouter();
-  const someDiscount = getCoupon.reduce((acc, curr) => acc + curr.value, 0);
+  const someDiscount = getCoupon?.value;
   return (
     <div className="grid grid-cols-[350px_1fr] max-lg:grid-cols-1 gap-4 max-lg:grid-flow-dense">
       <div className="flex flex-col gap-4 max-lg:order-2">
-        <div className=" border border-black rounded-sm py-4 px-2 h-fit flex flex-col gap-4">
+        <div className="border border-black rounded-sm py-4 px-2 h-fit flex flex-col gap-4">
           <p className="font-poppins font-medium text-[18px] tracking-[0.4px]">
             Cart Total
           </p>
-          <TotalComponent someDiscount={someDiscount} />
+          <TotalComponent someDiscount={someDiscount || 0} />
           <Button
             type="submit"
             variant="primary"
@@ -50,7 +50,6 @@ const Page = () => {
           handleDeleteProductCart={handleDeleteProductCart}
           setDisableBtn={setDisableBtn}
           setIsCartDataUpdated={setIsCartDataUpdated}
-          // isCartDataUpdated={isCartDataUpdated}
           disableBtn={disableBtn}
         />
         <div className="flex-between mt-6">

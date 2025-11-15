@@ -9,7 +9,7 @@ const Footer = () => {
   const { userId } = useProductContext();
 
   return (
-    <div className="mt-10 py-10 bg-black text-white grid grid-cols-1 max-md:text-center md:grid-cols-2 lg:grid-cols-4 gap-4 !px-10 max-md:!px-1 max-sm:px-0">
+    <div className="relative z-40 mt-10 py-10 bg-black text-white grid grid-cols-1 max-md:text-center md:grid-cols-2 lg:grid-cols-4 gap-4 px-10! max-md:px-1! max-sm:px-0">
       {footer.map((foot) => (
         <div key={foot.title}>
           <p className="font-inter text-[18px] mb-3">{foot.title}</p>

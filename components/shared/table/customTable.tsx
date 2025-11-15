@@ -4,11 +4,10 @@ import { tableType } from "../../../types/tabletypes";
 import TableBodyData from "./TableBodyData";
 
 const CustomTable = ({ dataBody, titles }: tableType) => {
-  // console.log("dataBody", dataBody);
   return (
     <>
       {dataBody.length > 0 ? (
-        <Table className="w-full">
+        <Table>
           <TableHeader>
             <TableRow>
               {titles &&

@@ -1,8 +1,7 @@
 "use client";
 
-import { supabase } from "@/supabase-client";
 import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import Image from "next/image";
 import PriceDisplay from "@/components/shared/priceDisplay";
+import { createClient } from "@/utils/supabase/client";
 
 interface OrderItemsType {
   product_id: string;
@@ -33,6 +33,8 @@ const Page = () => {
   const { orderId } = params;
   const [products, setProducts] = useState<OrderItemsType[]>([]);
   useEffect(() => {
+    const supabase = createClient();
+
     const getOrderItems = async () => {
       const { data: orderData, error: orderError } = await supabase
         .from("user_order")

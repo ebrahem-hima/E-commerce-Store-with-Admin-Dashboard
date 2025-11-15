@@ -1,26 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { categoriesLinks, navbar } from "../../constant/filterNavbar";
 import { IoMenu } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import MobileMenuLinks from "./MobileMenuLinks";
 
 export function NavbarMobile() {
   const [click, setClick] = useState(false);
+
   return (
     <Sheet>
-      <SheetTrigger asChild className="hidden max-md:block">
+      <SheetTrigger asChild className="hidden max-lg:block">
         <Button className="px-0" variant="outline">
           <IoMenu />
         </Button>
@@ -45,58 +44,7 @@ export function NavbarMobile() {
             Search
           </SheetTitle>
         </SheetHeader>
-        <div className="flex flex-col">
-          {click ? (
-            <div className="overflow-y-auto h-[500px]">
-              {categoriesLinks.map((category) => (
-                <div key={category.name}>
-                  <ul>
-                    <SheetClose asChild>
-                      <Link
-                        href={`/search?query=${category.value}`}
-                        className="font-bold cursor-pointer hover:opacity-75"
-                      >
-                        {category.name}
-                      </Link>
-                    </SheetClose>
-                    <li className="flex flex-col">
-                      {category.values.map((value) => (
-                        <SheetClose asChild key={value.value}>
-                          <Link
-                            href={{
-                              pathname: "/search",
-                              query: {
-                                query: category.value,
-                                category: value.value,
-                              },
-                            }}
-                            className="cursor-pointer hover:opacity-75"
-                            key={value.name}
-                          >
-                            {value.name}
-                          </Link>
-                        </SheetClose>
-                      ))}
-                    </li>
-                  </ul>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col font-medium text-[17px] gap-1">
-              {navbar.map((nav) => (
-                <SheetClose asChild key={nav.text}>
-                  <Link
-                    className="action:ml-5 hover:ml-5 duration-300"
-                    href={nav.link}
-                  >
-                    {nav.text}
-                  </Link>
-                </SheetClose>
-              ))}
-            </div>
-          )}
-        </div>
+        <MobileMenuLinks click={click} />
         <SheetFooter className="flex items-end">
           <Input type="text" placeholder="What are you looking for ?" />
         </SheetFooter>

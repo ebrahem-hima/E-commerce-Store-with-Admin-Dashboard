@@ -59,7 +59,7 @@ function NavigationMenuDemo() {
 
 const Filters = () => {
   return (
-    <div className="max-md:hidden flex flex-col">
+    <div className="max-lg:hidden flex flex-col">
       <NavigationMenuDemo />
       {filter.map((filter) => (
         <Link

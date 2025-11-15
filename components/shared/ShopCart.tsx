@@ -23,7 +23,7 @@ export function ShopCart() {
   const { cartData, setCartData, userId, setIsCartDataUpdated } =
     useProductContext();
   const { total } = useProductContext();
-
+  console.log("cartData", cartData);
   const [count, setCount] = useState(0);
   useEffect(() => {
     setCount(cartData.length);
@@ -115,7 +115,7 @@ export function ShopCart() {
             </div>
           )}
         </div>
-        <SheetFooter className="flex !flex-col gap-2 border-t border-[#77777754] pt-1">
+        <SheetFooter className="flex flex-col! gap-2 border-t border-[#77777754] pt-1">
           <div className="flex-between">
             <span className="font-poppins text-[18px]">Subtotal:</span>
             <span>${total}</span>
@@ -125,7 +125,7 @@ export function ShopCart() {
               <Button
                 asChild
                 type="submit"
-                className="w-full bg-white text-primary hover:bg-[#e6e1e1] !mr-0"
+                className="w-full bg-white text-primary hover:bg-[#e6e1e1] mr-0!"
               >
                 <span>View Cart</span>
               </Button>

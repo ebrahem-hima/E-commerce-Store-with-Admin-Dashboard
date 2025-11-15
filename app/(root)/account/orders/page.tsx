@@ -31,7 +31,7 @@ const Page = () => {
               <TableHead>Order_Code</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Total</TableHead>
-              <TableHead>Created_at</TableHead>
+              <TableHead>Date</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="cursor-pointer hover:b-[#e4dfdf]">
@@ -41,9 +41,9 @@ const Page = () => {
                 key={item.order_code}
               >
                 <TableCell>{item.order_code}</TableCell>
-                <TableCell>{item.status}</TableCell>
+                <TableCell>{item.order_status}</TableCell>
                 <TableCell className="w-fi">{item.total}</TableCell>
-                <TableCell className="w-fi">{item.created_at}</TableCell>
+                <TableCell className="w-fi">{item.date}</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -11,6 +11,8 @@ import {
   isProductWishList,
 } from "@/lib/userWishlistFn";
 import { typeProduct } from "@/types/productTypes";
+import { MESSAGES } from "@/lib/message";
+import { toast } from "sonner";
 
 interface Props {
   item: typeProduct;
@@ -35,16 +37,15 @@ const ImgProduct = ({ item, isGrid }: Props) => {
         isGrid && "w-1/2"
       } `}
     >
-      <div className="relative w-[130px] h-[130px]">
-        <Image
-          src={img}
-          alt={`img-${name}`}
-          fill
-          className="object-contain"
-          priority
-          draggable={false}
-        />
-      </div>
+      <Image
+        src={img}
+        alt={`img-${name}`}
+        width={130}
+        height={130}
+        className="object-contain"
+        priority
+        draggable={false}
+      />
 
       <div className="flex flex-col absolute items-center top-2 right-2">
         {isWishList ? (
@@ -65,6 +66,8 @@ const ImgProduct = ({ item, isGrid }: Props) => {
         ) : (
           <HiOutlineHeart
             onClick={(e) => {
+              e.preventDefault();
+              if (!userId) return toast.info(MESSAGES.wishlist.loginRequired);
               addWishList({
                 e,
                 item,

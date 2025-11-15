@@ -1,6 +1,6 @@
-import { supabase } from "@/supabase-client";
 import { useEffect, useState } from "react";
 import { typeProduct } from "../../types/productTypes";
+import { createClient } from "@/utils/supabase/client";
 
 const WishListFn = () => {
   const [Loading, setLoading] = useState(true);
@@ -8,6 +8,7 @@ const WishListFn = () => {
   const [isDisabled, setIsDisabled] = useState(false);
   useEffect(() => {
     const getProductWishList = async () => {
+      const supabase = createClient();
       setLoading(true);
       const { data, error } = await supabase.from("user_wishlist").select();
       if (error) {

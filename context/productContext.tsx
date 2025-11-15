@@ -1,63 +1,14 @@
 "use client";
 
-import React, {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  Dispatch,
-  SetStateAction,
-} from "react";
-import { typeIsOpen, typeProduct, typeUserOrder } from "../types/productTypes";
+import { createContext, useContext, useState, ReactNode } from "react";
+import { typeIsOpen } from "../types/productTypes";
 import { typeGetCoupon } from "../types/typeAliases";
-import { profileType } from "../types/profileFnTypes";
 import useUserCart from "../components/FetchData/useUserCart";
 import AuthFn from "../components/FetchData/authFn";
 import UserOrdersFn from "../components/FetchData/userOrdersFn";
 import GetProfile from "../components/FetchData/getProfile";
+import { ProductContextType } from "@/types/contextType";
 
-interface ProductContextType {
-  isOpen: typeIsOpen;
-  setIsOpen: React.Dispatch<React.SetStateAction<typeIsOpen>>;
-
-  wishListStatus: boolean;
-  setWishListStatus: Dispatch<SetStateAction<boolean>>;
-
-  userId: string | null;
-
-  profileData: profileType;
-  setProfileData: Dispatch<SetStateAction<profileType>>;
-
-  isProfileChange: { address: boolean; profile: boolean };
-  setIsProfileChange: Dispatch<
-    SetStateAction<{ address: boolean; profile: boolean }>
-  >;
-
-  isCartDataUpdated: boolean;
-  setIsCartDataUpdated: Dispatch<SetStateAction<boolean>>;
-
-  cartData: typeProduct[];
-  setCartData: Dispatch<SetStateAction<typeProduct[]>>;
-
-  isUserOrderUpdated: boolean;
-  setIsUserOrderUpdated: Dispatch<SetStateAction<boolean>>;
-
-  userOrders: typeUserOrder[];
-
-  getCoupon: typeGetCoupon[];
-  setGetCoupon: Dispatch<SetStateAction<typeGetCoupon[]>>;
-
-  isCouponApplied: boolean;
-  setIsCouponApplied: Dispatch<SetStateAction<boolean>>;
-
-  isAuth: boolean;
-  setIsAuth: Dispatch<SetStateAction<boolean>>;
-
-  setUser: Dispatch<SetStateAction<string | null>>;
-
-  total: number;
-  Loading: boolean;
-}
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
 // Provider
@@ -83,8 +34,7 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
   // -------------- Start CartShop --------------
 
   const [isCartDataUpdated, setIsCartDataUpdated] = useState(false);
-  const { cartData, setCartData, total, Loading } = useUserCart({
-    // userId: userId || "",
+  const { cartData, setCartData, total } = useUserCart({
     isAuth,
     isCartDataUpdated,
   });
@@ -106,8 +56,7 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
   // -------------- End Fetch User Profile --------------
 
   // -------------- Start Coupon --------------
-  const [getCoupon, setGetCoupon] = useState<typeGetCoupon[]>([]);
-  const [isCouponApplied, setIsCouponApplied] = useState(false);
+  const [getCoupon, setGetCoupon] = useState<typeGetCoupon>(null);
   // -------------- End Coupon --------------
 
   const values = {
@@ -138,15 +87,10 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
     getCoupon,
     setGetCoupon,
 
-    // to allow function to increase time_used by 1
-    isCouponApplied,
-    setIsCouponApplied,
-
     isAuth,
     setIsAuth,
 
     total,
-    Loading,
   };
   return (
     <ProductContext.Provider value={values}>{children}</ProductContext.Provider>

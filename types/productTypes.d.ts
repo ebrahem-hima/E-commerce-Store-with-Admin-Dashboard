@@ -25,10 +25,14 @@ export interface typeProduct {
 }
 
 export interface typeUserOrder {
-  status: "paid" | "pending";
+  type: "orderTable";
+  id: string;
+  order_status: string;
   order_code: string;
   total: number;
-  created_at: string;
+  date: string;
+  payment_status?: string;
+  customer?: string;
 }
 
 // check if searchNavbar or filter open

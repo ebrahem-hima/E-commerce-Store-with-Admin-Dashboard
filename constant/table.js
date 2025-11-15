@@ -1,8 +1,7 @@
 export const headTopMember = [
   { title: "Name" },
-  { title: "Date" },
-  { title: "Amount" },
-  { title: "Status" },
+  { title: "Orders" },
+  { title: "Total Spent" },
 ];
 
 export const bodyTopMember = [
@@ -10,25 +9,22 @@ export const bodyTopMember = [
     type: "topMember",
     id: "123",
     name: "Ahmed",
-    date: "28/04/2021",
-    amount: 124.97,
-    status: "Paid",
+    orders: "15",
+    totalSpent: 124.97,
   },
   {
     type: "topMember",
     id: "1234",
     name: "Ali",
-    date: "4/05/2015",
-    amount: 154.97,
-    status: "Pending",
+    orders: "20",
+    totalSpent: 154.97,
   },
   {
     type: "topMember",
     id: "1235",
     name: "Eslam",
-    date: "24/01/2018",
-    amount: 184.97,
-    status: "Paid",
+    orders: "10",
+    totalSpent: 184.97,
   },
 ];
 
@@ -42,22 +38,25 @@ export const bodyTopProduct = [
   {
     type: "topProduct",
     id: "123",
-    name: "Ahmed",
-    price: "28/04/2021",
+    img: "/images/productImages/bag.webp",
+    name: "Leather Bag ",
+    price: "$40",
     unitSold: "200",
   },
   {
     type: "topProduct",
     id: "1234",
-    name: "Ali",
-    price: "4/05/2015",
+    img: "/images/productImages/Controller.webp",
+    name: "Wireless Controller",
+    price: "$20",
     unitSold: "150",
   },
   {
     type: "topProduct",
     id: "12345",
-    name: "Eslam",
-    price: "24/01/2018",
+    img: "/images/productImages/cooler.webp",
+    name: "Gaming Cooler",
+    price: "$120",
     unitSold: "100",
   },
 ];

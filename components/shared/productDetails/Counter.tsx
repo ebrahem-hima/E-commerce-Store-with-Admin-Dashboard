@@ -1,12 +1,15 @@
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import "../Card/Card.css";
 import { HiOutlineHeart } from "react-icons/hi2";
 import { HiMiniHeart } from "react-icons/hi2";
-import { addGuestCartItems, AddToCart } from "@/lib/userCartFn";
-import { addWishList } from "@/lib/userWishlistFn";
+import { handleAddToCart } from "@/lib/userCartFn";
+import { addWishList, handleDeleteItemWishList } from "@/lib/userWishlistFn";
 import { toast } from "sonner";
 import { typeProduct } from "../../../types/productTypes";
+import { MdOutlineAddShoppingCart } from "react-icons/md";
+import { MouseEvent, useEffect, useState } from "react";
+import { MESSAGES } from "@/lib/message";
 
 interface Props {
   setCount: React.Dispatch<React.SetStateAction<number>>;
@@ -49,6 +52,35 @@ const Counter = ({
       return c + 1;
     });
   };
+  const [isExist, setIsExist] = useState(false);
+
+  useEffect(() => {
+    const exist = cartData.some(
+      (cartItem: typeProduct) => cartItem.product_id === item.product_id
+    );
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsExist(exist);
+  }, [cartData, item.product_id]);
+
+  const toggleWishlist = async (e: MouseEvent<HTMLButtonElement>) => {
+    if (!userId) return toast.info(MESSAGES.wishlist.loginRequired);
+    if (!heart) {
+      await addWishList({
+        item,
+        userId: userId || "",
+        setWishListStatus,
+        setIsWishList: setHeart,
+      });
+    } else {
+      await handleDeleteItemWishList({
+        e,
+        item,
+        setWishListStatus,
+        setIsWishList: setHeart,
+      });
+    }
+  };
+
   return (
     <div className="flex items-center gap-2">
       <div className="flex items-center w-fit rounded-sm">
@@ -72,33 +104,63 @@ const Counter = ({
       <Button
         size="sm"
         disabled={!active}
-        className="w-fit text-[15px] px-6 rounded-sm hover:bg-hover duration-300"
-        onClick={async (e) => {
-          e.preventDefault();
-          if (userId) {
-            await AddToCart({
-              item,
-              userId: userId || "",
-              count,
-              setIsCartDataUpdated,
-              cartData,
-              setCartData,
-              getOptions,
-            });
-          } else {
-            addGuestCartItems({
-              setCartData,
-              item,
-              count,
-              getOptions,
-              setIsCartDataUpdated,
-            });
+        className={`w-fit hover:opacity-85! text-[15px] px-6 rounded-sm 
+          ${
+            stock === 0
+              ? "bg-red-900"
+              : isExist
+              ? "bg-red-900 hover:bg-[#9c2929] duration-200"
+              : "bg-black hover:bg-[#000000ea] duration-200"
           }
+          `}
+        onClick={(e) =>
+          handleAddToCart({
+            e,
+            userId: userId || "",
+            isExist,
+            setIsCartDataUpdated,
+            setCartData,
+            cartData,
+            item,
+            getOptions,
+          })
+        }
+      >
+        {/* Buy Now */}
+        {stock === 0 ? (
+          <span>Out of Stock</span>
+        ) : isExist ? (
+          <div className="flex gap-2 items-center text-sm">
+            <span>Remove from cart</span>
+            <Trash2 />
+          </div>
+        ) : (
+          <div className="flex gap-2 items-center text-sm">
+            <span>Add to Cart</span>
+            <MdOutlineAddShoppingCart className="h-5.5! w-5.5!" />
+          </div>
+        )}
+      </Button>
+      <button onClick={toggleWishlist}>
+        {heart ? (
+          <HiMiniHeart
+            size={33}
+            className="text-primary cursor-pointer border border-[#777] rounded-sm p-1"
+          />
+        ) : (
+          <HiOutlineHeart
+            size={33}
+            className="cursor-pointer border border-[#777] rounded-sm p-1"
+          />
+        )}
+      </button>
+
+      {/* <button
+        onClick={() => {
+          if (!userId) return toast.info(MESSAGES.wishlist.loginRequired);
+          setHeart((prev) => !prev);
         }}
       >
-        Buy Now
-      </Button>
-      <button onClick={() => setHeart((prev) => !prev)}>
         {heart ? (
           <HiMiniHeart
             size={33}
@@ -116,7 +178,7 @@ const Counter = ({
             }
           />
         )}
-      </button>
+      </button> */}
     </div>
   );
 };

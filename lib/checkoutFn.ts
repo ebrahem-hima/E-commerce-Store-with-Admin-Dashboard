@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 import { MESSAGES } from "./message";
 import { Dispatch, MouseEvent, SetStateAction } from "react";
-import { supabase } from "@/supabase-client";
+import { createClient } from "@/utils/supabase/client";
 
 type typeGetCoupon = { name: string; value: number };
 
@@ -54,12 +54,10 @@ const checkTotal = async ({
 interface applyCouponType extends sameType {
   e: MouseEvent<HTMLButtonElement>;
   couponRef: React.RefObject<HTMLInputElement | null>;
-  setIsCouponApplied: Dispatch<SetStateAction<boolean>>;
 }
 
 export const applyCoupon = async ({
   e,
-  setIsCouponApplied,
   couponRef,
   total,
   setGetCoupon,
@@ -67,6 +65,8 @@ export const applyCoupon = async ({
 }: applyCouponType) => {
   e.preventDefault();
   if (couponRef.current?.value === "") return false;
+  const supabase = createClient();
+
   const { data, error } = await supabase
     .from("coupons")
     .select()
@@ -96,6 +96,5 @@ export const applyCoupon = async ({
     if (couponRef.current) couponRef.current.value = "";
     return false;
   }
-  setIsCouponApplied(true);
   if (couponRef.current) couponRef.current.value = "";
 };

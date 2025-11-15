@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/supabase-client";
 import { useRouter } from "next/navigation";
 import { updateAddress } from "@/lib/utilsProfile";
 import { AddressType } from "@/types/profileFnTypes";
 import { useProductContext } from "@/context/productContext";
+import { createClient } from "@/utils/supabase/client";
 
 const Page = () => {
   const {
@@ -26,10 +26,13 @@ const Page = () => {
   const [changeInput, setChangeInput] = useState(true);
   const { push } = useRouter();
   useEffect(() => {
+    const supabase = createClient();
+
     const getAddress = async () => {
       const { data, error } = await supabase
         .from("user_profile")
         .select()
+        .eq("id", userId)
         .single();
       if (error) {
         console.log("error", error);

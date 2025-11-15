@@ -1,31 +1,22 @@
 "use client";
 
+import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
+import { IoIosHeartEmpty } from "react-icons/io";
+
 import { navbar } from "../../constant/filterNavbar";
 import NavbarSearch from "./NavbarSearch";
-import { IoIosHeartEmpty } from "react-icons/io";
-import { usePathname, useRouter } from "next/navigation";
-import { IoPersonOutline } from "react-icons/io5";
-import Link from "next/link";
-
 import NavbarMobile from "./NavbarMobile";
 import ShopCart from "../shared/ShopCart";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useProductContext } from "../../context/productContext";
-import { logout } from "@/app/(root)/(auth)/authActions/logout";
+import AccountNav from "./AccountNav";
+import AdminNav from "./AdminNav";
+import IsAdminFn from "../FetchData/IsAdminFn";
 
 const Navbar = () => {
   const { push } = useRouter();
   const pathName = usePathname();
+  const { isAdmin } = IsAdminFn();
 
   return (
     <nav className="fixed flex-between left-0 py-3 px-10 bg-[#F5F5F5] w-full border-b border-b-[#00000017] z-50 max-md:px-1 max-sm:px-0">
@@ -36,7 +27,7 @@ const Navbar = () => {
         Exclusive
       </Link>
       {/* Links */}
-      <div className="flex gap-5 max-md:hidden">
+      <div className="flex gap-5 max-lg:hidden">
         {navbar.map((nav) => (
           <Link
             href={nav.link}
@@ -61,7 +52,8 @@ const Navbar = () => {
           onClick={() => push(`/wishlist`)}
         />
         <ShopCart />
-        <Account />
+        <AccountNav />
+        {isAdmin && <AdminNav />}
         <NavbarMobile />
       </div>
     </nav>
@@ -69,60 +61,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-function Account() {
-  const { userId, setUser, setCartData, cartData } = useProductContext();
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <IoPersonOutline size={22} className="cursor-pointer" />
-      </DropdownMenuTrigger>
-      <DropdownMenuPortal>
-        {userId ? (
-          <DropdownMenuContent className="w-56" align="start" sideOffset={4}>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuGroup>
-              <Link href={`/account/MyProfile`}>
-                <DropdownMenuItem>Account</DropdownMenuItem>
-              </Link>
-              <Link href={`/account/Address`}>
-                <DropdownMenuItem>Address</DropdownMenuItem>
-              </Link>
-              <Link href={`/account/orders`}>
-                <DropdownMenuItem>My Orders</DropdownMenuItem>
-              </Link>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => {
-                setUser("");
-                setCartData([]);
-                localStorage.removeItem("user_cart");
-                localStorage.removeItem("cart_guest");
-                localStorage.removeItem("user_profile");
-                // localStorage.clear();
-                logout();
-                console.log("cartData", cartData);
-                // setIsAuth(false);
-              }}
-            >
-              Log Out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        ) : (
-          <DropdownMenuContent className="w-56" align="start" sideOffset={4}>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuGroup>
-              <Link href={`/log-in`}>
-                <DropdownMenuItem>LogIn</DropdownMenuItem>
-              </Link>
-              <Link href={`/sign-up`}>
-                <DropdownMenuItem>SignUp</DropdownMenuItem>
-              </Link>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        )}
-      </DropdownMenuPortal>
-    </DropdownMenu>
-  );
-}

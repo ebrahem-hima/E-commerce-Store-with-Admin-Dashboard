@@ -4,12 +4,12 @@ import { typeGetCoupon } from "../../types/typeAliases";
 
 interface Props {
   text: string;
-  setBadge: Dispatch<SetStateAction<typeGetCoupon[]>>;
+  setBadge?: Dispatch<SetStateAction<typeGetCoupon[]>>;
 }
 
 const Badge = ({ text, setBadge }: Props) => {
   const deleteBadge = (name: string) => {
-    setBadge((prev) => prev.filter((badge) => badge.name !== name));
+    setBadge?.((prev) => prev.filter((badge) => badge?.name !== name));
   };
   return (
     <div

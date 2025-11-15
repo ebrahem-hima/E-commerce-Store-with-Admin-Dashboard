@@ -10,20 +10,12 @@ import { isInWishList } from "@/lib/userWishlistFn";
 import { iconsDescription } from "../../../constant/index";
 import Counter from "./Counter";
 import Options from "./Options";
+import PriceDisplay from "../priceDisplay";
 
 type optionsType = { optionTitle: string; values: string[] };
 
 const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
-  const {
-    name,
-    description,
-    price,
-    discount,
-    options,
-    rate,
-    active,
-    discount_type,
-  } = item;
+  const { name, description, options, rate, active } = item;
   const [count, setCount] = useState(1);
   const [getOptions, setGetOptions] = useState<optionsType[]>([]);
   const [heart, setHeart] = useState(false);
@@ -72,27 +64,16 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
           )}
         </div>
         {/* Price */}
-        <span className="font-inter font-normal text-2xl tracking-[0.03em]">
-          {discount ? (
-            discount_type === "percentage" ? (
-              <div className="flex items-center gap-2">
-                <span>${price - price * (1 / discount)}</span>
-                <span className="line-through text-[#777]">${price}</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <span>${price - discount}</span>
-                <span className="line-through text-[#777]">${price}</span>
-              </div>
-            )
-          ) : (
-            <span>${price}</span>
-          )}
-        </span>
+        <PriceDisplay
+          price={item.price}
+          discount={item.discount}
+          discountType={item.discount_type}
+          productDetail={true}
+        />
       </div>
       {/* description */}
       <div className="font-poppins font-normal text-sm">{description}</div>
-      <div className="w-full h-[1px] bg-[#777] rounded-sm" />
+      <div className="w-full h-px bg-[#777] rounded-sm" />
       {/* Options */}
       <Options
         options={options || []}
@@ -119,7 +100,7 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
         {iconsDescription.map((icons) => (
           <div
             key={icons.text}
-            className="px-2 py-4 flex gap-3 items-center [&:not(:last-child)]:border-b border-[rgba(0, 0, 0, 0.5)]"
+            className="px-2 py-4 flex gap-3 items-center not-last:border-b border-[rgba(0, 0, 0, 0.5)]"
           >
             {/* Icon */}
             {<icons.icon size={35} />}

@@ -13,10 +13,9 @@ const SliderComponent = ({
   type,
   titleComponent,
   Product,
-  search,
+  search = false,
 }: SliderComponentType) => {
   const parentRef = useRef<HTMLDivElement | null>(null);
-
   return (
     <div className="w-full flex flex-col gap-3 overflow-hidden red">
       <TitleComponent parentRef={parentRef} titleComponent={titleComponent} />

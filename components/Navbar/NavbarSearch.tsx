@@ -7,6 +7,7 @@ import { IoSearchOutline } from "react-icons/io5";
 import { firstProduct } from "../../constant/product";
 import { useProductContext } from "../../context/productContext";
 import Link from "next/link";
+import PriceDisplay from "../shared/priceDisplay";
 
 const NavbarSearch = () => {
   const { push } = useRouter();
@@ -39,7 +40,7 @@ const NavbarSearch = () => {
   const [inputValue, setInputValue] = useState("");
   return (
     <form
-      className="relative w-[260px] max-md:hidden flex items-center"
+      className="relative w-[450px] max-lg:hidden flex items-center"
       onSubmit={handleSubmitSearch}
     >
       <>
@@ -65,16 +66,21 @@ const NavbarSearch = () => {
           ref={divRef}
           className={`${
             isOpen.searchNavbar ? "hidden" : ""
-          } absolute flex flex-col gap-2 top-9 w-full rounded-md bg-[#f0efef] p-2 z-20`}
+          } absolute flex flex-col gap-2 top-9 w-full rounded-md bg-white p-2 z-20`}
         >
           {firstProduct.map((item) => (
             <Link
-              href={``}
-              // href={`/productDetails/${item.id}`}
+              href={`/productDetails/${item.product_id}`}
               key={item.product_id}
-              className="grid grid-cols-[80px_1fr] gap-3 cursor-pointer hover:bg-[#9999992c] rounded-md items-center"
+              className="grid grid-cols-[110px_1fr] gap-3 cursor-pointer hover:bg-[#9999992c] rounded-md items-center"
+              onClick={() => {
+                setIsOpen((prev) => ({
+                  ...prev,
+                  searchNavbar: true,
+                }));
+              }}
             >
-              <div className="relative w-[80px] h-[60px]">
+              <div className="relative w-full h-[60px]">
                 <Image
                   src={item.img}
                   fill
@@ -82,9 +88,17 @@ const NavbarSearch = () => {
                   className="object-contain rounded-md"
                 />
               </div>
-              <span className="line-clamp-2 break-all text-sm">
-                {item.name}
-              </span>
+              <div className="">
+                <span className="line-clamp-2 break-all text-sm font-medium">
+                  {item.name}
+                </span>
+                <PriceDisplay
+                  isProduct={true}
+                  discount={item.discount}
+                  discountType={item.discount_type}
+                  price={item.price}
+                />
+              </div>
             </Link>
           ))}
         </div>

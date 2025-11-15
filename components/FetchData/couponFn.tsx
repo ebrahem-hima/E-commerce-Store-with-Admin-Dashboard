@@ -1,8 +1,8 @@
 import { MESSAGES } from "@/lib/message";
-import { supabase } from "@/supabase-client";
 import { MouseEvent, useRef } from "react";
 import { toast } from "sonner";
 import { useProductContext } from "../../context/productContext";
+import { createClient } from "@/utils/supabase/client";
 
 interface checkTotalType {
   discount: number;
@@ -11,12 +11,8 @@ interface checkTotalType {
   ID: number;
 }
 
-interface Props {
-  total: number;
-}
-
-const CouponFn = ({ total }: Props) => {
-  const { getCoupon, setGetCoupon, setIsCouponApplied } = useProductContext();
+const CouponFn = () => {
+  const { getCoupon, setGetCoupon, total } = useProductContext();
   const couponRef = useRef<HTMLInputElement | null>(null);
   const getValue = useRef<string | null>(null);
 
@@ -28,36 +24,32 @@ const CouponFn = ({ total }: Props) => {
   }: checkTotalType) => {
     if (discountType === "percentage") {
       const result = total * (discount / 100);
-      console.log("result", result);
-      const totalDiscount = getCoupon.reduce(
-        (acc, curr) => acc + curr.value,
-        0
-      );
-      const newTotalDiscount = totalDiscount + result;
+      const totalDiscount = getCoupon?.value;
+      const newTotalDiscount = totalDiscount || 0 + result;
       if (newTotalDiscount > total) {
         toast.error("Discount More total");
         return false;
       }
-      setGetCoupon((prev) => [
-        ...prev,
-        { name: getValue.current || "", value: result, id: ID },
-      ]);
+      setGetCoupon({
+        name: getValue.current || "",
+        value: result,
+        id: ID,
+      });
 
       return true;
     } else if (discountType === "fixed") {
-      const totalDiscount = getCoupon.reduce(
-        (acc, curr) => acc + curr.value,
-        0
-      );
-      const newTotalDiscount = totalDiscount + discount;
+      const totalDiscount = getCoupon?.value;
+      const newTotalDiscount = totalDiscount || 0 + discount;
       if (newTotalDiscount > total) {
         toast.error("Discount More total");
         return false;
       }
-      setGetCoupon((prev) => [
-        ...prev,
-        { name: getValue.current || "", value: discount, id: ID },
-      ]);
+      setGetCoupon({
+        name: getValue.current || "",
+        value: discount,
+        id: ID,
+      });
+
       return true;
     }
   };
@@ -65,8 +57,9 @@ const CouponFn = ({ total }: Props) => {
   const applyCoupon = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const code = couponRef.current?.value?.trim();
-    if (!code) return false;
-    if (couponRef.current?.value === "") return false;
+    if (couponRef.current?.value === "" || !code) return;
+    const supabase = createClient();
+
     const { data, error } = await supabase
       .from("coupons")
       .select()
@@ -85,7 +78,7 @@ const CouponFn = ({ total }: Props) => {
     }
     if (!data.is_active) {
       toast.error(MESSAGES.coupon.invalid);
-      return false;
+      return;
     }
 
     getValue.current = code;
@@ -99,12 +92,10 @@ const CouponFn = ({ total }: Props) => {
 
     if (!check) {
       if (couponRef.current) couponRef.current.value = "";
-      return false;
+      return;
     }
-    setIsCouponApplied(true);
     if (couponRef.current) couponRef.current.value = "";
   };
-
   return { applyCoupon, couponRef, getCoupon };
 };
 

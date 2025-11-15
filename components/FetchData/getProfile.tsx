@@ -1,6 +1,6 @@
-import { supabase } from "@/supabase-client";
 import { useEffect, useState } from "react";
 import { profileType } from "../../types/profileFnTypes";
+import { createClient } from "@/utils/supabase/client";
 
 interface Props {
   isProfileChange: {
@@ -29,17 +29,24 @@ const GetProfile = ({ isProfileChange, isAuth }: Props) => {
   const [profileData, setProfileData] = useState<profileType>(getData);
   useEffect(() => {
     const fetchProfile = async () => {
+      const supabase = createClient();
+
       try {
+        const { data: userData, error: userError } =
+          await supabase.auth.getUser();
+        if (userError) throw userError;
+
         const { data: accountData, error: accountError } = await supabase
           .from("user_profile")
-          .select();
+          .select()
+          .eq("id", userData.user.id);
         if (accountError) throw accountError;
 
         const account = accountData?.[0] || {};
 
-        const { data: userData, error: userError } =
-          await supabase.auth.getUser();
-        if (userError) throw userError;
+        // const { data: userData, error: userError } =
+        //   await supabase.auth.getUser();
+        // if (userError) throw userError;
 
         const email = userData?.user?.email || "";
 

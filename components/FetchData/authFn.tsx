@@ -1,5 +1,5 @@
 import { getUser } from "@/app/(root)/(auth)/authActions/getUser";
-import { supabase } from "@/supabase-client";
+import { createClient } from "@/utils/supabase/client";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -19,6 +19,8 @@ const AuthFn = ({ isAuth }: Props) => {
     };
 
     fetchUser();
+    const supabase = createClient();
+
     const { data: listener } = supabase.auth.onAuthStateChange(() => {
       fetchUser();
     });

@@ -6,15 +6,17 @@ interface PriceDisplayProps {
   discountType?: string;
   count?: number;
   isProduct?: boolean;
+  productDetail?: boolean;
 }
 
-const PriceDisplay: React.FC<PriceDisplayProps> = ({
+const PriceDisplay = ({
   price,
   discount,
   discountType,
   count = 1,
   isProduct = false,
-}) => {
+  productDetail,
+}: PriceDisplayProps) => {
   const discountedPrice =
     discount && discountType === "percentage"
       ? price - (price * discount) / 100
@@ -24,26 +26,35 @@ const PriceDisplay: React.FC<PriceDisplayProps> = ({
 
   const hasDiscount = discount && discount > 0;
 
-  if (!isProduct) {
-    return (
-      <span className="text-black font-poppins font-medium">
-        {discountedPrice * count} EGP
-      </span>
+  if (productDetail) {
+    return hasDiscount ? (
+      <div className="flex items-center gap-2 font-poppins text-2xl tracking-[0.03em]">
+        <span className="text-black">${discountedPrice * count}</span>
+        <span className="line-through text-gray-500">${price * count}</span>
+      </div>
+    ) : (
+      <span className="line-through text-gray-500">${price * count}</span>
     );
   }
 
-  return hasDiscount ? (
-    <div className="flex items-center gap-2 text-sm">
-      <span className="text-primary font-poppins font-medium">
-        {discountedPrice * count} EGP
-      </span>
-      <span className="font-poppins line-through text-gray-500 font-medium">
+  return isProduct ? (
+    hasDiscount ? (
+      <div className="flex items-center gap-2 text-sm">
+        <span className="text-primary text-sm font-poppins font-medium">
+          {discountedPrice * count} EGP
+        </span>
+        <span className="font-poppins line-through text-gray-500 font-medium">
+          {price * count} EGP
+        </span>
+      </div>
+    ) : (
+      <span className="text-primary text-sm font-poppins font-medium">
         {price * count} EGP
       </span>
-    </div>
+    )
   ) : (
-    <span className="text-primary font-poppins font-medium">
-      {price * count} EGP
+    <span className="text-black font-poppins font-medium">
+      ${discountedPrice * count}
     </span>
   );
 };

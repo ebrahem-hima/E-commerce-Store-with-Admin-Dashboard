@@ -3,6 +3,7 @@ export const MESSAGES = {
     added: (name: string) => `${name} has been added to your wishlist.`,
     removed: (name: string) => `${name} has been removed from your wishlist.`,
     ExistCartShop: "These products are already in your cart.",
+    loginRequired: "Please log in to add items to your favorites list.",
   },
   cart: {
     added: (name?: string) => `${name || "Items"} has been added to your cart.`,

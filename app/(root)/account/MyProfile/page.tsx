@@ -4,14 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MESSAGES } from "@/lib/message";
-import { supabase } from "@/supabase-client";
-import React, { MouseEvent, useEffect, useRef, useState } from "react";
+import { MouseEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { updateEmail, updatePassword, updateProfile } from "@/lib/utilsProfile";
 import { useProductContext } from "@/context/productContext";
 import { myProfileType } from "@/types/profileFnTypes";
 import { profileSchema } from "@/validation";
+import { createClient } from "@/utils/supabase/client";
 
 const Page = () => {
   const { userId, profileData, setProfileData, isProfileChange } =
@@ -34,9 +34,11 @@ const Page = () => {
   // store data in originalProfile to check data change
   useEffect(() => {
     const fetchUserProfile = async () => {
+      const supabase = createClient();
       const { data: profileDataDb, error: profileError } = await supabase
         .from("user_profile")
-        .select();
+        .select()
+        .eq("id", userId);
       if (profileError) {
         console.log("Profile error:", profileError);
         return false;

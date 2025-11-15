@@ -11,3 +11,23 @@ export function getTodayDate() {
   const year = today.getFullYear();
   return `${month}/${day}/${year}`;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function withLock<T extends (...args: any[]) => Promise<any>>(fn: T) {
+  let isRunning = false;
+
+  return async (...args: Parameters<T>): Promise<ReturnType<T> | void> => {
+    const e = args[0]?.e;
+    e?.stopPropagation();
+    e?.preventDefault();
+
+    if (isRunning) return;
+    isRunning = true;
+
+    try {
+      return await fn(...args);
+    } finally {
+      isRunning = false;
+    }
+  };
+}

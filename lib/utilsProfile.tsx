@@ -1,4 +1,3 @@
-import { supabase } from "@/supabase-client";
 import {
   AddressType,
   updateAddressType,
@@ -9,10 +8,12 @@ import {
 import { toast } from "sonner";
 import { MESSAGES } from "./message";
 import { addressSchema } from "@/validation";
+import { createClient } from "@/utils/supabase/client";
 
 interface signInType {
   password: string;
 }
+const supabase = createClient();
 
 export const signIn = async ({ password }: signInType) => {
   const { data } = await supabase.auth.getUser();

@@ -33,6 +33,7 @@ export const firstProduct = [
     img: "/images/productImages/Controller.webp",
     description: "Ergonomic wireless controller with haptic feedback.",
     imgGallery: ["/images/productImages/Controller.webp"],
+
     rate: 4.7,
     stock: 0,
     discount: 0,

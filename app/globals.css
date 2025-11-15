@@ -53,6 +53,7 @@
   --color-lightGray: #f5f5f5;
   --color-darkGray: #333333;
   --color-hover: #e07575;
+  --color-blue: #1e5eff;
   /* Fonts */
   --font-inter: "Inter", sans-serif;
   --font-poppins: "Poppins", sans-serif;
@@ -60,6 +61,7 @@
   --breakpoint-tablet: 56rem;
   --breakpoint-laptop: 50rem;
   --breakpoint-400: 25rem;
+  --breakpoint-650: 65rem;
   /* --breakpoint-lg: 1000px; */
 }
 /* End Global Colors */

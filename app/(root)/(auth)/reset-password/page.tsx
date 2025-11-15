@@ -9,11 +9,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/supabase-client";
 import { FormEvent, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { MESSAGES } from "@/lib/message";
+import { createClient } from "@/utils/supabase/client";
 
 const Page = () => {
   const [Loading, setLoading] = useState(false);
@@ -22,6 +22,7 @@ const Page = () => {
   const changePassword = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    const supabase = createClient();
     try {
       const { error } = await supabase.auth.updateUser({
         password,
@@ -49,7 +50,7 @@ const Page = () => {
           type="password"
           name="password"
           placeholder="Enter your new password"
-          className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-[0px]"
+          className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-none"
           required
           onChange={(e) => setPassword(e.target.value)}
         />

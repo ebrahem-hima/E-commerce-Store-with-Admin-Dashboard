@@ -4,37 +4,42 @@ import { typeProduct } from "@/types/productTypes";
 import { Dispatch, MouseEvent, SetStateAction } from "react";
 import { toast } from "sonner";
 import { MESSAGES } from "./message";
-import { supabase } from "@/supabase-client";
+import { withLock } from "./utils";
+import { createClient } from "@/utils/supabase/client";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+const supabase = createClient();
+
 interface Props {
   item: typeProduct;
   setWishListStatus: Dispatch<SetStateAction<boolean>>;
   setIsWishList: Dispatch<SetStateAction<boolean>>;
   e: MouseEvent;
 }
-export const handleDeleteItemWishList = async ({
-  e,
-  item,
-  setWishListStatus,
-  setIsWishList,
-}: Props) => {
-  e.stopPropagation();
-  e.preventDefault();
-  const { error } = await supabase
-    .from("user_wishlist")
-    .delete()
-    .eq("product_id", item.product_id);
-  toast.success(MESSAGES.wishlist.removed(item.name));
-  if (error) {
-    console.log("error", error);
-    return;
+
+export const handleDeleteItemWishList = withLock(
+  async ({ e, item, setWishListStatus, setIsWishList }: Props) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    const { error } = await supabase
+      .from("user_wishlist")
+      .delete()
+      .eq("product_id", item.product_id);
+
+    if (error) {
+      console.log("error", error);
+      return;
+    }
+
+    toast.success(MESSAGES.wishlist.removed(item.name));
+    setIsWishList(false);
+    setWishListStatus((prev) => !prev);
   }
-  setIsWishList(false);
-  setWishListStatus((prev) => !prev);
-};
+);
 
 interface addWishListType {
   e?: MouseEvent<SVGElement>;
@@ -44,40 +49,44 @@ interface addWishListType {
   setIsWishList?: Dispatch<SetStateAction<boolean>>;
 }
 
-export const addWishList = async ({
-  e,
-  item,
-  userId,
-  setWishListStatus,
-  setIsWishList,
-}: addWishListType) => {
-  e?.stopPropagation();
-  e?.preventDefault();
-  const { error } = await supabase.from("user_wishlist").insert({
-    product_id: item.product_id,
-    user_id: userId,
-    name: item.name,
-    img: item.img,
-    description: item.description,
-    rate: item.rate,
-    stock: item.stock,
-    imgGallery: item.imgGallery,
-    discount: item.discount,
-    discount_type: item.discount_type,
-    price: item.price,
-    options: item.options,
-    active: item.active,
-    reviews: item.reviews,
-  });
-  toast.success(MESSAGES.wishlist.added(item.name));
-  if (error)
+export const addWishList = withLock(
+  async ({
+    e,
+    item,
+    userId,
+    setWishListStatus,
+    setIsWishList,
+  }: addWishListType) => {
+    e?.stopPropagation();
+    e?.preventDefault();
+
+    const { error } = await supabase.from("user_wishlist").insert({
+      product_id: item.product_id,
+      user_id: userId,
+      name: item.name,
+      img: item.img,
+      description: item.description,
+      rate: item.rate,
+      stock: item.stock,
+      imgGallery: item.imgGallery,
+      discount: item.discount,
+      discount_type: item.discount_type,
+      price: item.price,
+      options: item.options,
+      active: item.active,
+      reviews: item.reviews,
+    });
+
     if (error) {
       console.log("error", error);
       return;
     }
-  setWishListStatus((prev) => !prev);
-  setIsWishList?.(true);
-};
+
+    toast.success(MESSAGES.wishlist.added(item.name));
+    setWishListStatus((prev) => !prev);
+    setIsWishList?.(true);
+  }
+);
 
 interface isProductWishListType {
   setIsWishList: Dispatch<SetStateAction<boolean>>;
@@ -89,15 +98,18 @@ export const isProductWishList = async ({
   item,
 }: isProductWishListType) => {
   if (!item.product_id) return;
+
   try {
     const { count, error } = await supabase
       .from("user_wishlist")
       .select("id", { count: "exact", head: true })
       .eq("product_id", item.product_id);
+
     if (error) {
       console.log(error);
       return false;
     }
+
     const exists = (count ?? 0) > 0;
     setIsWishList(exists);
   } catch (error) {
@@ -113,10 +125,12 @@ export const getProductWishList = async ({
   setWishList,
 }: getProductWishListType) => {
   const { data, error } = await supabase.from("user_wishlist").select();
+
   if (error) {
     console.error("Error fetching wishlist:", error);
     return;
   }
+
   if (data) {
     setWishList(data);
   }
@@ -133,5 +147,6 @@ export const isInWishList = async ({ item, setHeart }: isInWishListType) => {
     .select()
     .eq("product_id", item.product_id)
     .maybeSingle();
+
   setHeart(!!exist);
 };

@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { typeProduct } from "../../types/productTypes";
-import { supabase } from "@/supabase-client";
 import { getUser } from "@/app/(root)/(auth)/authActions/getUser";
+import { createClient } from "@/utils/supabase/client";
 
 interface Props {
   isCartDataUpdated: boolean;
@@ -11,15 +11,17 @@ interface Props {
 }
 
 const UseUserCart = ({ isAuth, isCartDataUpdated }: Props) => {
-  const saved =
+  const userCart =
+    typeof window !== "undefined" ? localStorage.getItem("user_cart") : "";
+  const guestCart =
     typeof window !== "undefined" ? localStorage.getItem("cart_guest") : "";
-  const getCartData = saved ? JSON.parse(saved) : [];
+  const getCartData = JSON.parse(guestCart || userCart || "[]");
   const [cartData, setCartData] = useState<typeProduct[]>(getCartData);
 
   const [Loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
 
-  const mergeUnique = (data: typeProduct[], cartGuest: typeProduct[]) =>
+  const mergeUnique = async (data: typeProduct[], cartGuest: typeProduct[]) =>
     [...data, ...cartGuest].filter(
       (item, index, self) =>
         index === self.findIndex((t) => t.product_id === item.product_id)
@@ -36,42 +38,51 @@ const UseUserCart = ({ isAuth, isCartDataUpdated }: Props) => {
     };
     const handleUserCart = async (userId: string) => {
       try {
+        const supabase = createClient();
+
         setLoading(true);
         const getCartGuest = JSON.parse(
           localStorage.getItem("cart_guest") || "[]"
         );
 
-        const { data, error: selectError } = await supabase
+        const { data: dataSelect, error: selectError } = await supabase
           .from("user_cart")
           .select();
 
         if (selectError) throw selectError;
 
-        const collectData = mergeUnique(data, getCartGuest);
-        // console.log("data", data);
-        localStorage.setItem("user_cart", JSON.stringify(collectData));
-        setCartData(collectData);
-        localStorage.removeItem("cart_guest");
-
+        const collectData = await mergeUnique(dataSelect, getCartGuest);
         const addUserIdToCartData = collectData.map((item) => ({
           ...item,
           user_id: userId,
         }));
 
         const getNewData =
-          data.length > 0
+          dataSelect.length > 0
             ? addUserIdToCartData.filter(
                 (item) =>
-                  !data.some(
+                  !dataSelect.some(
                     (d: typeProduct) => item.product_id === d.product_id
                   )
               )
             : addUserIdToCartData;
-
         if (getNewData.length > 0) {
-          const { error } = await supabase.from("user_cart").insert(getNewData);
+          console.log("push Items");
+          const { data, error } = await supabase
+            .from("user_cart")
+            .insert(getNewData)
+            .select();
+          setCartData([...(data || []), ...dataSelect]);
+          localStorage.setItem(
+            "user_cart",
+            JSON.stringify([...(data || []), ...dataSelect])
+          );
           if (error) throw error;
+        } else {
+          setCartData(dataSelect);
+          localStorage.setItem("user_cart", JSON.stringify(dataSelect));
         }
+        localStorage.removeItem("cart_guest");
       } catch (err) {
         console.error("Error syncing user cart:", err);
       } finally {
@@ -87,7 +98,7 @@ const UseUserCart = ({ isAuth, isCartDataUpdated }: Props) => {
   }, [isAuth, isCartDataUpdated]);
 
   useEffect(() => {
-    const getTotal = data.current.reduce((acc, curr) => {
+    const getTotal = cartData.reduce((acc, curr) => {
       let price = curr.price;
 
       if (curr.discount && curr.discount_type) {
@@ -101,7 +112,7 @@ const UseUserCart = ({ isAuth, isCartDataUpdated }: Props) => {
     }, 0);
 
     setTotal(getTotal);
-  }, [isCartDataUpdated, data]);
+  }, [isCartDataUpdated, cartData]);
 
   return { cartData, Loading, total, setCartData };
 };

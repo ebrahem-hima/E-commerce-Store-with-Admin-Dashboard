@@ -13,11 +13,11 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { toast } from "sonner";
-import { supabase } from "@/supabase-client";
 import { login } from "../authActions/login";
 import { useRouter } from "next/navigation";
 import { useProductContext } from "@/context/productContext";
 import { MESSAGES } from "@/lib/message";
+import { createClient } from "@/utils/supabase/client";
 
 interface userDataType {
   email: string;
@@ -54,18 +54,19 @@ const Page = () => {
       toast.error(MESSAGES.password.resetEnterEmail);
       return;
     }
-    toast.success(MESSAGES.password.resetCheckEmail);
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(
-        userData.email,
-        {
-          redirectTo: "http://localhost:3000/reset-password",
-        }
-      );
-      if (error) throw error;
-    } catch (error) {
-      console.log("error", error);
+    const supabase = createClient();
+
+    const { error } = await supabase.auth.resetPasswordForEmail(
+      userData.email,
+      {
+        redirectTo: "http://localhost:3000/reset-password",
+      }
+    );
+    if (error) {
+      console.log("Rest Password Error", error);
+      return;
     }
+    toast.success(MESSAGES.password.resetCheckEmail);
   };
   return (
     <form action={handleLogin}>
@@ -88,7 +89,7 @@ const Page = () => {
               type="email"
               name="email"
               placeholder="Email or Phone Number"
-              className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-[0px]"
+              className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-none"
               required
               onChange={(e) =>
                 setUserData((prev) => ({
@@ -103,7 +104,7 @@ const Page = () => {
                 type="password"
                 name="password"
                 placeholder="Password"
-                className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-[0px]"
+                className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-none"
                 required
                 onChange={(e) =>
                   setUserData((prev) => ({

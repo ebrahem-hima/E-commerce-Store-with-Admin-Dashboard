@@ -1,14 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Badge from "../Badge";
 import CouponFn from "../../FetchData/couponFn";
 import { useProductContext } from "../../../context/productContext";
+import { useState } from "react";
+import { IoClose } from "react-icons/io5";
 
 const CouponComponent = () => {
-  const { total, setGetCoupon } = useProductContext();
-  const { applyCoupon, couponRef, getCoupon } = CouponFn({
-    total,
-  });
+  const { setGetCoupon } = useProductContext();
+  const { applyCoupon, couponRef, getCoupon } = CouponFn();
+  const [couponValue, setCouponValue] = useState("");
+
   return (
     <div>
       <div className="flex items-center gap-4 mb-2">
@@ -16,16 +17,31 @@ const CouponComponent = () => {
           ref={couponRef}
           type="text"
           placeholder="Add Coupon"
-          className=""
+          value={couponValue}
+          onChange={(e) => setCouponValue(e.target.value)}
         />
-        <Button onClick={applyCoupon} variant="primary" size="sm">
+        <Button
+          disabled={couponValue.trim() === ""}
+          onClick={(e) => {
+            applyCoupon(e);
+            setCouponValue("");
+          }}
+          variant="primary"
+          size="sm"
+        >
           Apply Coupon
         </Button>
       </div>
       <div className="flex items-center gap-2 flex-wrap">
-        {getCoupon.map((item, idx) => (
-          <Badge setBadge={setGetCoupon} key={idx} text={item.name} />
-        ))}
+        {getCoupon?.name && (
+          <div
+            onClick={() => setGetCoupon(null)}
+            className="flex items-center gap-1 w-fit px-2 py-1 bg-[#777] rounded-sm text-white text-sm cursor-pointer"
+          >
+            <span className="text-[11px]">{getCoupon?.name}</span>
+            <IoClose />
+          </div>
+        )}
       </div>
     </div>
   );
