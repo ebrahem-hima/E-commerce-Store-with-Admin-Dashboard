@@ -74,7 +74,6 @@ export const addWishList = withLock(
       price: item.price,
       options: item.options,
       active: item.active,
-      reviews: item.reviews,
     });
 
     if (error) {

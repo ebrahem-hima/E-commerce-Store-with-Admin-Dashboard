@@ -39,12 +39,28 @@ export const MESSAGES = {
     no_products: "You don’t have any items in your cart to buy.",
   },
 
-  coupon: {
-    notFound: "This coupon code does not exist.",
-    invalid: "This coupon is no longer valid or has reached its usage limit.",
-  },
   contact: {
     success: "Your message has been sent successfully!",
     error: "Failed to send your message. Please try again later.",
+  },
+  admin: {
+    coupon: {
+      created: "Coupon has been created",
+      updated: "Coupon has been updated",
+      notFound: "This coupon code does not exist.",
+      invalid: "This coupon is no longer valid or has reached its usage limit.",
+      InvalidExpirationDate:
+        "The coupon's expiration date cannot be earlier than today.",
+    },
+    category: {
+      createCategory: "Category created successfully!",
+      updateCategory: "Category updated successfully!",
+      requiredField: "All fields are required",
+    },
+    product: {
+      requiredField: "All fields are required",
+      createdSuccessfully: "Product added successfully",
+      updatedSuccessfully: "Product updated successfully",
+    },
   },
 };

@@ -1,4 +1,8 @@
-import { deleteProductCart, typeProduct } from "@/types/productTypes";
+import {
+  deleteProductCart,
+  optionType,
+  typeProduct,
+} from "@/types/productTypes";
 import { toast } from "sonner";
 import { MESSAGES } from "./message";
 import { Dispatch, MouseEvent, SetStateAction } from "react";
@@ -13,7 +17,7 @@ interface AddToCartType {
   setIsCartDataUpdated: Dispatch<SetStateAction<boolean>>;
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
   cartData: typeProduct[];
-  getOptions?: { optionTitle: string; values: string[] }[];
+  getOptions?: optionType[];
 }
 const supabase = createClient();
 
@@ -25,7 +29,7 @@ interface handleAddToCartType {
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
   cartData: typeProduct[];
   item: typeProduct;
-  getOptions?: { optionTitle: string; values: string[] }[];
+  getOptions?: optionType[];
 }
 export const handleAddToCart = async ({
   e,
@@ -40,7 +44,7 @@ export const handleAddToCart = async ({
   e.preventDefault();
   if (isExist) {
     await handleDeleteProductCart({
-      ID: item.product_id,
+      ID: item.product_id || "",
       name: item.name,
       setIsCartDataUpdated,
       userId: userId || "",
@@ -94,7 +98,6 @@ export const AddToCart = withLock(
       price: item.price,
       options: getOptions || [],
       active: item.active,
-      reviews: item.reviews,
     });
 
     if (error) {
@@ -111,7 +114,7 @@ interface addGuestCartItemsType {
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
   item: typeProduct;
   count?: number;
-  getOptions?: { optionTitle: string; values: string[] }[];
+  getOptions?: optionType[];
   setIsCartDataUpdated: Dispatch<SetStateAction<boolean>>;
 }
 

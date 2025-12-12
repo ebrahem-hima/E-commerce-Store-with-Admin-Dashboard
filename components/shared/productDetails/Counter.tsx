@@ -6,7 +6,7 @@ import { HiMiniHeart } from "react-icons/hi2";
 import { handleAddToCart } from "@/lib/userCartFn";
 import { addWishList, handleDeleteItemWishList } from "@/lib/userWishlistFn";
 import { toast } from "sonner";
-import { typeProduct } from "../../../types/productTypes";
+import { optionType, typeProduct } from "../../../types/productTypes";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
 import { MouseEvent, useEffect, useState } from "react";
 import { MESSAGES } from "@/lib/message";
@@ -22,7 +22,7 @@ interface Props {
   setWishListStatus: React.Dispatch<React.SetStateAction<boolean>>;
   cartData: typeProduct[];
   setCartData: React.Dispatch<React.SetStateAction<typeProduct[]>>;
-  getOptions: { optionTitle: string; values: string[] }[];
+  getOptions: optionType[];
 }
 
 const Counter = ({

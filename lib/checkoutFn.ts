@@ -77,11 +77,11 @@ export const applyCoupon = async ({
     return false;
   }
   if (!data.is_active) {
-    toast.error(MESSAGES.coupon.invalid);
+    toast.error(MESSAGES.admin.coupon.invalid);
     return false;
   }
   if (data.coupon_id !== couponRef.current?.value) {
-    toast.error(MESSAGES.coupon.notFound);
+    toast.error(MESSAGES.admin.coupon.notFound);
     return false;
   }
   const check = checkTotal({

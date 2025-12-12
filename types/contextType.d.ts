@@ -31,8 +31,8 @@ export interface ProductContextType {
 
   userOrders: typeUserOrder[];
 
-  getCoupon: typeGetCoupon;
-  setGetCoupon: Dispatch<SetStateAction<typeGetCoupon>>;
+  getCoupon: typeGetCoupon | null;
+  setGetCoupon: Dispatch<SetStateAction<typeGetCoupon | null>>;
 
   isAuth: boolean;
   setIsAuth: Dispatch<SetStateAction<boolean>>;

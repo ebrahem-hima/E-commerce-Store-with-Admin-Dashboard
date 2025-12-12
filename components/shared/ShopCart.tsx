@@ -23,7 +23,6 @@ export function ShopCart() {
   const { cartData, setCartData, userId, setIsCartDataUpdated } =
     useProductContext();
   const { total } = useProductContext();
-  console.log("cartData", cartData);
   const [count, setCount] = useState(0);
   useEffect(() => {
     setCount(cartData.length);
@@ -84,7 +83,7 @@ export function ShopCart() {
                           <span className="font-medium">
                             {option.optionTitle}:
                           </span>
-                          {option.values.map((val) => (
+                          {(option.values || []).map((val) => (
                             <span key={val}>{val}</span>
                           ))}
                         </div>
@@ -98,7 +97,7 @@ export function ShopCart() {
                     () =>
                       // userId
                       handleDeleteProductCart({
-                        ID: item.product_id,
+                        ID: item.product_id || "",
                         name: item.name,
                         setIsCartDataUpdated,
                         userId: userId || "",

@@ -60,3 +60,11 @@ export const bodyTopProduct = [
     unitSold: "100",
   },
 ];
+
+export const titleOrderDetails = [
+  { title: "Product" },
+  { title: "Price" },
+  { title: "Quantity" },
+  { title: "Total" },
+  { title: "Options" },
+];

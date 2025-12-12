@@ -3,13 +3,7 @@ import { MouseEvent, useRef } from "react";
 import { toast } from "sonner";
 import { useProductContext } from "../../context/productContext";
 import { createClient } from "@/utils/supabase/client";
-
-interface checkTotalType {
-  discount: number;
-  discountType: "percentage" | "fixed";
-  total: number;
-  ID: number;
-}
+import { checkTotalType } from "@/types/fetchType";
 
 const CouponFn = () => {
   const { getCoupon, setGetCoupon, total } = useProductContext();
@@ -69,7 +63,7 @@ const CouponFn = () => {
     if (error) {
       // PGRST116 => code from supabase mean error because code.id !== any code in database (No rows found)
       if (error.code === "PGRST116") {
-        toast.error(MESSAGES.coupon.notFound);
+        toast.error(MESSAGES.admin.coupon.notFound);
       } else {
         console.log(error);
         toast.error("something went wrong");
@@ -77,7 +71,7 @@ const CouponFn = () => {
       return false;
     }
     if (!data.is_active) {
-      toast.error(MESSAGES.coupon.invalid);
+      toast.error(MESSAGES.admin.coupon.invalid);
       return;
     }
 

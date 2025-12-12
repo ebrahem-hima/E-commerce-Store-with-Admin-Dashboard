@@ -46,7 +46,7 @@ const Page = () => {
       };
     };
     getAddress();
-  }, [isProfileChange]);
+  }, [isProfileChange, userId]);
 
   if (!userId) return false;
   return (

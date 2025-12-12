@@ -7,7 +7,7 @@ import {
 } from "@/types/profileFnTypes";
 import { toast } from "sonner";
 import { MESSAGES } from "./message";
-import { addressSchema } from "@/validation";
+import { addressSchema } from "@/validation/validation";
 import { createClient } from "@/utils/supabase/client";
 
 interface signInType {

@@ -20,7 +20,13 @@ const UserOrdersFn = (isUserOrderUpdated: boolean) => {
         console.log(error);
         return false;
       }
-      if (data) setUserOrders(data);
+      if (data) {
+        const orderData = data.map((item) => ({
+          ...item,
+          type: "orderTable",
+        }));
+        setUserOrders(orderData);
+      }
     };
     getUserOrders();
   }, [isUserOrderUpdated]);

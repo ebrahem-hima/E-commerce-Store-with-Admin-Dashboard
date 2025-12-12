@@ -1,18 +1,17 @@
+import { optionType } from "@/types/productTypes";
 import React from "react";
 
 interface Props {
-  options: { optionTitle: string; values: string[] }[];
-  getOptions: { optionTitle: string; values: string[] }[];
-  setGetOptions: React.Dispatch<
-    React.SetStateAction<{ optionTitle: string; values: string[] }[]>
-  >;
+  options: optionType[];
+  getOptions: optionType[];
+  setGetOptions: React.Dispatch<React.SetStateAction<optionType[]>>;
 }
 
 const Options = ({ options, getOptions, setGetOptions }: Props) => {
   const addOptions = (value: string, optionTitle: string) => {
     setGetOptions((prev) => {
       const existing = prev.find((item) => item.optionTitle === optionTitle);
-      if (existing) {
+      if (existing?.values) {
         const values = existing.values.includes(value)
           ? existing.values.filter((v) => v !== value)
           : [value];
@@ -35,11 +34,11 @@ const Options = ({ options, getOptions, setGetOptions }: Props) => {
             {option.optionTitle}:
           </span>
           <div className="flex gap-2">
-            {option.values.map((value, idx) => (
+            {(option.values || []).map((value, idx) => (
               <span
                 key={idx}
                 className={`${
-                  getOptions.some((item) => item.values[0] === value)
+                  getOptions.some((item) => item.values?.[0] === value)
                     ? "bg-primary text-white !border-primary"
                     : ""
                 } cursor-pointer duration-200 py-0.5 px-3 border border-gray-400 hover:border-primary hover:text-white hover:bg-primary rounded-sm active:bg-primary active:border-primary active:text-white`}

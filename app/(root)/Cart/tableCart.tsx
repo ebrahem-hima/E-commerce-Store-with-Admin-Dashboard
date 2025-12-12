@@ -66,7 +66,7 @@ export function TableCart({
             ...prev,
             {
               count: Number(e.target.value),
-              id: item.product_id,
+              id: item.product_id || "",
             },
           ]
     );
@@ -102,7 +102,7 @@ export function TableCart({
                         size={23}
                         onClick={() =>
                           handleDeleteProductCart({
-                            ID: item.product_id,
+                            ID: item.product_id || "",
                             name: item.name,
                             setIsCartDataUpdated,
                             userId: userId || "",

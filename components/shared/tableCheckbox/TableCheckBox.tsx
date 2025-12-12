@@ -27,14 +27,16 @@ const TableCheckbox = ({
   Edit,
   setEditValue,
 }: Props) => {
+  console.log("selectCheckBox", selectCheckBox);
   return (
     <>
       {dataBody.length > 0 ? (
-        <Table>
+        <Table className="bg-white rounded-md">
           <TableHeader>
             <TableRow>
               <TableHead>
                 <Checkbox
+                  checked={selectCheckBox.length === dataBody.length}
                   onCheckedChange={(checked) =>
                     setSelectCheckBox(() =>
                       checked

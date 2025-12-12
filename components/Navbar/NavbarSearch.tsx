@@ -17,7 +17,7 @@ const NavbarSearch = () => {
 
   const handleSubmitSearch = (e: FormEvent) => {
     e.preventDefault();
-    push(`/search/${inputValue}`);
+    push(`/search?${inputValue}`);
     setInputValue("");
     if (inputRef.current) inputRef.current.value = "";
   };

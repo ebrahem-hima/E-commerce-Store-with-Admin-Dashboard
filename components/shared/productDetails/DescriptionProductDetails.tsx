@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { typeProduct } from "../../../types/productTypes";
+import { optionType, typeProduct } from "../../../types/productTypes";
 import { Star } from "lucide-react";
 
 import { useProductContext } from "../../../context/productContext";
@@ -12,12 +12,12 @@ import Counter from "./Counter";
 import Options from "./Options";
 import PriceDisplay from "../priceDisplay";
 
-type optionsType = { optionTitle: string; values: string[] };
+// type optionsType = { optionTitle: string; values: string[] };
 
 const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
   const { name, description, options, rate, active } = item;
   const [count, setCount] = useState(1);
-  const [getOptions, setGetOptions] = useState<optionsType[]>([]);
+  const [getOptions, setGetOptions] = useState<optionType[]>([]);
   const [heart, setHeart] = useState(false);
   const { replace } = useRouter();
   const pathName = usePathname();

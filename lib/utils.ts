@@ -6,10 +6,17 @@ export function cn(...inputs: ClassValue[]) {
 }
 export function getTodayDate() {
   const today = new Date();
-  const day = today.getDate();
-  const month = today.getMonth() + 1;
   const year = today.getFullYear();
-  return `${month}/${day}/${year}`;
+  const month = String(today.getMonth() + 1).padStart(2, "0"); // شهور تبدأ من 0
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+export function formatDateForPostgres(date: string | Date) {
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0"); // شهور تبدأ من 0
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

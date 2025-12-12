@@ -8,21 +8,20 @@ import { createClient } from "@/utils/supabase/client";
 const IsAdminFn = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [Loading, setLoading] = useState(true);
-  const { isAuth, userId } = useProductContext();
+  const { isAuth } = useProductContext();
   useEffect(() => {
     setLoading(true);
     const getAdmin = async () => {
       const user = await getUser();
       if (!user?.id) {
         setIsAdmin(false);
-        return;
       }
       const supabase = createClient();
 
       const { data, error } = await supabase
         .from("user_profile")
         .select("role")
-        .eq("id", user.id)
+        .eq("id", user?.id)
         .maybeSingle();
       if (error) {
         console.log("error", error);
@@ -31,15 +30,11 @@ const IsAdminFn = () => {
       if (data?.role === "admin") {
         setIsAdmin(true);
       }
-      // // when user logout disappear admin icon
-      if (!userId) {
-        setIsAdmin(false);
-      }
       setLoading(false);
     };
 
     getAdmin();
-  }, [isAuth, userId]);
+  }, [isAuth]);
   return { isAdmin, setIsAdmin, Loading };
 };
 

@@ -61,6 +61,8 @@
   --breakpoint-tablet: 56rem;
   --breakpoint-laptop: 50rem;
   --breakpoint-400: 25rem;
+  --breakpoint-450: 28rem;
+  --breakpoint-500: 31.25rem;
   --breakpoint-650: 65rem;
   /* --breakpoint-lg: 1000px; */
 }
@@ -98,10 +100,10 @@
     @apply line-clamp-1 truncate;
   }
   .line-2 {
-    @apply line-clamp-2 truncate;
+    @apply line-clamp-2 overflow-hidden break-all;
   }
   .line-3 {
-    @apply line-clamp-3 truncate;
+    @apply line-clamp-3 overflow-hidden break-all;
   }
   .line-4 {
     @apply line-clamp-4 truncate;

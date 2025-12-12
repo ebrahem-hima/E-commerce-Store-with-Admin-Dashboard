@@ -3,7 +3,7 @@ import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { tableType } from "../../../types/tabletypes";
 import TableBodyData from "./TableBodyData";
 
-const CustomTable = ({ dataBody, titles }: tableType) => {
+const CustomTable = ({ dataBody, titles, role }: tableType) => {
   return (
     <>
       {dataBody.length > 0 ? (
@@ -16,7 +16,7 @@ const CustomTable = ({ dataBody, titles }: tableType) => {
                 ))}
             </TableRow>
           </TableHeader>
-          <TableBodyData dataBody={dataBody} />
+          <TableBodyData role={role} dataBody={dataBody} />
         </Table>
       ) : (
         <div className="flex flex-col items-center justify-center py-20">

@@ -6,7 +6,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 import BankForm from "./BankForm";
 import DeliveryForm from "./DeliveryForm";
-import { placeOrderSchema } from "@/validation";
+import { placeOrderSchema } from "@/validation/validation";
 import { toast } from "sonner";
 import { useProductContext } from "@/context/productContext";
 import { useRouter } from "next/navigation";
@@ -35,8 +35,6 @@ const Page = () => {
   const { push } = useRouter();
   const [Loading, setLoading] = useState(false);
   const someDiscount = getCoupon?.value;
-
-  console.log("getCoupon", getCoupon?.value);
 
   const placeOrder = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

@@ -56,7 +56,7 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
   // -------------- End Fetch User Profile --------------
 
   // -------------- Start Coupon --------------
-  const [getCoupon, setGetCoupon] = useState<typeGetCoupon>(null);
+  const [getCoupon, setGetCoupon] = useState<typeGetCoupon | null>(null);
   // -------------- End Coupon --------------
 
   const values = {

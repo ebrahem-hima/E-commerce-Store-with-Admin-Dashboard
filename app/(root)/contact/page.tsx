@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useProductContext } from "@/context/productContext";
 import { toast } from "sonner";
-import { contactSchema } from "@/validation";
+import { contactSchema } from "@/validation/validation";
 import { MESSAGES } from "@/lib/message";
 
 interface InputValueType {
@@ -20,21 +20,12 @@ interface InputValueType {
 const Page = () => {
   const { profileData } = useProductContext();
   const [inputValue, setInputValue] = useState<InputValueType>({
-    userName: "",
-    email: "",
-    phone: "",
+    userName: profileData.firstName + " " + profileData.lastName,
+    email: profileData.email,
+    phone: profileData.phone,
     message: "",
   });
   const messageRef = useRef<HTMLTextAreaElement | null>(null);
-
-  useEffect(() => {
-    setInputValue({
-      userName: profileData.firstName + " " + profileData.lastName,
-      email: profileData.email,
-      phone: profileData.phone,
-      message: "",
-    });
-  }, [profileData]);
 
   const handleSendMessage = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

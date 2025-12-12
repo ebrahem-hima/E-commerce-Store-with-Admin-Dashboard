@@ -6,3 +6,10 @@ export interface userOrdersType {
   price: number;
   count: number;
 }
+
+export interface checkTotalType {
+  discount: number;
+  discountType: "percentage" | "fixed";
+  total: number;
+  ID: number;
+}

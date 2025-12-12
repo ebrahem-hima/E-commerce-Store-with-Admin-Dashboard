@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { updateEmail, updatePassword, updateProfile } from "@/lib/utilsProfile";
 import { useProductContext } from "@/context/productContext";
 import { myProfileType } from "@/types/profileFnTypes";
-import { profileSchema } from "@/validation";
+import { profileSchema } from "@/validation/validation";
 import { createClient } from "@/utils/supabase/client";
 
 const Page = () => {
@@ -67,7 +67,7 @@ const Page = () => {
     };
 
     fetchUserProfile();
-  }, [isProfileChange]);
+  }, [isProfileChange, userId]);
 
   if (!userId) return;
   const updateAccount = async (e: MouseEvent<HTMLButtonElement>) => {
