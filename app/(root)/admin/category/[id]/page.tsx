@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Edit2, Plus, Trash2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import DragAndDropImage from "../../shared/DragAndDropImage";
+import DragAndDropImage from "../../shared/DragAndDropImages/DragAndDropImage";
 import Link from "next/link";
 
 const Page = () => {
@@ -51,7 +51,7 @@ const Page = () => {
             <Input type="text" placeholder="Enter Category Name" />
           </div>
 
-          <DragAndDropImage />
+          {/* <DragAndDropImage /> */}
         </div>
       </div>
     </div>

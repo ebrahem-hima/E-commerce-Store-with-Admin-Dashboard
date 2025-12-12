@@ -1,83 +1,96 @@
-import React from "react";
+"use client";
+
 import PageHeader from "../shared/PageHeader";
-import Image from "next/image";
-import { Edit2 } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import AddCategory from "./AddCategory";
+import { Boxes } from "lucide-react";
+import useCategory from "../adminHooks/useGetCategory";
+import { Skeleton } from "@/components/ui/skeleton";
+import CategoryButtons from "./categoryButtons";
+import CategoryRealTime from "./categoryRealTime";
 
 const Page = () => {
+  const [showCategory, setShowCategory] = useState(false);
+  const [Edit, setEdit] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const {
+    handleGetCategory,
+    handleDeleteCategory,
+    categoryDetail,
+    categories,
+    Loading,
+    setCategoryDetail,
+    setCategories,
+  } = useCategory();
   return (
     <div>
-      <PageHeader title="Categories" buttonText="Add Category" />
-      <div className="grid grid-cols-1 400:grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3">
-        <Link href={`/admin/category/123`}>
-          {/* Image */}
-          <div className="relative w-full h-[250px] group cursor-pointer duration-300 hover:bg-[#0000004b]">
-            <Image
-              src={"/images/adminCategory/Bitmap.png"}
-              alt="category-img"
-              fill
-              className="object-cover rounded-t-sm z-[-1]"
-            />
-            {/* Edit */}
-            <div className="hidden group-hover:block duration-300 absolute top-1/2 left-1/2 transform translate-x-[-50%] text-blue-500 bg-white rounded-sm px-2 py-1">
-              <span className="flex items-center gap-2">
-                <Edit2 size={20} />
-                Edit
-              </span>
-            </div>
+      <CategoryRealTime setCategories={setCategories} />
+      {showCategory && (
+        <div>
+          <div className="absolute top-0 left-0 z-50 bg-black/75 w-full h-full"></div>
+          <AddCategory
+            Edit={Edit}
+            categoryDetail={categoryDetail}
+            setShowCategory={setShowCategory}
+          />
+        </div>
+      )}
+      <PageHeader
+        title="Categories"
+        onClick={() => {
+          setShowCategory(true);
+          setEdit(false);
+          setCategoryDetail(null);
+        }}
+        buttonText="Add Category"
+      />
+      <div className="grid grid-cols-1 500:grid-cols-2 lg:grid-cols-3 gap-3">
+        {Loading ? (
+          <>
+            <Skeleton className="bg-[#b9b9b9be] h-[170px] rounded-xl" />
+            <Skeleton className="bg-[#b9b9b9be] h-[170px] rounded-xl" />
+            <Skeleton className="bg-[#b9b9b9be] h-[170px] rounded-xl" />
+          </>
+        ) : categories.length > 0 ? (
+          <>
+            {categories.map((item) => (
+              <Link key={item?.id} href={`/admin/category/${item?.id}`}>
+                <div className="bg-white rounded-xl p-6 shadow-sm border-2 border-transparent transition-all hover:-translate-y-1 hover:shadow-lg hover:border-primary">
+                  {/* Text */}
+                  <div className="flex-between">
+                    <div className="max-w-[220px] min-w-40">
+                      <h3 className="text-lg max-md:text-md line-1 font-semibold mb-2">
+                        {item?.name}
+                      </h3>
+                      <p className="text-gray-500 max-md:text-sm mb-3 line-3">
+                        {item?.description}
+                      </p>
+                    </div>
+                    <CategoryButtons
+                      setEdit={setEdit}
+                      itemId={item?.id || 0}
+                      handleGetCategory={handleGetCategory}
+                      setShowCategory={setShowCategory}
+                      handleDeleteCategory={handleDeleteCategory}
+                      showDeleteDialog={showDeleteDialog}
+                      setShowDeleteDialog={setShowDeleteDialog}
+                    />
+                  </div>
+                  {/* Stats */}
+                  <div className="flex items-center gap-2 text-primary">
+                    <Boxes className="w-5 h-5" />
+                    <strong>15</strong> Products
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </>
+        ) : (
+          <div className="font-medium text-[18px]">
+            There are no categories yet.
           </div>
-          {/* text */}
-          <div className="pl-6 py-2">
-            <p className="font-inter font-medium text-[18px]">Men Clothes</p>
-            <span className="text-[#777] text-sm">24 items</span>
-          </div>
-        </Link>
-        <Link href={`/admin/category/1234`}>
-          {/* Image */}
-          <div className="relative w-full h-[250px] group cursor-pointer duration-300 hover:bg-[#0000004b]">
-            <Image
-              src={"/images/adminCategory/Bitmap1.png"}
-              alt="category-img"
-              fill
-              className="object-cover rounded-t-sm z-[-1]"
-            />
-            {/* Edit */}
-            <div className="hidden group-hover:block duration-300 absolute top-1/2 left-1/2 transform translate-x-[-50%] text-blue-500 bg-white rounded-sm px-2 py-1">
-              <span className="flex items-center gap-2">
-                <Edit2 size={20} />
-                Edit
-              </span>
-            </div>
-          </div>
-          {/* text */}
-          <div className="pl-6 py-2">
-            <p className="font-inter font-medium text-[18px]">Men Clothes</p>
-            <span className="text-[#777] text-sm">24 items</span>
-          </div>
-        </Link>
-        <Link href={`/admin/category/12345`}>
-          {/* Image */}
-          <div className="relative w-full h-[250px] group cursor-pointer duration-300 hover:bg-[#0000004b]">
-            <Image
-              src={"/images/adminCategory/image.png"}
-              alt="category-img"
-              fill
-              className="object-cover rounded-t-sm z-[-1]"
-            />
-            {/* Edit */}
-            <div className="hidden group-hover:block duration-300 absolute top-1/2 left-1/2 transform translate-x-[-50%] text-blue-500 bg-white rounded-sm px-2 py-1">
-              <span className="flex items-center gap-2">
-                <Edit2 size={20} />
-                Edit
-              </span>
-            </div>
-          </div>
-          {/* text */}
-          <div className="pl-6 py-2">
-            <p className="font-inter font-medium text-[18px]">Men Clothes</p>
-            <span className="text-[#777] text-sm">24 items</span>
-          </div>
-        </Link>
+        )}
       </div>
     </div>
   );
