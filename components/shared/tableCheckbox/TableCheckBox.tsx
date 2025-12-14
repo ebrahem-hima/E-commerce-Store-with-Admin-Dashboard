@@ -1,37 +1,49 @@
 import React from "react";
 import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { tableBodyType } from "../../../types/tabletypes";
 import TableBodyCheckbox from "./TableBodyCheckbox";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SelectCheckBox } from "@/types/typeAliases";
 import { typeEditValue } from "@/types/adminType";
+import { tableBodyCheckBoxType } from "@/types/adminTableCheckboxtype";
 
-export interface Props {
+export interface Props<T extends { id: string }> {
   Edit?: boolean;
   setEditValue?: React.Dispatch<React.SetStateAction<typeEditValue[]>>;
-  dataBody: tableBodyType;
+  dataBody: T[];
   titles: { title: string }[];
   emptyMessage: string;
-  handleCheckboxChange: (ID: string, checked: boolean) => void;
   selectCheckBox: SelectCheckBox[];
   setSelectCheckBox: React.Dispatch<React.SetStateAction<SelectCheckBox[]>>;
+  tableWidth?: string;
 }
 
-const TableCheckbox = ({
+const TableCheckbox = <T extends { id: string }>({
   dataBody,
   titles,
   emptyMessage,
   selectCheckBox,
   setSelectCheckBox,
-  handleCheckboxChange,
   Edit,
   setEditValue,
-}: Props) => {
-  console.log("selectCheckBox", selectCheckBox);
+  tableWidth,
+}: Props<T>) => {
+  const handleCheckboxChange = (ID: string, checked: boolean) => {
+    setSelectCheckBox((prev) =>
+      prev.some((check) => check.ID === ID)
+        ? prev.filter((check) => check.ID !== ID)
+        : [
+            ...prev,
+            {
+              ID,
+              value: checked,
+            },
+          ]
+    );
+  };
   return (
     <>
       {dataBody.length > 0 ? (
-        <Table className="bg-white rounded-md">
+        <Table className={`${tableWidth} bg-white rounded-md`}>
           <TableHeader>
             <TableRow>
               <TableHead>
@@ -60,7 +72,7 @@ const TableCheckbox = ({
             Edit={Edit}
             selectCheckBox={selectCheckBox}
             handleCheckboxChange={handleCheckboxChange}
-            dataBody={dataBody}
+            dataBody={dataBody as unknown as tableBodyCheckBoxType}
           />
         </Table>
       ) : (
