@@ -88,7 +88,11 @@ const TableBodyCheckbox = ({
     return (
       <TableBody>
         {dataBody.map((o) => (
-          <TableRow key={o.id} className="h-10">
+          <TableRow
+            onClick={() => push(`/admin/orders/orderDetails/${o.order_code}`)}
+            key={o.id}
+            className="h-10 cursor-pointer"
+          >
             <TableCell>
               <Checkbox
                 checked={selectCheckBox.some(
@@ -231,15 +235,13 @@ const TableBodyCheckbox = ({
             </TableCell>
             <TableCell className="flex items-center gap-2">
               <span className="w-10 h-10 bg-[#777] flex-center rounded-full text-white text-[18px] font-medium">
-                {c.first_name.charAt(0).toUpperCase()}
+                {c.name.charAt(0).toUpperCase()}
               </span>
-              <span>{c.first_name + " " + c.last_name}</span>
+              <span>{c.name}</span>
             </TableCell>
-            <TableCell className="bg-[red] overflow-hidden">
-              {c.email}
-            </TableCell>
+            <TableCell className="overflow-hidden">{c.email}</TableCell>
             <TableCell>{c.order_count}</TableCell>
-            <TableCell>{c.total_spent}</TableCell>
+            <TableCell>{c.total_spent} EGP</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -247,7 +249,6 @@ const TableBodyCheckbox = ({
   }
 
   if (isCouponTable(dataBody)) {
-    console.log("dataBody", dataBody);
     return (
       <TableBody>
         {dataBody.map((c, idx) => (

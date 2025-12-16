@@ -6,7 +6,7 @@ import { SelectCheckBox } from "@/types/typeAliases";
 import { typeEditValue } from "@/types/adminType";
 import { tableBodyCheckBoxType } from "@/types/adminTableCheckboxtype";
 
-export interface Props<T extends { id: string }> {
+export interface Props<T extends { id: string | number }> {
   Edit?: boolean;
   setEditValue?: React.Dispatch<React.SetStateAction<typeEditValue[]>>;
   dataBody: T[];
@@ -17,7 +17,7 @@ export interface Props<T extends { id: string }> {
   tableWidth?: string;
 }
 
-const TableCheckbox = <T extends { id: string }>({
+const TableCheckbox = <T extends { id: string | number }>({
   dataBody,
   titles,
   emptyMessage,
@@ -27,7 +27,7 @@ const TableCheckbox = <T extends { id: string }>({
   setEditValue,
   tableWidth,
 }: Props<T>) => {
-  const handleCheckboxChange = (ID: string, checked: boolean) => {
+  const handleCheckboxChange = (ID: string | number, checked: boolean) => {
     setSelectCheckBox((prev) =>
       prev.some((check) => check.ID === ID)
         ? prev.filter((check) => check.ID !== ID)

@@ -2,8 +2,8 @@
 
 import HeaderSaveActions from "@/app/(root)/admin/shared/HeaderSaveActions";
 import GetOrderDetails from "@/components/FetchData/getOrderDetails";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import CustomTable from "@/components/shared/table/customTable";
-import { Skeleton } from "@/components/ui/skeleton";
 import { titleOrderDetails } from "@/constant/table";
 import { useParams } from "next/navigation";
 
@@ -22,7 +22,7 @@ const Page = () => {
         hideSave={true}
       />
       {Loading ? (
-        <Skeleton className="h-60 w-full rounded-md" />
+        <LoadingSpinner />
       ) : products.length > 0 ? (
         <CustomTable
           role="admin"

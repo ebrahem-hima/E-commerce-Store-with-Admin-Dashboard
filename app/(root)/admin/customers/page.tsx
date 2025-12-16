@@ -1,57 +1,46 @@
 "use client";
 
 import { useState } from "react";
-import { SelectCheckBox } from "@/types/typeAliases";
 import TableSearch from "../shared/TableSearch";
+import { SelectCheckBox } from "@/types/typeAliases";
 import PageHeader from "../shared/PageHeader";
-import useCustomerFn from "../adminFn/useCustomerFn";
+import useCustomerFn from "../adminHooks/useCustomerFn";
+import CustomerRealTime from "./customerRealTime";
+import { CustomerTableType } from "@/types/adminTableCheckboxtype";
 
 const Page = () => {
-  const [isCustomerChange, setIsCustomerChange] = useState(false);
   const [selectCheckBox, setSelectCheckBox] = useState<SelectCheckBox[]>([]);
   const [searchText, setSearchText] = useState("");
   const [selectFilter, setSelectFilter] = useState("");
-  const { Loading, customer } = useCustomerFn({
-    isCustomerChange,
+  const { Loading, customer, setCustomer } = useCustomerFn({
     searchText,
     selectFilter,
   });
 
-  const selectOptions = ["Newest", "Oldest"];
-  const handleCheckboxChange = (ID: string, checked: boolean) => {
-    setSelectCheckBox((prev) =>
-      prev.some((check) => check.ID === ID)
-        ? prev.filter((check) => check.ID !== ID)
-        : [
-            ...prev,
-            {
-              ID,
-              value: checked,
-            },
-          ]
-    );
-  };
+  const selectOptions = [
+    { label: "Newest", value: "newest" },
+    { label: "Oldest", value: "oldest" },
+  ];
 
   const headers = [
     { title: "Name" },
     { title: "Email" },
-    { title: "Location" },
     { title: "orders" },
     { title: "Spent" },
   ];
 
   return (
     <>
+      <CustomerRealTime setCustomer={setCustomer} />
       <PageHeader title="Customers" />
-      <TableSearch
+      <TableSearch<CustomerTableType>
+        tableWidth="min-w-[600px]"
         typeTable="user_profile"
-        isTableChange={setIsCustomerChange}
         selectCheckBox={selectCheckBox}
         setSelectCheckBox={setSelectCheckBox}
         selectOptions={selectOptions}
         setSearchText={setSearchText}
         tableData={customer}
-        handleCheckboxChange={handleCheckboxChange}
         headers={headers}
         Loading={Loading}
         setSelectFilter={setSelectFilter}

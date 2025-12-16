@@ -14,6 +14,7 @@ import { SelectCheckBox } from "@/types/typeAliases";
 import { toast } from "sonner";
 import { Dispatch, SetStateAction } from "react";
 import { selectFilterType, typeEditValue } from "@/types/adminType";
+import { handleDeleteUsers } from "../adminFn/handleDeleteUsers";
 
 interface Props {
   selectOptions: selectFilterType[];
@@ -88,7 +89,7 @@ const FilterSearch = ({
   const handleDeleteProducts = async () => {
     const productIds = selectCheckBox.map((item) => item.ID);
     for (const productId of productIds) {
-      await deleteProductFolder(productId);
+      await deleteProductFolder(productId as string);
     }
   };
 
@@ -104,6 +105,7 @@ const FilterSearch = ({
     toast.success("Successfully deleted");
     setSelectCheckBox?.([]);
   };
+
   const handleEditTable = async () => {
     if (!EditValue || EditValue?.length === 0) return;
     try {
@@ -127,6 +129,8 @@ const FilterSearch = ({
     setSelectCheckBox?.([]);
     toast.success("Updated");
   };
+
+  const userIds = selectCheckBox.map((user) => String(user.ID));
 
   return (
     <div className="grid grid-cols-[auto_1fr_auto] max-md:grid-flow-col max-md:grid-rows-2 items-center gap-3 mb-3 bg-background">
@@ -165,7 +169,11 @@ const FilterSearch = ({
           ))}
         <Trash2
           onClick={() => {
-            handleDelete();
+            if (typeTable === "user_profile") {
+              handleDeleteUsers(userIds);
+            } else {
+              handleDelete();
+            }
             if (typeTable === "products") {
               handleDeleteProducts();
             }
