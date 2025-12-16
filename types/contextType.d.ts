@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { typeIsOpen, typeProduct, typeUserOrder } from "./productTypes";
+import { typeIsOpen, typeProduct, TypeUserOrder } from "./productTypes";
 import { profileType } from "./profileFnTypes";
 import { typeGetCoupon } from "./typeAliases";
 
@@ -29,7 +29,7 @@ export interface ProductContextType {
   isUserOrderUpdated: boolean;
   setIsUserOrderUpdated: Dispatch<SetStateAction<boolean>>;
 
-  userOrders: typeUserOrder[];
+  userOrders: TypeUserOrder[];
 
   getCoupon: typeGetCoupon | null;
   setGetCoupon: Dispatch<SetStateAction<typeGetCoupon | null>>;

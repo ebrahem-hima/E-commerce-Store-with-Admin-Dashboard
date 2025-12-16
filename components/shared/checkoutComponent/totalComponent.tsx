@@ -16,7 +16,7 @@ const TotalComponent = ({ someDiscount }: Props) => {
           <span>${total}</span>
         </span>
       </p>
-      <div className="w-full h-[1px] bg-[#999]" />
+      <div className="w-full h-px bg-[#999]" />
       {someDiscount ? (
         <p className="flex-between text-sm">
           <span>Total:</span>

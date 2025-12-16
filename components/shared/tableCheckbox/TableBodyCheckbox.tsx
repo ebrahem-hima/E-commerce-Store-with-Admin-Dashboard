@@ -1,36 +1,61 @@
+"use client";
+
 import { TableBody, TableCell, TableRow } from "@/components/ui/table";
-import {
-  couponTableType,
-  customerTableType,
-  productAdminTable,
-  tableBodyType,
-} from "../../../types/tabletypes";
-import { typeUserOrder } from "@/types/productTypes";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SelectCheckBox } from "@/types/typeAliases";
 import { typeEditValue } from "@/types/adminType";
 import Image from "next/image";
-import Link from "next/link";
+import { Dispatch, SetStateAction, useState } from "react";
+import { useRouter } from "next/navigation";
+import PriceDisplay from "../priceDisplay";
+import {
+  CouponTableType,
+  CustomerTableType,
+  InboxTableType,
+  tableBodyCheckBoxType,
+  TypeProductTable,
+  TypeUserOrder,
+} from "@/types/adminTableCheckboxtype";
+import InboxPopup from "@/app/(root)/admin/inbox/InboxPopup";
 
 interface Props {
   Edit?: boolean;
-  setEditValue?: React.Dispatch<React.SetStateAction<typeEditValue[]>>;
-  dataBody: tableBodyType;
-  handleCheckboxChange: (ID: string, checked: boolean) => void;
+  setEditValue?: Dispatch<SetStateAction<typeEditValue[]>>;
+  dataBody: tableBodyCheckBoxType;
+  handleCheckboxChange: (ID: string | number, checked: boolean) => void;
   selectCheckBox: SelectCheckBox[];
 }
 
-function isOrderTable(value: tableBodyType): value is typeUserOrder[] {
+function isOrderTable(value: tableBodyCheckBoxType): value is TypeUserOrder[] {
   return value[0].type === "orderTable";
 }
-function isProductTable(value: tableBodyType): value is productAdminTable[] {
+function isProductTable(
+  value: tableBodyCheckBoxType
+): value is TypeProductTable[] {
   return value[0].type === "productTable";
 }
-function isCustomerTable(value: tableBodyType): value is customerTableType[] {
+function isCustomerTable(
+  value: tableBodyCheckBoxType
+): value is CustomerTableType[] {
   return value[0].type === "customerTable";
 }
-function isCouponTable(value: tableBodyType): value is couponTableType[] {
+function isCouponTable(
+  value: tableBodyCheckBoxType
+): value is CouponTableType[] {
   return value[0].type === "couponTable";
+}
+function isInboxTable(value: tableBodyCheckBoxType): value is InboxTableType[] {
+  return value[0].type === "inboxTable";
+}
+
+interface MessageType {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  date: string;
+  status: string;
 }
 
 const TableBodyCheckbox = ({
@@ -40,6 +65,12 @@ const TableBodyCheckbox = ({
   handleCheckboxChange,
   selectCheckBox,
 }: Props) => {
+  const [onOpenChange, setonOpenChange] = useState(false);
+  const [MessageDetails, setMessageDetails] = useState<MessageType | null>(
+    null
+  );
+
+  const { push } = useRouter();
   if (isOrderTable(dataBody)) {
     const getSelected = selectCheckBox.map((item) => item.ID);
     const handleEdit = (ID: string, status: string) => {
@@ -63,6 +94,9 @@ const TableBodyCheckbox = ({
                 checked={selectCheckBox.some(
                   (check) => check.ID === o.id && check.value
                 )}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
                 onCheckedChange={(checked) =>
                   handleCheckboxChange(o.id, checked as boolean)
                 }
@@ -120,24 +154,33 @@ const TableBodyCheckbox = ({
     return (
       <TableBody>
         {dataBody.map((p, idx) => (
-          <TableRow key={idx} className="h-10">
+          <TableRow
+            onClick={() => push(`/admin/products/updateProduct/${p.id}`)}
+            key={idx}
+            className="cursor-pointer hover:bg-[#f1f1f196] h-10 font-medium"
+          >
             <TableCell>
-              {/* <Link href={`/`} className="flex"> */}
               <Checkbox
                 checked={selectCheckBox.some(
                   (check) => check.ID === p.id && check.value
                 )}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
                 onCheckedChange={(checked) =>
-                  handleCheckboxChange(p.id, checked as boolean)
+                  handleCheckboxChange(p.id || "", checked as boolean)
                 }
               />
-              {/* </Link> */}
             </TableCell>
             <TableCell className="flex items-center gap-2">
-              <Image src={p.img} alt="product-img" width={70} height={70} />
-              <span className="font-medium line-clamp-2 max-w-[200px]">
-                {p.name}
-              </span>
+              <Image
+                src={p.img}
+                alt="product-img"
+                width={55}
+                height={55}
+                className="rounded-md"
+              />
+              <span className="line-clamp-2 max-w-[170px]">{p.name}</span>
             </TableCell>
             <TableCell>
               {p.stock > 0 ? (
@@ -148,7 +191,16 @@ const TableBodyCheckbox = ({
                 </span>
               )}
             </TableCell>
-            <TableCell>{p.price}</TableCell>
+            <TableCell>
+              <PriceDisplay
+                isProduct={true}
+                price={p.price}
+                discount={p.discount}
+                discountType={p.discount_type}
+              />
+            </TableCell>
+            <TableCell>{p.categories?.name}</TableCell>
+            <TableCell>{p.created_at}</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -159,12 +211,19 @@ const TableBodyCheckbox = ({
     return (
       <TableBody>
         {dataBody.map((c, idx) => (
-          <TableRow key={idx} className="h-10">
+          <TableRow
+            onClick={() => push(`/admin/customers/customerInformation/${c.id}`)}
+            key={idx}
+            className="h-10 cursor-pointer"
+          >
             <TableCell>
               <Checkbox
                 checked={selectCheckBox.some(
                   (check) => check.ID === c.id && check.value
                 )}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
                 onCheckedChange={(checked) =>
                   handleCheckboxChange(c.id, checked as boolean)
                 }
@@ -176,8 +235,9 @@ const TableBodyCheckbox = ({
               </span>
               <span>{c.first_name + " " + c.last_name}</span>
             </TableCell>
-            <TableCell>{c.email}</TableCell>
-            <TableCell>{c.country + " " + c.address1}</TableCell>
+            <TableCell className="bg-[red] overflow-hidden">
+              {c.email}
+            </TableCell>
             <TableCell>{c.order_count}</TableCell>
             <TableCell>{c.total_spent}</TableCell>
           </TableRow>
@@ -191,22 +251,35 @@ const TableBodyCheckbox = ({
     return (
       <TableBody>
         {dataBody.map((c, idx) => (
-          <TableRow key={idx} className="h-10">
+          <TableRow
+            onClick={() => push(`/admin/coupons/updateCoupon/${c.id}`)}
+            key={idx}
+            className="h-10 cursor-pointer"
+          >
             <TableCell>
               <Checkbox
                 checked={selectCheckBox.some(
                   (check) => check.ID === c.id && check.value
                 )}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
                 onCheckedChange={(checked) =>
                   handleCheckboxChange(c.id, checked as boolean)
                 }
               />
             </TableCell>
-            <TableCell>{c.coupon_id}</TableCell>
+            <TableCell>
+              <div className="flex flex-col">
+                <span className="font-medium">{c.coupon_name}</span>
+                <span className="text-[#5A607F]">
+                  <span className="font-medium">Code:</span> {c.coupon_code}
+                </span>
+              </div>
+            </TableCell>
             <TableCell>
               {c.max_uses} / {c.times_used}
             </TableCell>
-            {/* <TableCell></TableCell> */}
             <TableCell>
               {c.is_active ? (
                 <span className="px-2 py-1 rounded-sm bg-[#C4F8E2] text-[#06A561]">
@@ -219,11 +292,90 @@ const TableBodyCheckbox = ({
               )}
             </TableCell>
             <TableCell>
-              {c.created_at} / {c.expires_at}
+              {c.applies_to_type === "specific" ? (
+                <span className="px-2 py-1 rounded-sm bg-[#C4F8E2] text-[#06A561]">
+                  Specific
+                </span>
+              ) : (
+                <span className="px-2 py-1 rounded-sm bg-[#E6E9F4] text-[#5A607F]">
+                  All Users
+                </span>
+              )}
+            </TableCell>
+            <TableCell>
+              {c.created_at} / {c.expired_at}
             </TableCell>
           </TableRow>
         ))}
       </TableBody>
+    );
+  }
+
+  if (isInboxTable(dataBody)) {
+    return (
+      <>
+        <TableBody>
+          {dataBody.map((c, idx) => (
+            <TableRow
+              onClick={() => {
+                setonOpenChange(true);
+                setMessageDetails({
+                  id: c.id,
+                  name: c.user_profile.first_name,
+                  email: c.user_profile.email,
+                  phone: c.user_profile.phone,
+                  message: c.message,
+                  date: c.created_at,
+                  status: c.status,
+                });
+              }}
+              key={idx}
+              className="h-10 cursor-pointer"
+            >
+              <TableCell>
+                <Checkbox
+                  checked={selectCheckBox.some(
+                    (check) => check.ID === c.id && check.value
+                  )}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onCheckedChange={(checked) =>
+                    handleCheckboxChange(c.id, checked as boolean)
+                  }
+                />
+              </TableCell>
+              <TableCell className="overflow-hidden">
+                {c.user_profile.email}
+              </TableCell>
+              <TableCell>{c.message}</TableCell>
+              <TableCell>
+                <span
+                  className={`text-center px-3 py-1 rounded-md font-medium ${
+                    c.status === "New"
+                      ? "text-green-700 bg-green-100"
+                      : c.status === "Seen"
+                      ? "text-gray-600 bg-gray-100"
+                      : c.status === "Reply"
+                      ? "text-blue-700 bg-blue-100"
+                      : "text-black bg-white"
+                  }`}
+                >
+                  {c.status}
+                </span>
+              </TableCell>
+              <TableCell>{c.created_at}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+        {onOpenChange && (
+          <InboxPopup
+            onOpenChange={setonOpenChange}
+            isOpen={onOpenChange}
+            data={MessageDetails}
+          />
+        )}
+      </>
     );
   }
 };

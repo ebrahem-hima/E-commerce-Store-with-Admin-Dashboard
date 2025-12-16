@@ -1,6 +1,6 @@
 "use client";
 
-import React, { MouseEvent, useEffect, useRef, useState } from "react";
+import { MouseEvent, useRef, useState } from "react";
 import { CONTACT_INFO } from "@/constant/filterNavbar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,6 +9,7 @@ import { useProductContext } from "@/context/productContext";
 import { toast } from "sonner";
 import { contactSchema } from "@/validation/validation";
 import { MESSAGES } from "@/lib/message";
+import { createClient } from "@/utils/supabase/client";
 
 interface InputValueType {
   userName: string;
@@ -18,7 +19,7 @@ interface InputValueType {
 }
 
 const Page = () => {
-  const { profileData } = useProductContext();
+  const { profileData, userId } = useProductContext();
   const [inputValue, setInputValue] = useState<InputValueType>({
     userName: profileData.firstName + " " + profileData.lastName,
     email: profileData.email,
@@ -26,7 +27,7 @@ const Page = () => {
     message: "",
   });
   const messageRef = useRef<HTMLTextAreaElement | null>(null);
-
+  const supabase = createClient();
   const handleSendMessage = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
@@ -45,11 +46,14 @@ const Page = () => {
       console.log(error);
       return false;
     }
-    // const { error } = await supabase.from('contact').insert(inputValue)
-    // if (error) {
-    //   console.log(error)
-    //   return false
-    // }
+    const { error } = await supabase.from("inbox").insert({
+      user_id: userId,
+      message: inputValue.message,
+    });
+    if (error) {
+      console.log(error);
+      return false;
+    }
     setInputValue((prev) => ({
       ...prev,
       message: "",
@@ -57,6 +61,7 @@ const Page = () => {
     if (messageRef.current) messageRef.current.value = "";
     toast.success(MESSAGES.contact.success);
   };
+  console.log("inputValue", inputValue);
   return (
     <div className="grid grid-cols-[300px_1fr] max-md:grid-cols-1 gap-6">
       <div className="flex flex-col gap-3 max-md:mx-auto max-md:text-center">

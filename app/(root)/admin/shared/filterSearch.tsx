@@ -35,7 +35,6 @@ const FilterSearch = ({
   Edit,
   typeTable,
   selectCheckBox,
-  // isTableChange,
   EditValue,
   setSelectCheckBox,
 }: Props) => {
@@ -102,7 +101,6 @@ const FilterSearch = ({
       console.log(error);
       return;
     }
-    // isTableChange((prev) => !prev);
     toast.success("Successfully deleted");
     setSelectCheckBox?.([]);
   };

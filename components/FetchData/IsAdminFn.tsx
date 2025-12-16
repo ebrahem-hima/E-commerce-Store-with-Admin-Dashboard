@@ -29,6 +29,8 @@ const IsAdminFn = () => {
       }
       if (data?.role === "admin") {
         setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
       }
       setLoading(false);
     };
