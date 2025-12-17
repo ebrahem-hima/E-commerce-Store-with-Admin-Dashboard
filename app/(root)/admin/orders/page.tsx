@@ -6,6 +6,8 @@ import TableSearch from "../shared/TableSearch";
 import OrdersRealtime from "./OrderRealtime";
 import { typeEditValue } from "@/types/adminType";
 import useOrders from "./hooks/useOrders";
+import { TypeUserOrder } from "@/types/adminTableCheckboxtype";
+import PageHeader from "../shared/PageHeader";
 
 const Page = () => {
   const [selectCheckBox, setSelectCheckBox] = useState<SelectCheckBox[]>([]);
@@ -23,20 +25,6 @@ const Page = () => {
     { label: "Oldest", value: "oldest" },
   ];
 
-  const handleCheckboxChange = (orderCode: string, checked: boolean) => {
-    setSelectCheckBox((prev) =>
-      prev.some((check) => check.ID === orderCode)
-        ? prev.filter((check) => check.ID !== orderCode)
-        : [
-            ...prev,
-            {
-              ID: orderCode,
-              value: checked,
-            },
-          ]
-    );
-  };
-
   const headers = [
     { title: "Order" },
     { title: "Date" },
@@ -48,18 +36,19 @@ const Page = () => {
 
   return (
     <>
+      <PageHeader title="Orders" />
       <OrdersRealtime setOrders={setOrders} />
-      <TableSearch
+      <TableSearch<TypeUserOrder>
         Edit={Edit}
         EditValue={EditValue}
         setEditValue={setEditValue}
+        tableWidth="min-w-[630px]"
         typeTable="user_order"
         selectCheckBox={selectCheckBox}
         setSelectCheckBox={setSelectCheckBox}
         selectOptions={selectOptions}
         setSearchText={setSearchText}
         tableData={orders}
-        handleCheckboxChange={handleCheckboxChange}
         headers={headers}
         Loading={Loading}
         setSelectFilter={setSelectFilter}

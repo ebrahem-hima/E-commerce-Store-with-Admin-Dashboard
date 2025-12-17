@@ -1,4 +1,4 @@
-import { typeUserOrder } from "@/types/productTypes";
+import { TypeUserOrder } from "@/types/adminTableCheckboxtype";
 import { createClient } from "@/utils/supabase/client";
 import { useEffect, useState } from "react";
 
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const useOrders = ({ searchText, selectFilter }: Props) => {
-  const [orders, setOrders] = useState<typeUserOrder[]>([]);
+  const [orders, setOrders] = useState<TypeUserOrder[]>([]);
   const [Loading, setLoading] = useState(true);
 
   useEffect(() => {

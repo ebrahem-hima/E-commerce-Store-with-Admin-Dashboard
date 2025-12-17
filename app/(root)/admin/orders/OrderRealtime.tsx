@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { typeUserOrder } from "@/types/productTypes";
 import { createClient } from "@/utils/supabase/client";
+import { TypeUserOrder } from "@/types/adminTableCheckboxtype";
 
 export default function OrdersRealtime({
   setOrders,
 }: {
-  setOrders: React.Dispatch<React.SetStateAction<typeUserOrder[]>>;
+  setOrders: React.Dispatch<React.SetStateAction<TypeUserOrder[]>>;
 }) {
   useEffect(() => {
     const supabase = createClient();

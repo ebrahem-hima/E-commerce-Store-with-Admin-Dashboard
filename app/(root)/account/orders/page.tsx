@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useProductContext } from "@/context/productContext";
-import { typeUserOrder } from "@/types/productTypes";
 import CustomTable from "@/components/shared/table/customTable";
+import { TypeUserOrder } from "@/types/adminTableCheckboxtype";
 
 const Page = () => {
   const { userOrders } = useProductContext();
-  const [userOrder, setUserOrder] = useState<typeUserOrder[]>([]);
+  const [userOrder, setUserOrder] = useState<TypeUserOrder[]>([]);
 
   const titles = [
     { title: "Order_Code" },
