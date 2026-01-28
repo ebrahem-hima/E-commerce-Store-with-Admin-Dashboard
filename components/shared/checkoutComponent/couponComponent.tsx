@@ -12,7 +12,13 @@ const CouponComponent = () => {
 
   return (
     <div>
-      <div className="flex items-center gap-4 mb-2">
+      <form
+        onSubmit={(e) => {
+          applyCoupon(e);
+          setCouponValue("");
+        }}
+        className="flex items-center gap-4 mb-2"
+      >
         <Input
           ref={couponRef}
           type="text"
@@ -22,16 +28,14 @@ const CouponComponent = () => {
         />
         <Button
           disabled={couponValue.trim() === ""}
-          onClick={(e) => {
-            applyCoupon(e);
-            setCouponValue("");
-          }}
+          type="submit"
           variant="primary"
           size="sm"
+          className="whitespace-nowrap"
         >
           Apply Coupon
         </Button>
-      </div>
+      </form>
       <div className="flex items-center gap-2 flex-wrap">
         {getCoupon?.name && (
           <div
