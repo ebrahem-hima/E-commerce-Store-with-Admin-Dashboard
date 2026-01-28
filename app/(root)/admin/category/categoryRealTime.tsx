@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 import { categoryDetailType } from "@/types/adminType";
 
 export default function CategoryRealTime({
@@ -42,15 +42,15 @@ export default function CategoryRealTime({
                       description: payload.new.description,
                       created_at: payload.new.created_at,
                     }
-                  : category
-              )
+                  : category,
+              ),
             );
           } else if (payload.eventType === "DELETE") {
             setCategories((prev) =>
-              prev.filter((category) => category?.id !== payload.old.id)
+              prev.filter((category) => category?.id !== payload.old.id),
             );
           }
-        }
+        },
       )
       .subscribe();
 

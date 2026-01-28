@@ -1,7 +1,11 @@
 import { MESSAGES } from "@/lib/message";
 import { getTodayDate } from "@/lib/utils";
-import { categoryDetailType } from "@/types/adminType";
-import { createClient } from "@/utils/supabase/client";
+import {
+  categoryDetailType,
+  categorySelectType,
+  categoryType,
+} from "@/types/adminType";
+import { createClient } from "@/app/utils/supabase/client";
 import { Dispatch, MouseEvent, RefObject, SetStateAction } from "react";
 import { toast } from "sonner";
 
@@ -12,6 +16,8 @@ interface handleAddCategoryType {
   Edit: boolean;
 }
 
+const supabase = createClient();
+
 export const handleAddCategory = async ({
   e,
   category,
@@ -19,12 +25,11 @@ export const handleAddCategory = async ({
   Edit,
 }: handleAddCategoryType) => {
   e.preventDefault();
-  const supabase = createClient();
   const emptyArr = ["name", "type", "description"];
 
   if (!category) return;
   const checkEmpty = emptyArr.some(
-    (field) => category[field as keyof categoryDetailType] === ""
+    (field) => category[field as keyof categoryDetailType] === "",
   );
   if (checkEmpty) {
     toast.error(MESSAGES.admin.category.requiredField);
@@ -57,7 +62,6 @@ export const handleAddCategory = async ({
     }
     toast.success(MESSAGES.admin.category.createCategory);
   }
-  // setIsCategoryUpdated((prev) => !prev);
   setShowCategory(false);
 };
 
@@ -67,6 +71,21 @@ interface handleCloseType {
   inputRef: RefObject<HTMLInputElement | null>;
 }
 
+export const handleDeleteCategory = async (
+  categoryIds: (number | undefined)[],
+  couponId: number,
+) => {
+  const { error } = await supabase
+    .from("coupon_category")
+    .delete()
+    .in("category_id", categoryIds)
+    .eq("coupon_id", couponId);
+  if (error) {
+    console.log(error);
+    return;
+  }
+};
+
 export const handleClose = ({
   e,
   setShowCategory,
@@ -75,4 +94,46 @@ export const handleClose = ({
   e.preventDefault();
   if (inputRef?.current) inputRef.current.value = "";
   setShowCategory(false);
+};
+
+export const handleCouponCategory = async (
+  categorySelected: categoryType[],
+  couponId: number,
+) => {
+  const categorySelectedVar = categorySelected.map((category) => ({
+    category_id: category.id,
+    coupon_id: couponId,
+  }));
+  const { error } = await supabase
+    .from("coupon_category")
+    .insert(categorySelectedVar);
+
+  if (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+// to avoid send same category
+export const handleCategoryDuplicate = async (
+  selectedCategory: categorySelectType,
+  couponId: number,
+) => {
+  const { data, error } = await supabase
+    .from("coupon_category")
+    .select("category_id")
+    .eq("coupon_id", couponId);
+  if (error) {
+    console.log(error);
+    return false;
+  }
+  // filter categories to find duplicates
+  const handleDuplicate = selectedCategory.categorySelected.filter(
+    (category: categoryType) =>
+      !data.some((cat) => cat.category_id === category.id),
+  );
+  // category that doesn't exist in DB
+  if (handleDuplicate.length > 0) {
+    await handleCouponCategory(handleDuplicate, couponId);
+  }
 };

@@ -6,50 +6,34 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Edit, Trash2 } from "lucide-react";
-import React from "react";
+import { MouseEvent, useState } from "react";
+import { handleDeleteCategory } from "./hooks/handleDeleteCategory";
+import { categoryDetailType } from "@/types/adminType";
 
 interface CategoryButtonsProps {
-  itemId: number;
-  handleGetCategory: (args: {
-    e: React.MouseEvent<HTMLButtonElement>;
-    setShowCategory: React.Dispatch<React.SetStateAction<boolean>>;
-    categoryID: number;
-  }) => void;
-  setShowCategory: React.Dispatch<React.SetStateAction<boolean>>;
-  handleDeleteCategory: (args: {
-    categoryID: number;
-    setShowDeleteDialog: React.Dispatch<React.SetStateAction<boolean>>;
-    e: React.MouseEvent<HTMLButtonElement>;
-  }) => void;
-  showDeleteDialog: boolean;
-  setShowDeleteDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  setEdit: React.Dispatch<React.SetStateAction<boolean>>;
+  item: categoryDetailType;
+  handleEditClick: (
+    e: MouseEvent<HTMLButtonElement>,
+    category: categoryDetailType
+  ) => void;
 }
 
-const CategoryButtons = ({
-  itemId,
-  handleGetCategory,
-  setShowCategory,
-  handleDeleteCategory,
-  showDeleteDialog,
-  setShowDeleteDialog,
-  setEdit,
-}: CategoryButtonsProps) => {
+const CategoryButtons = ({ item, handleEditClick }: CategoryButtonsProps) => {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  if (!item) return;
+  const categoryData = {
+    id: item.id,
+    name: item.name,
+    description: item.description,
+    type: item.type,
+  };
   return (
     <div className="flex flex-col gap-2 ml-2">
       <Button
         variant="outline"
         size="sm"
-        onClick={(e) => {
-          {
-            setEdit(true);
-            handleGetCategory({
-              e,
-              setShowCategory,
-              categoryID: itemId,
-            });
-          }
-        }}
+        onClick={(e) => handleEditClick(e, categoryData)}
         title="isEdit"
         className="p-2 rounded-lg hover:bg-gray-100 transition"
       >
@@ -88,9 +72,8 @@ const CategoryButtons = ({
                 onClick={(e) => {
                   e.preventDefault();
                   handleDeleteCategory({
-                    categoryID: itemId,
+                    categoryID: item.id,
                     setShowDeleteDialog,
-                    e,
                   });
                 }}
               >
