@@ -13,7 +13,7 @@ import { FormEvent, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { MESSAGES } from "@/lib/message";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 
 const Page = () => {
   const [Loading, setLoading] = useState(false);

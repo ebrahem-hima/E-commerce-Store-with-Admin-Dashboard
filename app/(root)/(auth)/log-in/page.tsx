@@ -17,7 +17,7 @@ import { login } from "../authActions/login";
 import { useRouter } from "next/navigation";
 import { useProductContext } from "@/context/productContext";
 import { MESSAGES } from "@/lib/message";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 
 interface userDataType {
   email: string;
@@ -60,7 +60,7 @@ const Page = () => {
       userData.email,
       {
         redirectTo: "http://localhost:3000/reset-password",
-      }
+      },
     );
     if (error) {
       console.log("Rest Password Error", error);
@@ -74,12 +74,14 @@ const Page = () => {
         <CardHeader>
           <div>
             <CardTitle>Login to your account</CardTitle>
-            <CardDescription className="text-[13px] mt-1">
+            <CardDescription className="text-[12px] mt-1">
               Enter your email below to login to your account
             </CardDescription>
           </div>
-          <Link href={`/sign-up`} className="mx-auto">
-            <Button variant="link">Sign Up</Button>
+          <Link href={`/sign-up`}>
+            <Button variant="link" className="whitespace-nowrap">
+              Sign Up
+            </Button>
           </Link>
         </CardHeader>
         <CardContent>

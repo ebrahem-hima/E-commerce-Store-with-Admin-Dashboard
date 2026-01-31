@@ -7,8 +7,8 @@ export default function RootLayout({
 }>) {
   return (
     <main lang="en">
-      <div className="grid grid-cols-[1fr_500px] max-lg:grid-cols-1 gap-4">
-        <div className="relative h-[550px] gap-4 max-lg:hidden">
+      <div className="grid grid-cols-[1fr_550px] max-lg:grid-cols-1 gap-4">
+        <div className="relative h-137.5 gap-4 max-lg:hidden">
           <Image
             src={`/images/auth/Side Image.webp`}
             // aspect-[1/4]
