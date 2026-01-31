@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { updateAddress } from "@/lib/utilsProfile";
 import { AddressType } from "@/types/profileFnTypes";
 import { useProductContext } from "@/context/productContext";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 
 const Page = () => {
   const {

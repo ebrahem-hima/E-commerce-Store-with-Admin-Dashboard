@@ -11,7 +11,7 @@ import { updateEmail, updatePassword, updateProfile } from "@/lib/utilsProfile";
 import { useProductContext } from "@/context/productContext";
 import { myProfileType } from "@/types/profileFnTypes";
 import { profileSchema } from "@/validation/validation";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 
 const Page = () => {
   const { userId, profileData, setProfileData, isProfileChange } =
@@ -76,7 +76,7 @@ const Page = () => {
     const hasChanges = checkField.some(
       (field) =>
         profileData[field as keyof myProfileType] !==
-        originalProfile.current?.[field as keyof myProfileType]
+        originalProfile.current?.[field as keyof myProfileType],
     );
     try {
       const result = profileSchema.safeParse({

@@ -21,8 +21,13 @@ const Page = () => {
   }, [userOrders]);
 
   return (
-    <div className="h-[450px] overflow-y-auto">
-      <CustomTable dataBody={userOrder || []} titles={titles} />
+    <div className="h-122.5 overflow-y-auto">
+      <h2 className="text-primary font-bold text-xl mb-2">Your Orders</h2>
+      <CustomTable
+        empty_table="No orders have been placed yet."
+        dataBody={userOrder || []}
+        titles={titles}
+      />
     </div>
   );
 };
