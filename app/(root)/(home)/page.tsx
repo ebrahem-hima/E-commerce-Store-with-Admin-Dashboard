@@ -1,28 +1,30 @@
 import HeroImageFilter from "@/components/shared/HeroImageFilter";
 import HomeIcons from "@/components/shared/HomeIcons";
 import SliderComponent from "@/components/shared/SliderComponent/SliderComponent";
-import { components } from "@/constant/product";
-const Page = () => {
+import { createClient } from "@/app/utils/supabase/server";
+import CategoryComponent from "@/components/shared/SliderComponent/CategoryComponent";
+const Page = async () => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("categories").select(`name,id`);
+  if (error) console.error("Error fetching categories:", error);
+
+  if (!data || data.length === 0) return null;
   return (
     <div className="grid gap-y-18">
       {/* Filter And Hero Image */}
-      <HeroImageFilter />
+      <HeroImageFilter filter={data} />
       {/* Component Category */}
-      <SliderComponent
-        type="category"
+      <CategoryComponent
         titleComponent="Browse By Category"
-        Product={[]}
-        category=""
+        categories={data}
       />
-      {components.map((component) => (
+      {data?.map((cat: { name: string; id: number }) => (
         <SliderComponent
-          key={component.component_id}
-          titleComponent={component.title}
-          Product={component.products}
-          category={component.category}
+          key={cat.id}
+          categoryId={cat.id}
+          titleComponent={cat.name}
         />
       ))}
-
       <HomeIcons />
     </div>
   );
