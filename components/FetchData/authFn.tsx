@@ -1,35 +1,30 @@
+"use client";
+
 import { getUser } from "@/app/(root)/(auth)/authActions/getUser";
-import { createClient } from "@/utils/supabase/client";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
-interface Props {
-  isAuth: boolean;
-}
+const useAuth = () => {
+  const [isAuth, setIsAuth] = useState<boolean>(false);
 
-const AuthFn = ({ isAuth }: Props) => {
-  const [user, setUser] = useState<string | null>(null);
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const user = await getUser();
-        if (user) setUser(user?.id);
+        if (user?.id) {
+          setIsAuth(true);
+        } else {
+          setIsAuth(false);
+        }
       } catch (err) {
         console.error(err);
+        setIsAuth(false);
       }
     };
 
     fetchUser();
-    const supabase = createClient();
+  }, []);
 
-    const { data: listener } = supabase.auth.onAuthStateChange(() => {
-      fetchUser();
-    });
-
-    return () => {
-      listener.subscription.unsubscribe();
-    };
-  }, [isAuth]);
-  return { user, setUser };
+  return { isAuth, setIsAuth };
 };
 
-export default AuthFn;
+export default useAuth;
