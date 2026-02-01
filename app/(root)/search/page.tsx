@@ -1,169 +1,117 @@
-"use client";
-
-import React, { Suspense, useState } from "react";
-import { firstProduct } from "@/constant/product";
-import ProductCard from "@/components/shared/Card/ProductCard/ProductCard";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "@/components/ui/select";
-import { IoList } from "react-icons/io5";
-import { SlGrid } from "react-icons/sl";
+import { Suspense } from "react";
 import FilterComponent from "./filterComponent";
-import SliderComponent from "@/components/shared/SliderComponent/SliderComponent";
 import SearchFilterMobile from "./searchFilterMobile";
-import { usePathname } from "next/navigation";
+import SliderClientComponent from "@/components/shared/SliderComponent/SliderClientComponent";
+import SearchProduct from "./SearchProduct";
+import { createClient } from "@/app/utils/supabase/server";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
 
-interface filterType {
-  filterName: string;
-  items: string[];
+interface SearchPageProps {
+  searchParams: {
+    query?: string;
+  };
 }
 
-const Page = () => {
-  const pathName = usePathname();
+const Page = async ({ searchParams }: SearchPageProps) => {
+  const supabase = await createClient();
+  const resolvedParams = await searchParams;
+  const querySearch = resolvedParams.query?.trim();
 
-  const [filters, setFilters] = useState<filterType[]>([]);
-  const filter = [
-    { filterName: "Colors", items: ["Red", "Black", "Green"] },
-    { filterName: "Sizes", items: ["md", "lg", "sm"] },
-  ];
-  const [openFilter, setOpenFilter] = useState<{ [key: string]: boolean }>({});
-  const [isGrid, setIsGrid] = useState(false);
+  if (!querySearch) {
+    return <p>No search query</p>;
+  }
 
-  const handleOpenFilter = (ID: number) => {
-    setOpenFilter((prev) => ({
-      ...prev,
-      [ID]: !prev[ID],
+  const filters = Object.entries(resolvedParams)
+    .filter(([key]) => key !== "query")
+    .map(([key, value]) => ({
+      optionTitle: key,
+      values: value.split(","),
     }));
-  };
 
-  const handleFilter = (Name: string, item: string) => {
-    const exist = filters.some((filter) => filter.filterName === Name);
-    setFilters((prev) =>
-      exist
-        ? prev.map((filterItem) =>
-            filterItem.filterName === Name
-              ? {
-                  ...filterItem,
-                  items: filterItem.items.includes(item)
-                    ? filterItem.items.filter((filter) => filter !== item)
-                    : [...filterItem.items, item],
-                }
-              : filterItem
-          )
-        : [...prev, { filterName: Name, items: [item] }]
-    );
-  };
+  let query = supabase.from("products").select();
 
-  const handleReset = () => {
-    setFilters([]);
-    setOpenFilter({});
+  if (querySearch) {
+    query = query.ilike("search_text", `%${querySearch}%`);
+  }
+  // This solution is from AI until I learn SQL and write all of this in the database.
+  if (filters.length > 0) {
+    const orConditions: string[] = [];
 
-    const searchParams = new URLSearchParams(window.location.search);
-
-    const queryValue = searchParams.get("query");
-    const categoryValue = searchParams.get("category");
-
-    searchParams.forEach((_, key) => {
-      if (key !== "query") searchParams.delete(key);
+    filters.forEach(({ optionTitle, values }) => {
+      values.forEach((singleValue) => {
+        const rawJson = JSON.stringify([
+          { optionTitle, values: [singleValue] },
+        ]);
+        const escapedJson = rawJson.replace(/"/g, '\\"');
+        const condition = `options.cs."${escapedJson}"`;
+        orConditions.push(condition);
+      });
     });
-    const newUrl = queryValue
-      ? `${pathName}?query=${encodeURIComponent(
-          queryValue
-        )}&category=${categoryValue}`
-      : pathName;
 
-    window.history.replaceState({}, "", newUrl);
-  };
+    if (orConditions.length > 0) {
+      query = query.or(orConditions.join(","));
+    }
+  }
+  // end solution
+  const { data, error } = await query;
 
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  const getFilters = data.map((product) => product.options).flat();
+  const map = new Map();
+  getFilters?.forEach(({ optionTitle, values }) => {
+    if (!map.has(optionTitle)) {
+      map.set(optionTitle, new Set(values));
+    } else {
+      const existing = map.get(optionTitle);
+      values.forEach((val: string) => existing.add(val));
+    }
+  });
+  const mergeArray = Array.from(map, ([optionTitle, values]) => ({
+    optionTitle,
+    values: [...values],
+  }));
+
+  const bestSellersProducts = data.filter((product) => product.discount > 0);
+  const otherProducts = data.filter((product) => !product.discount);
+
+  if (data.length === 0) {
+    return (
+      <div className="flex-center font-bold text-primary">
+        There Are No Products to Show
+      </div>
+    );
+  }
   return (
     <>
       <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-4">
         {/* Filter Component */}
         <div className="hidden lg:block">
           <Suspense fallback={<div>Loading...</div>}>
-            <FilterComponent
-              setFilters={setFilters}
-              openFilter={openFilter}
-              handleOpenFilter={handleOpenFilter}
-              handleFilter={handleFilter}
-              handleReset={handleReset}
-              filter={filter}
-              filters={filters}
-              pathName={pathName}
-            />
+            <FilterComponent filter={mergeArray} />
           </Suspense>
         </div>
         {/* Best Sellers */}
         <div className="flex flex-col gap-4">
-          <SliderComponent
-            type="products"
-            titleComponent="Best Sellers"
-            Product={firstProduct}
-            search={true}
-          />
-          {/* Sort by */}
-          <div className="flex-between">
-            <div className="flex gap-2 items-center">
-              <span>Sort By</span>
-              <div className="w-[200px]">
-                <Select>
-                  <SelectTrigger className="!h-8">
-                    <SelectValue placeholder="Sort by" />
-                  </SelectTrigger>
-                  <SelectContent className="border-none">
-                    <SelectItem value="high-to-low">
-                      Price (High to Low)
-                    </SelectItem>
-                    <SelectItem value="low-to-high">
-                      Price (Low to High)
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="flex gap-2 items-center">
-              <SlGrid
-                onClick={() => setIsGrid(true)}
-                size={19}
-                className="cursor-pointer"
-              />
-              <IoList
-                onClick={() => setIsGrid(false)}
-                size={27}
-                className="cursor-pointer"
-              />
-            </div>
-          </div>
-          {/* Products */}
-          <div
-            className={`${
-              isGrid
-                ? "flex flex-col"
-                : "grid grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-400:grid-cols-1"
-            } gap-4 `}
-          >
-            {firstProduct.map((item) => (
-              <ProductCard isGrid={isGrid} key={item.product_id} item={item} />
-            ))}
-          </div>
+          {bestSellersProducts.length > 0 && (
+            <SliderClientComponent
+              titleComponent="Best Sellers"
+              Product={bestSellersProducts}
+              search={true}
+            />
+          )}
+          {/* Products + Sort by */}
+          {otherProducts.length > 0 && (
+            <Suspense fallback={<LoadingSpinner />}>
+              <SearchProduct products={otherProducts} />
+            </Suspense>
+          )}
         </div>
       </div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <SearchFilterMobile
-          filter={filter}
-          handleReset={handleReset}
-          handleFilter={handleFilter}
-          handleOpenFilter={handleOpenFilter}
-          openFilter={openFilter}
-          filters={filters}
-          setFilters={setFilters}
-          pathName={pathName}
-        />
-      </Suspense>
+      <SearchFilterMobile filter={mergeArray} />
     </>
   );
 };

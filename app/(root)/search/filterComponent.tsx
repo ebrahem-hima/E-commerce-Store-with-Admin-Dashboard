@@ -1,6 +1,11 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+import { Label } from "@/components/ui/label";
+import { productOptionsType } from "@/types/type";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Dispatch, SetStateAction, useState } from "react";
 
 import { IoIosArrowDown } from "react-icons/io";
 
@@ -9,30 +14,60 @@ interface filterType {
   items: string[];
 }
 
-interface Props {
-  handleReset: () => void;
-  handleOpenFilter: (idx: number) => void;
-  handleFilter: (name: string, item: string) => void;
-  filter: filterType[];
-  openFilter: { [key: string]: boolean };
-  filters: filterType[];
-  setFilters: React.Dispatch<React.SetStateAction<filterType[]>>;
-  pathName: string;
-}
-
 const FilterComponent = ({
-  filters,
-  pathName,
   filter,
-  handleOpenFilter,
-  handleFilter,
-  openFilter,
-  handleReset,
-}: Props) => {
+  setIsOpen,
+}: {
+  filter: productOptionsType[];
+  setIsOpen?: Dispatch<SetStateAction<boolean>>;
+}) => {
   const { push } = useRouter();
   const searchParams = useSearchParams();
   const query = searchParams.get("query") || "";
-  useEffect(() => {
+
+  const pathName = usePathname();
+
+  const [filters, setFilters] = useState<filterType[]>([]);
+
+  const [openFilter, setOpenFilter] = useState<{ [key: string]: boolean }>({});
+
+  const handleOpenFilter = (ID: number) => {
+    setOpenFilter((prev) => ({
+      ...prev,
+      [ID]: !prev[ID],
+    }));
+  };
+
+  const handleFilter = (Name: string, item: string) => {
+    const exist = filters.some((filter) => filter.filterName === Name);
+    setFilters((prev) =>
+      exist
+        ? prev.map((filterItem) =>
+            filterItem.filterName === Name
+              ? {
+                  ...filterItem,
+                  items: filterItem.items.includes(item)
+                    ? filterItem.items.filter((filter) => filter !== item)
+                    : [...filterItem.items, item],
+                }
+              : filterItem,
+          )
+        : [...prev, { filterName: Name, items: [item] }],
+    );
+  };
+
+  const handleReset = () => {
+    setFilters([]);
+    setOpenFilter({});
+    const searchParams = new URLSearchParams(window.location.search);
+    const queryValue = searchParams.get("query");
+    searchParams.forEach((_, key) => {
+      if (key !== "query") searchParams.delete(key);
+    });
+    push(`${pathName}?query=${queryValue}`);
+  };
+
+  const handleURLSearch = () => {
     if (!query) return;
     const searchParams = new URLSearchParams(window.location.search);
 
@@ -47,7 +82,12 @@ const FilterComponent = ({
     });
 
     push(`${pathName}?${decodeURIComponent(searchParams.toString())}`);
-  }, [filters, pathName, push, query]);
+    setIsOpen?.(false);
+  };
+
+  const searchCount = filters
+    .map((fil) => fil.items.length)
+    .reduce((acc, curr) => acc + curr, 0);
   return (
     <div className="px-4">
       <div className="flex-between mb-4">
@@ -57,14 +97,14 @@ const FilterComponent = ({
         </span>
       </div>
       <div className="flex flex-col gap-3">
-        {filter.map((filter, idx) => (
-          <div key={filter.filterName}>
+        {filter.map(({ optionTitle, values }, idx) => (
+          <div key={optionTitle}>
             <div>
               <p
                 onClick={() => handleOpenFilter(idx)}
-                className="px-3 py-[6px] cursor-pointer border border-black w-full rounded-sm flex-between"
+                className="px-3 py-1.5 cursor-pointer border border-black w-full rounded-sm flex-between"
               >
-                <span>{filter.filterName}</span>
+                <span>{optionTitle}</span>
                 <IoIosArrowDown
                   className={
                     openFilter[idx]
@@ -76,18 +116,23 @@ const FilterComponent = ({
               {/* filters */}
               {openFilter[idx] && (
                 <div className="flex flex-col gap-1 mt-3 ml-4">
-                  {filter.items.map((item) => (
-                    <div key={item} className="flex items-center gap-3">
-                      <label className="flex items-center gap-3 cursor-pointer">
-                        <Checkbox
-                          id={item}
-                          onCheckedChange={() =>
-                            handleFilter(filter.filterName, item)
-                          }
-                          className="border-black data-[state=checked]:bg-black"
-                        />
-                        <span className="text-sm">{item}</span>
-                      </label>
+                  {values.map((val) => (
+                    <div key={val} className="flex items-center gap-3">
+                      <Checkbox
+                        id={val}
+                        onCheckedChange={
+                          () => handleFilter(optionTitle, val)
+                          // handleCountSearch(filter.filterName, item);
+                        }
+                        checked={filters.some((s) => s.items.includes(val))}
+                        className="border-black data-[state=checked]:bg-black"
+                      />
+                      <Label
+                        htmlFor={val}
+                        className="flex items-center gap-3 cursor-pointer"
+                      >
+                        <span className="text-sm">{val}</span>
+                      </Label>
                     </div>
                   ))}
                 </div>
@@ -95,6 +140,10 @@ const FilterComponent = ({
             </div>
           </div>
         ))}
+        <Button onClick={handleURLSearch}>
+          <span>Search</span>
+          <span>({searchCount})</span>
+        </Button>
       </div>
     </div>
   );
