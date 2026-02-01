@@ -6,19 +6,19 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useProductContext } from "@/context/productContext";
-import { handleDeleteProductCart, updateProduct } from "@/lib/userCartFn";
-import { TableCart } from "./tableCart";
+import { updateProduct } from "@/lib/userCartFn";
 import CouponComponent from "@/components/shared/checkoutComponent/couponComponent";
 import TotalComponent from "@/components/shared/checkoutComponent/totalComponent";
+import { TableCart } from "./tableCart";
 
 type typeCount = { count: number; id: string }[];
-
 const Page = () => {
   const [count, setCount] = useState<typeCount>([]);
-  const { cartData, getCoupon, setIsCartDataUpdated } = useProductContext();
+  const { getCoupon, setCartData, userId, cartData } = useProductContext();
   const [disableBtn, setDisableBtn] = useState(true);
   const { push } = useRouter();
   const someDiscount = getCoupon?.value;
+
   return (
     <div className="grid grid-cols-[350px_1fr] max-lg:grid-cols-1 gap-4 max-lg:grid-flow-dense">
       <div className="flex flex-col gap-4 max-lg:order-2">
@@ -42,14 +42,11 @@ const Page = () => {
         </div>
         <CouponComponent />
       </div>
-      <div className="overflow-auto min-h-[50px] max-h-screen max-md:order-1">
+      <div className="overflow-auto min-h-12.5 max-h-screen max-md:order-1">
         <TableCart
           count={count}
           setCount={setCount}
-          cartData={cartData}
-          handleDeleteProductCart={handleDeleteProductCart}
           setDisableBtn={setDisableBtn}
-          setIsCartDataUpdated={setIsCartDataUpdated}
           disableBtn={disableBtn}
         />
         <div className="flex-between mt-6">
@@ -65,7 +62,13 @@ const Page = () => {
             variant="white"
             className="border border-[#999] hover:border-[#bdbbbb93] hover:bg-[#d8d4d493] w-fit"
             onClick={() => {
-              updateProduct({ setDisableBtn, count, setIsCartDataUpdated });
+              updateProduct({
+                setDisableBtn,
+                count,
+                setCartData,
+                userId: userId || "",
+                cartData,
+              });
             }}
           >
             Update Cart

@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 import { MESSAGES } from "./message";
 import { Dispatch, MouseEvent, SetStateAction } from "react";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 
 type typeGetCoupon = { name: string; value: number };
 
@@ -70,7 +70,7 @@ export const applyCoupon = async ({
   const { data, error } = await supabase
     .from("coupons")
     .select()
-    .eq("coupon_id", couponRef.current?.value)
+    .eq("coupon_code", couponRef.current?.value)
     .single();
   if (error) {
     console.log(error);

@@ -21,8 +21,8 @@ const PriceDisplay = ({
     discount && discountType === "percentage"
       ? price - (price * discount) / 100
       : discount && discountType === "fixed"
-      ? price - discount
-      : price;
+        ? price - discount
+        : price;
 
   const hasDiscount = discount && discount > 0;
 

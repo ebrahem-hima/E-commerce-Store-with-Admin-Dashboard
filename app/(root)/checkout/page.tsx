@@ -1,12 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import React, { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 import BankForm from "./BankForm";
 import DeliveryForm from "./DeliveryForm";
-import { placeOrderSchema } from "@/validation/validation";
 import { toast } from "sonner";
 import { useProductContext } from "@/context/productContext";
 import { useRouter } from "next/navigation";
@@ -15,9 +14,13 @@ import PriceDisplay from "@/components/shared/priceDisplay";
 import { handleDeleteAllProductCart } from "@/lib/userCartFn";
 import CouponComponent from "@/components/shared/checkoutComponent/couponComponent";
 import TotalComponent from "@/components/shared/checkoutComponent/totalComponent";
-import { getTodayDate } from "@/lib/utils";
 import { nanoid } from "nanoid";
-import { createClient } from "@/utils/supabase/client";
+import {
+  addOrderItems,
+  handleCheckOutValidation,
+  incrementCouponUsage,
+} from "./checkoutFn/checkout";
+import createOrder from "./hooks/createOrderFn";
 
 const Page = () => {
   const [checkOut, setCheckOut] = useState<"bank" | "delivery">("delivery");
@@ -26,11 +29,11 @@ const Page = () => {
     profileData,
     userId,
     cartData,
-    setIsCartDataUpdated,
     getCoupon,
     setGetCoupon,
     setIsUserOrderUpdated,
     total,
+    setCartData,
   } = useProductContext();
   const { push } = useRouter();
   const [Loading, setLoading] = useState(false);
@@ -39,87 +42,42 @@ const Page = () => {
   const placeOrder = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setLoading(true);
-    const currentDate = getTodayDate();
     const code = nanoid(8);
     if (cartData.length === 0) {
       toast.error(MESSAGES.buy.no_products);
       return false;
     }
     try {
-      const result = placeOrderSchema.safeParse({
-        firstName: profileData.firstName,
-        lastName: profileData.lastName,
-        email: profileData.email,
-        phone: profileData.phone,
-        address1: profileData.address1,
-        address2: profileData.address2,
-        state: profileData.state,
-        country: profileData.country,
+      if (!profileData) return;
+      const validate = handleCheckOutValidation(profileData);
+      if (!validate) return false;
+
+      const orderData = await createOrder({
+        userId: userId || "",
+        someDiscount: someDiscount!,
+        total,
+        profileData,
+        code,
+        checkOut,
       });
-      if (!result.success) {
-        console.log(result.error.issues);
-        toast.error(result.error.issues[0].message);
+      const addOrderItemsCheck = await addOrderItems({
+        userId: userId || "",
+        cartData,
+        orderId: orderData.id,
+      });
+      if (!addOrderItemsCheck) {
         return false;
       }
-      const supabase = createClient();
 
-      const { data: orderData, error: orderError } = await supabase
-        .from("user_order")
-        .insert({
-          // type: "orderTable",
-          user_id: userId,
-          total: someDiscount ? total - someDiscount : total,
-          customer: profileData.firstName + " " + profileData.lastName,
-          payment_status: checkOut === "delivery" ? "pending" : "paid",
-          order_status: "ready",
-          date: currentDate,
-          order_code: code,
-        })
-        .select();
-      if (orderError) {
-        console.log("orderError", orderError);
-        return false;
+      if (getCoupon) {
+        await incrementCouponUsage(userId || "", getCoupon.id, orderData.id);
       }
-      // to get data without id of row and add order_id
-      const getData = cartData.map((item) => ({
-        user_id: userId,
-        order_id: orderData[0].id,
-        product_id: item.product_id,
-        img: item.img,
-        name: item.name,
-        price: item.price,
-        discount: item.discount,
-        discount_type: item.discount_type,
-        count: item.count,
-        options: item.options,
-      }));
 
-      const { error: orderItemsError } = await supabase
-        .from("user_ordersItems")
-        .insert(getData);
-
-      if (orderItemsError) {
-        console.log("orderError", orderItemsError);
-        return false;
-      }
       // Delete All Product Cart
-      await handleDeleteAllProductCart({ cartData });
-
-      const getCouponID = getCoupon?.id;
-      if (getCouponID) {
-        const { error } = await supabase.rpc("increment_coupons_usage", {
-          couponid: getCouponID,
-        });
-
-        if (error) {
-          console.log("RPC Error:", error);
-          return false;
-        }
-      }
+      await handleDeleteAllProductCart({ cartData, setCartData });
 
       toast.success(MESSAGES.buy.success);
       setIsUserOrderUpdated((prev) => !prev);
-      setIsCartDataUpdated((prev) => !prev);
       setGetCoupon(null);
       setTimeout(() => {
         push(`/thankyou`);
@@ -132,15 +90,6 @@ const Page = () => {
     }
   };
 
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return <div>Loading....</div>;
-  }
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-[30px]">Billing Details</h1>
@@ -156,7 +105,7 @@ const Page = () => {
             {cartData?.length > 0 &&
               cartData.map((item) => (
                 <li
-                  key={item.product_id}
+                  key={item.id}
                   className="grid grid-cols-[40px_1fr_auto_auto] items-center gap-4"
                 >
                   <Image

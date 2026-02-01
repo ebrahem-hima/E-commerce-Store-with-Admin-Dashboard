@@ -16,17 +16,11 @@ import Image from "next/image";
 import { Trash2 } from "lucide-react";
 import { useProductContext } from "../../context/productContext";
 import { handleDeleteProductCart } from "@/lib/userCartFn";
-import { useEffect, useState } from "react";
 import PriceDisplay from "./priceDisplay";
 
 export function ShopCart() {
-  const { cartData, setCartData, userId, setIsCartDataUpdated } =
-    useProductContext();
-  const { total } = useProductContext();
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    setCount(cartData.length);
-  }, [cartData]);
+  const { cartData, setCartData, userId, total } = useProductContext();
+  const count = cartData.length;
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -43,11 +37,11 @@ export function ShopCart() {
         <SheetHeader>
           <SheetTitle>Your Cart</SheetTitle>
         </SheetHeader>
-        <div className="flex flex-col gap-4 h-[415px] mt-3 overflow-y-auto scrollbar-hide mb-1">
+        <div className="flex flex-col gap-4 h-103.75 mt-3 overflow-y-auto scrollbar-hide mb-1">
           {cartData.length > 0 ? (
             cartData.map((item) => (
               <div
-                key={item.product_id}
+                key={item.id}
                 className="grid grid-cols-[80px_1fr_auto] items-center gap-3 border-t border-[#d4d3d3] pt-3"
               >
                 <div className="relative">
@@ -56,6 +50,7 @@ export function ShopCart() {
                     alt={`img` + item.name}
                     height={100}
                     width={100}
+                    // loading="lazy"
                     className="object-contain"
                   />
                 </div>
@@ -93,17 +88,13 @@ export function ShopCart() {
                 <Trash2
                   className="duration-300 p-1 hover:duration-300 hover:text-white active:text-white rounded-sm hover:bg-primary active:bg-primary cursor-pointer"
                   size={30}
-                  onClick={
-                    () =>
-                      // userId
-                      handleDeleteProductCart({
-                        ID: item.product_id || "",
-                        name: item.name,
-                        setIsCartDataUpdated,
-                        userId: userId || "",
-                        setCartData,
-                      })
-                    // : deleteGuestCart(item.product_id)
+                  onClick={() =>
+                    handleDeleteProductCart({
+                      ID: item.id || "",
+                      name: item.name,
+                      userId: userId || "",
+                      setCartData,
+                    })
                   }
                 />
               </div>

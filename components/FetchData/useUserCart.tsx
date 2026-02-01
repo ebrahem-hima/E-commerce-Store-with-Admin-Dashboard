@@ -1,86 +1,115 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { typeProduct } from "../../types/productTypes";
 import { getUser } from "@/app/(root)/(auth)/authActions/getUser";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 
 interface Props {
-  isCartDataUpdated: boolean;
   isAuth: boolean;
+  userId: string;
 }
 
-const UseUserCart = ({ isAuth, isCartDataUpdated }: Props) => {
-  const userCart =
-    typeof window !== "undefined" ? localStorage.getItem("user_cart") : "";
-  const guestCart =
-    typeof window !== "undefined" ? localStorage.getItem("cart_guest") : "";
-  const getCartData = JSON.parse(guestCart || userCart || "[]");
-  const [cartData, setCartData] = useState<typeProduct[]>(getCartData);
-
+const UseUserCart = ({ isAuth, userId }: Props) => {
+  const [cartData, setCartData] = useState<typeProduct[]>([]);
   const [Loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
 
-  const mergeUnique = async (data: typeProduct[], cartGuest: typeProduct[]) =>
-    [...data, ...cartGuest].filter(
-      (item, index, self) =>
-        index === self.findIndex((t) => t.product_id === item.product_id)
-    );
-  const data = useRef(cartData);
-  useEffect(() => {
-    data.current = cartData;
-  }, [cartData]);
+  const mergeUnique = (
+    data: typeProduct[],
+    cartGuest: typeProduct[],
+    userId: string,
+  ) => {
+    const map = new Map<string, typeProduct>();
+
+    [...data, ...cartGuest].forEach((item) => {
+      const itemWithUserId = {
+        ...item,
+        user_id: userId,
+      };
+      if (!map.has(item.product_id!)) {
+        map.set(item.product_id!, itemWithUserId);
+      }
+    });
+    const mapData = Array.from(map.values());
+    return mapData;
+  };
+
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem("cart_guest", JSON.stringify(cartData));
+    }
+  }, [cartData, isLoaded]);
+
+  useEffect(() => {
+    const insetDataIntoDB = async ({
+      dataSelect,
+      getCartGuest,
+    }: {
+      dataSelect: typeProduct[];
+      getCartGuest: typeProduct[];
+    }) => {
+      const supabase = createClient();
+      const collectData = mergeUnique(dataSelect, getCartGuest, userId);
+      const getNewData =
+        dataSelect.length > 0
+          ? collectData.filter(
+              (item) =>
+                !dataSelect.some(
+                  (d: typeProduct) => item.product_id === d.product_id,
+                ),
+            )
+          : collectData;
+      const normalizeCartProducts = collectData.map(
+        ({ product_id, ...rest }) => ({
+          ...rest,
+          id: product_id!,
+        }),
+      );
+      setCartData(normalizeCartProducts);
+      const { error } = await supabase.from("user_cart").insert(getNewData);
+      if (error) throw error;
+    };
     const handleGuestCart = () => {
-      localStorage.setItem("cart_guest", JSON.stringify(data.current));
-      return;
+      const saved = localStorage.getItem("cart_guest");
+      if (saved) {
+        setCartData(JSON.parse(saved));
+      }
+      setIsLoaded(true);
     };
     const handleUserCart = async (userId: string) => {
       try {
         const supabase = createClient();
-
         setLoading(true);
         const getCartGuest = JSON.parse(
-          localStorage.getItem("cart_guest") || "[]"
-        );
+          localStorage.getItem("cart_guest") || "[]",
+        ).map(({ id, ...rest }: typeProduct) => ({
+          ...rest,
+          product_id: id,
+          user_id: userId,
+        }));
 
         const { data: dataSelect, error: selectError } = await supabase
           .from("user_cart")
           .select();
 
         if (selectError) throw selectError;
-
-        const collectData = await mergeUnique(dataSelect, getCartGuest);
-        const addUserIdToCartData = collectData.map((item) => ({
-          ...item,
-          user_id: userId,
-        }));
-
-        const getNewData =
-          dataSelect.length > 0
-            ? addUserIdToCartData.filter(
-                (item) =>
-                  !dataSelect.some(
-                    (d: typeProduct) => item.product_id === d.product_id
-                  )
-              )
-            : addUserIdToCartData;
-        if (getNewData.length > 0) {
-          console.log("push Items");
-          const { data, error } = await supabase
-            .from("user_cart")
-            .insert(getNewData)
-            .select();
-          setCartData([...(data || []), ...dataSelect]);
-          localStorage.setItem(
-            "user_cart",
-            JSON.stringify([...(data || []), ...dataSelect])
-          );
-          if (error) throw error;
+        if (dataSelect.length > 0) {
+          insetDataIntoDB({ dataSelect, getCartGuest });
         } else {
-          setCartData(dataSelect);
-          localStorage.setItem("user_cart", JSON.stringify(dataSelect));
+          const { error } = await supabase
+            .from("user_cart")
+            .insert(getCartGuest);
+          if (error) throw error;
+          const changeProduct = getCartGuest.map(
+            ({ product_id, ...rest }: typeProduct) => ({
+              ...rest,
+              id: product_id,
+            }),
+          );
+          setCartData(changeProduct);
         }
         localStorage.removeItem("cart_guest");
       } catch (err) {
@@ -95,7 +124,7 @@ const UseUserCart = ({ isAuth, isCartDataUpdated }: Props) => {
       if (user?.id) await handleUserCart(user?.id);
     };
     syncCart();
-  }, [isAuth, isCartDataUpdated]);
+  }, [userId]);
 
   useEffect(() => {
     const getTotal = cartData.reduce((acc, curr) => {
@@ -112,7 +141,7 @@ const UseUserCart = ({ isAuth, isCartDataUpdated }: Props) => {
     }, 0);
 
     setTotal(getTotal);
-  }, [isCartDataUpdated, cartData]);
+  }, [cartData]);
 
   return { cartData, Loading, total, setCartData };
 };
