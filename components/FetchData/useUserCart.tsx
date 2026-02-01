@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { typeProduct } from "../../types/productTypes";
-import { getUser } from "@/app/(root)/(auth)/authActions/getUser";
 import { createClient } from "@/app/utils/supabase/client";
 
 interface Props {
@@ -12,47 +11,41 @@ interface Props {
 
 const UseUserCart = ({ isAuth, userId }: Props) => {
   const [cartData, setCartData] = useState<typeProduct[]>([]);
-  const [Loading, setLoading] = useState(false);
+  const [userCartLoading, setUserCartLoading] = useState(true);
   const [total, setTotal] = useState(0);
 
-  const mergeUnique = (
-    data: typeProduct[],
-    cartGuest: typeProduct[],
-    userId: string,
-  ) => {
-    const map = new Map<string, typeProduct>();
-
-    [...data, ...cartGuest].forEach((item) => {
-      const itemWithUserId = {
-        ...item,
-        user_id: userId,
-      };
-      if (!map.has(item.product_id!)) {
-        map.set(item.product_id!, itemWithUserId);
-      }
-    });
-    const mapData = Array.from(map.values());
-    return mapData;
-  };
-
-  const [isLoaded, setIsLoaded] = useState(false);
-
   useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem("cart_guest", JSON.stringify(cartData));
-    }
-  }, [cartData, isLoaded]);
+    const mergeUnique = (
+      data: typeProduct[],
+      cartGuest: typeProduct[],
+      // userId: string,
+    ) => {
+      const map = new Map<string, typeProduct>();
 
-  useEffect(() => {
+      [...data, ...cartGuest].forEach((item) => {
+        const itemWithUserId = {
+          ...item,
+          user_id: userId,
+        };
+        if (!map.has(item.product_id!)) {
+          map.set(item.product_id!, itemWithUserId);
+        }
+      });
+      const mapData = Array.from(map.values());
+      return mapData;
+    };
     const insetDataIntoDB = async ({
       dataSelect,
       getCartGuest,
+      // userId,
     }: {
       dataSelect: typeProduct[];
       getCartGuest: typeProduct[];
+      // userId: string;
     }) => {
+      // console.log("start insertData");
       const supabase = createClient();
-      const collectData = mergeUnique(dataSelect, getCartGuest, userId);
+      const collectData = mergeUnique(dataSelect, getCartGuest);
       const getNewData =
         dataSelect.length > 0
           ? collectData.filter(
@@ -73,16 +66,15 @@ const UseUserCart = ({ isAuth, userId }: Props) => {
       if (error) throw error;
     };
     const handleGuestCart = () => {
-      const saved = localStorage.getItem("cart_guest");
-      if (saved) {
-        setCartData(JSON.parse(saved));
-      }
-      setIsLoaded(true);
+      console.log("start guest");
+      const getItems = localStorage.getItem("cart_guest") || "[]";
+      setCartData(JSON.parse(getItems));
     };
-    const handleUserCart = async (userId: string) => {
+    const handleUserCart = async () => {
+      console.log("start userCart");
       try {
         const supabase = createClient();
-        setLoading(true);
+        setUserCartLoading(true);
         const getCartGuest = JSON.parse(
           localStorage.getItem("cart_guest") || "[]",
         ).map(({ id, ...rest }: typeProduct) => ({
@@ -90,7 +82,6 @@ const UseUserCart = ({ isAuth, userId }: Props) => {
           product_id: id,
           user_id: userId,
         }));
-
         const { data: dataSelect, error: selectError } = await supabase
           .from("user_cart")
           .select();
@@ -110,21 +101,21 @@ const UseUserCart = ({ isAuth, userId }: Props) => {
             }),
           );
           setCartData(changeProduct);
+          console.log("start remove cart_guest");
+          localStorage.removeItem("cart_guest");
         }
-        localStorage.removeItem("cart_guest");
       } catch (err) {
         console.error("Error syncing user cart:", err);
       } finally {
-        setLoading(false);
+        setUserCartLoading(false);
       }
     };
     const syncCart = async () => {
-      const user = await getUser();
-      if (!user?.id) return handleGuestCart();
-      if (user?.id) await handleUserCart(user?.id);
+      if (!userId) return handleGuestCart();
+      if (userId) await handleUserCart();
     };
     syncCart();
-  }, [userId]);
+  }, [isAuth, userId]);
 
   useEffect(() => {
     const getTotal = cartData.reduce((acc, curr) => {
@@ -143,7 +134,7 @@ const UseUserCart = ({ isAuth, userId }: Props) => {
     setTotal(getTotal);
   }, [cartData]);
 
-  return { cartData, Loading, total, setCartData };
+  return { cartData, userCartLoading, total, setCartData };
 };
 
 export default UseUserCart;

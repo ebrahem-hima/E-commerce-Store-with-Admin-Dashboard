@@ -12,17 +12,21 @@ import { ProductContextType } from "@/types/contextType";
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
 // Provider
-export const ProductProvider = ({ children }: { children: ReactNode }) => {
+export const ProductProvider = ({
+  initialUser,
+  children,
+}: {
+  initialUser: string | null;
+  children: ReactNode;
+}) => {
   const [isOpen, setIsOpen] = useState<typeIsOpen>({
     filter: false,
     searchNavbar: false,
   });
-  const [wishListStatus, setWishListStatus] = useState(false);
 
   // -------------- Start UserId --------------
 
-  const [isAuth, setIsAuth] = useState(false);
-  const { user: userId, setUser } = AuthFn({ isAuth });
+  const { isAuth, setIsAuth } = AuthFn();
   // -------------- End UserId --------------
 
   // -------------- Start UserOrders --------------
@@ -32,13 +36,10 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
   // -------------- End UserOrders --------------
 
   // -------------- Start CartShop --------------
-
-  const [isCartDataUpdated, setIsCartDataUpdated] = useState(false);
-  const { cartData, setCartData, total } = useUserCart({
+  const { cartData, setCartData, total, userCartLoading } = useUserCart({
     isAuth,
-    isCartDataUpdated,
+    userId: initialUser || "",
   });
-
   // -------------- End CartShop --------------
 
   // -------------- Start  Fetch User Profile --------------
@@ -62,18 +63,11 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
   const values = {
     isOpen,
     setIsOpen,
-    wishListStatus,
-    setWishListStatus,
-    userId,
-    setUser,
+    userId: initialUser,
     profileData,
     setProfileData,
     isProfileChange,
     setIsProfileChange,
-
-    // to update cartData instantly
-    isCartDataUpdated,
-    setIsCartDataUpdated,
 
     cartData,
     setCartData,
@@ -91,6 +85,7 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
     setIsAuth,
 
     total,
+    userCartLoading,
   };
   return (
     <ProductContext.Provider value={values}>{children}</ProductContext.Provider>
