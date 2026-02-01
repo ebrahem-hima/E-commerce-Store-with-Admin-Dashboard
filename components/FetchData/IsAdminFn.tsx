@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { getUser } from "@/app/(root)/(auth)/authActions/getUser";
 import { useProductContext } from "@/context/productContext";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 
 const IsAdminFn = () => {
   const [isAdmin, setIsAdmin] = useState(false);
