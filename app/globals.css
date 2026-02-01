@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @plugin "tailwindcss-animate";
+@plugin "tailwind-scrollbar";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -112,7 +113,7 @@
 
 @layer utilities {
   .searchGrid {
-    @apply grid gap-2 grid-flow-col 
+    @apply grid w-full gap-2 grid-flow-col 
       auto-cols-[calc((100%/4)-0.4rem)]
       max-lg:auto-cols-[calc((100%/3)-0.37rem)] 
       max-md:auto-cols-[calc((100%/2)-0.33rem)] 
