@@ -5,31 +5,34 @@ import { HiMiniHeart, HiOutlineHeart } from "react-icons/hi2";
 import "../Card.css";
 import { useProductContext } from "../../../../context/productContext";
 import { useEffect, useState } from "react";
-import {
-  addWishList,
-  handleDeleteItemWishList,
-  isProductWishList,
-} from "@/lib/userWishlistFn";
+import { addWishList, isProductWishList } from "@/lib/userWishlistFn";
 import { typeProduct } from "@/types/productTypes";
-import { MESSAGES } from "@/lib/message";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   item: typeProduct;
   isGrid?: boolean;
+  toggleProducts: (productId: string) => void;
 }
 
-const ImgProduct = ({ item, isGrid }: Props) => {
+const ImgProduct = ({ item, isGrid, toggleProducts }: Props) => {
   const { name, discount, price, discount_type, img } = item;
   const discountPercentage = ((discount! / price) * 100).toFixed(0);
-  const { userId, setWishListStatus } = useProductContext();
+  const { userId } = useProductContext();
   const [isWishList, setIsWishList] = useState(false);
+
+  const handleToggleWishList = async () => {
+    const exist = await isProductWishList(item.id);
+    setIsWishList(!exist);
+  };
+
   useEffect(() => {
-    isProductWishList({
-      setIsWishList,
-      item,
-    });
-  }, [item, userId]);
+    const isExist = async () => {
+      const exist = await isProductWishList(item.id);
+      setIsWishList(exist || false);
+    };
+    isExist();
+  }, [item.id]);
 
   return (
     <div
@@ -40,46 +43,35 @@ const ImgProduct = ({ item, isGrid }: Props) => {
       <Image
         src={img}
         alt={`img-${name}`}
-        width={130}
-        height={130}
-        className="object-contain"
+        width={200}
+        height={200}
+        className="object-contain p-6"
+        sizes="100%"
         priority
         draggable={false}
       />
 
       <div className="flex flex-col absolute items-center top-2 right-2">
-        {isWishList ? (
-          <HiMiniHeart
-            onClick={(e) =>
-              handleDeleteItemWishList({
-                e,
-                item,
-                setWishListStatus,
-                setIsWishList,
-              })
-            }
-            size={28}
-            className={`${
-              isWishList ? "text-primary" : "hover:bg-primary hover:text-white"
-            } iconImg duration-300 p-0.5 rounded-lg`}
-          />
-        ) : (
-          <HiOutlineHeart
-            onClick={(e) => {
-              e.preventDefault();
-              if (!userId) return toast.info(MESSAGES.wishlist.loginRequired);
-              addWishList({
-                e,
-                item,
-                userId: userId || "",
-                setWishListStatus,
-                setIsWishList,
-              });
-            }}
-            size={28}
-            className="iconImg hover:bg-primary hover:text-white duration-300 p-0.5 rounded-sm"
-          />
-        )}
+        <Button
+          variant="link"
+          className="p-0"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            addWishList({
+              item,
+              userId: userId || "",
+            });
+            toggleProducts(item.id);
+            handleToggleWishList();
+          }}
+        >
+          {isWishList ? (
+            <HiMiniHeart size={25} />
+          ) : (
+            <HiOutlineHeart size={25} />
+          )}
+        </Button>
       </div>
       {discount !== 0 &&
         (discount_type === "percentage" ? (

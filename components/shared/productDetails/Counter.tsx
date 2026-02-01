@@ -4,22 +4,22 @@ import "../Card/Card.css";
 import { HiOutlineHeart } from "react-icons/hi2";
 import { HiMiniHeart } from "react-icons/hi2";
 import { handleAddToCart } from "@/lib/userCartFn";
-import { addWishList, handleDeleteItemWishList } from "@/lib/userWishlistFn";
+import {
+  addWishList,
+  handleDeleteItemWishList,
+  isInWishList,
+} from "@/lib/userWishlistFn";
 import { toast } from "sonner";
 import { optionType, typeProduct } from "../../../types/productTypes";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
-import { MouseEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MESSAGES } from "@/lib/message";
 
 interface Props {
   setCount: React.Dispatch<React.SetStateAction<number>>;
   count: number;
   item: typeProduct;
-  setHeart: React.Dispatch<React.SetStateAction<boolean>>;
   userId?: string;
-  heart: boolean;
-  setIsCartDataUpdated: React.Dispatch<React.SetStateAction<boolean>>;
-  setWishListStatus: React.Dispatch<React.SetStateAction<boolean>>;
   cartData: typeProduct[];
   setCartData: React.Dispatch<React.SetStateAction<typeProduct[]>>;
   getOptions: optionType[];
@@ -30,15 +30,17 @@ const Counter = ({
   count,
   item,
   userId,
-  setHeart,
-  heart,
-  setIsCartDataUpdated,
   cartData,
   setCartData,
   getOptions,
-  setWishListStatus,
 }: Props) => {
   const { active, stock } = item;
+
+  const [heart, setHeart] = useState(false);
+  useEffect(() => {
+    isInWishList({ item, setHeart });
+  }, [item]);
+
   const handleMaxCount = () => {
     setCount((c) => {
       if (!active) {
@@ -53,34 +55,29 @@ const Counter = ({
     });
   };
   const [isExist, setIsExist] = useState(false);
+  console.log("cartData", cartData);
 
   useEffect(() => {
     const exist = cartData.some(
-      (cartItem: typeProduct) => cartItem.product_id === item.product_id
+      (cartItem: typeProduct) => cartItem.id === item.id,
     );
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsExist(exist);
-  }, [cartData, item.product_id]);
+  }, [cartData, item.id]);
 
-  const toggleWishlist = async (e: MouseEvent<HTMLButtonElement>) => {
+  const toggleWishlist = async () => {
     if (!userId) return toast.info(MESSAGES.wishlist.loginRequired);
     if (!heart) {
       await addWishList({
         item,
         userId: userId || "",
-        setWishListStatus,
-        setIsWishList: setHeart,
       });
+      setHeart(true);
     } else {
-      await handleDeleteItemWishList({
-        e,
-        item,
-        setWishListStatus,
-        setIsWishList: setHeart,
-      });
+      await handleDeleteItemWishList(item.id, item.name);
+      setHeart(false);
     }
   };
-
   return (
     <div className="flex items-center gap-2">
       <div className="flex items-center w-fit rounded-sm">
@@ -104,27 +101,26 @@ const Counter = ({
       <Button
         size="sm"
         disabled={!active}
-        className={`w-fit hover:opacity-85! text-[15px] px-6 rounded-sm 
+        className={`w-fit hover:opacity-85! text-[15px] px-3 rounded-sm 
           ${
             stock === 0
               ? "bg-red-900"
               : isExist
-              ? "bg-red-900 hover:bg-[#9c2929] duration-200"
-              : "bg-black hover:bg-[#000000ea] duration-200"
+                ? "bg-red-900 hover:bg-[#9c2929] duration-200"
+                : "bg-black hover:bg-[#000000ea] duration-200"
           }
           `}
-        onClick={(e) =>
+        onClick={(e) => {
+          e.preventDefault();
           handleAddToCart({
-            e,
             userId: userId || "",
             isExist,
-            setIsCartDataUpdated,
             setCartData,
             cartData,
             item,
             getOptions,
-          })
-        }
+          });
+        }}
       >
         {/* Buy Now */}
         {stock === 0 ? (
@@ -141,7 +137,13 @@ const Counter = ({
           </div>
         )}
       </Button>
-      <button onClick={toggleWishlist}>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          toggleWishlist();
+        }}
+      >
         {heart ? (
           <HiMiniHeart
             size={33}
@@ -154,31 +156,6 @@ const Counter = ({
           />
         )}
       </button>
-
-      {/* <button
-        onClick={() => {
-          if (!userId) return toast.info(MESSAGES.wishlist.loginRequired);
-          setHeart((prev) => !prev);
-        }}
-      >
-        {heart ? (
-          <HiMiniHeart
-            size={33}
-            className="text-primary cursor-pointer border border-[#777] rounded-sm p-1"
-            onClick={() =>
-              addWishList({ item, userId: userId || "", setWishListStatus })
-            }
-          />
-        ) : (
-          <HiOutlineHeart
-            size={33}
-            className="cursor-pointer border border-[#777] rounded-sm p-1"
-            onClick={() =>
-              addWishList({ item, userId: userId || "", setWishListStatus })
-            }
-          />
-        )}
-      </button> */}
     </div>
   );
 };

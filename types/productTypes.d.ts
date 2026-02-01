@@ -8,7 +8,8 @@ export interface CategoryType {
 }
 
 export interface typeProduct {
-  id?: string;
+  id: string;
+  // id: string;
   product_id?: string;
   name: string;
   img: string;
@@ -16,7 +17,7 @@ export interface typeProduct {
   imgGallery?: string[];
   rate?: number;
   stock: number;
-  categories?: CategoryType;
+  category_id: number;
   count?: number;
   discount?: number;
   discount_type?: string;
@@ -24,35 +25,17 @@ export interface typeProduct {
   options?: optionType[];
   active: boolean;
   created_at?: string;
-  // sales?: string;
-  // reviews?: {
-  //   userId: string;
-  //   username: string;
-  //   rating: number;
-  //   comment: string;
-  // }[];
-}
-
-export interface typeUserOrder {
-  type: "orderTable";
-  id: string;
-  order_status: string;
-  order_code: string;
-  total: number;
-  date: string;
-  payment_status?: string;
-  customer?: string;
-  user_id: string;
+  search_text?: string;
 }
 
 export interface OrderDetailsType {
-  product_id: string;
+  id: string;
   name: string;
   img: string;
   price: number;
   discount?: number;
   discount_type?: string;
-  count: number;
+  quantity: number;
   options?: {
     optionTitle: string;
     values: string[];
@@ -64,19 +47,45 @@ export interface typeIsOpen {
   filter: boolean;
   searchNavbar: boolean;
 }
-
+export interface productCategory {
+  name: string;
+  id: string;
+  price: number;
+  discount: number;
+  img: string;
+  rate: number;
+  discount_type: string;
+  stock: number;
+}
+export interface productWithCategory {
+  id?: string;
+  id?: string;
+  name: string;
+  img: string;
+  description: string;
+  imgGallery?: string[];
+  rate?: number;
+  stock: number;
+  count?: number;
+  discount?: number;
+  discount_type?: string;
+  price: number;
+  options?: optionType[];
+  active: boolean;
+  created_at?: string;
+  categories: { name: string };
+}
 export interface SliderComponentType {
-  titleComponent: string;
-  Product: typeProduct[];
-  category?: string;
-  type?: string;
+  titleComponent?: string;
+  Product?: typeProduct[];
+  categories?: { name: string; id: number }[];
   search?: boolean;
+  categoryId?: number;
 }
 
 export interface deleteProductCart {
   ID: string;
   name: string;
   userId: string;
-  setIsCartDataUpdated: Dispatch<SetStateAction<boolean>>;
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
 }

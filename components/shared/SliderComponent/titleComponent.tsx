@@ -1,25 +1,33 @@
 "use client";
 
+import { typeProduct } from "@/types/productTypes";
 import React, { useEffect, useState } from "react";
 import { IoMdArrowForward } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
 
 interface Props {
-  titleComponent: string;
+  titleComponent: string | undefined;
   parentRef: React.RefObject<HTMLDivElement | null>;
+  products: typeProduct[] | undefined;
+  categories?: { name: string; id: number }[] | undefined;
 }
 
-const TitleComponent = ({ titleComponent, parentRef }: Props) => {
+const TitleComponent = ({
+  titleComponent,
+  parentRef,
+  products,
+  categories,
+}: Props) => {
   const [isDisabled, setIsDisabled] = useState({ left: false, right: false });
 
   useEffect(() => {
     const parent = parentRef.current;
-    if (!parent) return;
-    const firstChild = parent?.children[0].firstChild as Element;
-    const lastChild = parent?.children[0].lastChild as Element;
+    const firstChild = parent?.children[0].firstElementChild as Element;
+    const lastChild = parent?.children[0].lastElementChild as Element;
     const options = {
       root: parent,
       threshold: 1.0,
+      // threshold: 0.9,
       rootMargin: "0px 10px",
     };
     const observe = new IntersectionObserver((entries) => {
@@ -40,7 +48,7 @@ const TitleComponent = ({ titleComponent, parentRef }: Props) => {
       if (firstChild) observe.unobserve(firstChild);
       if (lastChild) observe.unobserve(lastChild);
     };
-  }, [parentRef]);
+  }, [parentRef, products, categories]);
 
   const handleClickArrow = (direction: string) => {
     const parent = parentRef.current;

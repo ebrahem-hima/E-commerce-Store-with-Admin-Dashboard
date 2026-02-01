@@ -1,46 +1,31 @@
-"use client";
-
-import { useRef } from "react";
-import TitleComponent from "./titleComponent";
 import { SliderComponentType } from "../../../types/productTypes";
-import Slider from "./Slider";
-import CardCategory from "../Card/CardCategory";
-import { categoryCard } from "../../../constant/filterNavbar";
 import "../Card/Card.css";
-import ProductCard from "../Card/ProductCard/ProductCard";
+import { createClient } from "@/app/utils/supabase/server";
+import SliderClientComponent from "./SliderClientComponent";
 
-const SliderComponent = ({
-  type,
+const SliderComponent = async ({
   titleComponent,
-  Product,
   search = false,
+  categoryId,
+  Product,
 }: SliderComponentType) => {
-  const parentRef = useRef<HTMLDivElement | null>(null);
+  const supabase = await createClient();
+
+  const products =
+    Product ??
+    (categoryId
+      ? (await supabase.from("products").select().eq("category_id", categoryId))
+          .data
+      : undefined);
+
+  if (products?.length === 0) return null;
   return (
-    <div className="w-full flex flex-col gap-3 overflow-hidden red">
-      <TitleComponent parentRef={parentRef} titleComponent={titleComponent} />
-      {type === "category" ? (
-        <Slider parentRef={parentRef}>
-          <div className="categoryGrid">
-            {categoryCard.map((category) => (
-              <CardCategory
-                key={category.text}
-                icon={category.icon}
-                text={category.text}
-                value={category.value}
-              />
-            ))}
-          </div>
-        </Slider>
-      ) : (
-        <Slider parentRef={parentRef}>
-          <div className={search ? "searchGrid" : "productGrid"}>
-            {Product.map((item) => (
-              <ProductCard key={item.product_id} item={item} />
-            ))}
-          </div>
-        </Slider>
-      )}
+    <div className="flex-center">
+      <SliderClientComponent
+        titleComponent={titleComponent}
+        Product={products || undefined}
+        search={search}
+      />
     </div>
   );
 };

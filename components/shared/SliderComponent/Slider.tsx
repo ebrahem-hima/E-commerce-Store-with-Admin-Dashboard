@@ -41,7 +41,7 @@ const Slider = ({
       onDragStart={(e) => {
         e.preventDefault();
       }}
-      className={`slider scroll-smooth overflow-x-auto scrollbar-hide snap-x snap-mandatory`}
+      className={`flex-center slider scroll-smooth overflow-x-auto scrollbar-hide snap-x snap-mandatory`}
       ref={parentRef}
     >
       {children}

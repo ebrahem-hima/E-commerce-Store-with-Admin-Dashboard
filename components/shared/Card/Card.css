@@ -6,7 +6,7 @@
 
 @layer utilities {
   .categoryGrid {
-    @apply grid gap-2 grid-flow-col 
+    @apply grid w-full gap-2 grid-flow-col 
       auto-cols-[calc((100%/6)-0.49rem)]
       max-lg:auto-cols-[calc((100%/5)-0.4rem)] 
       max-md:auto-cols-[calc((100%/4)-0.38rem)] 
@@ -14,7 +14,7 @@
       max-400:auto-cols-[calc((100%/2))];
   }
   .productGrid {
-    @apply grid gap-2 grid-flow-col 
+    @apply grid w-full gap-2 grid-flow-col 
       auto-cols-[calc((100%/5)-0.4rem)]
       max-lg:auto-cols-[calc((100%/4)-0.37rem)] 
       max-md:auto-cols-[calc((100%/3)-0.33rem)] 
@@ -23,7 +23,7 @@
   }
   .addProduct {
     @apply mt-1 flex items-center justify-center 
-    h-[35px] hover:opacity-85 duration-200 rounded-sm text-white font-medium;
+    h-8.75 hover:opacity-85 rounded-sm text-white font-medium transition-all w-full px-0 duration-300 disabled:opacity-90;
   }
   .btnStyles {
     @apply cursor-pointer active:text-white active:border-[#DB4444] active:bg-[#DB4444] hover:text-white flex justify-center items-center h-8 w-8 border border-[#777] hover:bg-[#DB4444] hover:border-[#DB4444] rounded-l-[3px] duration-200;

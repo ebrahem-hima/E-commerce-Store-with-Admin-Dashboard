@@ -8,18 +8,19 @@ import Link from "next/link";
 interface Props {
   item: typeProduct;
   isGrid?: boolean;
+  toggleProducts: (productId: string) => void;
 }
 
-const ProductCard = ({ item, isGrid }: Props) => {
+const ProductCard = ({ item, isGrid, toggleProducts }: Props) => {
   return (
     <Link
-      href={`/productDetails/${item.product_id}`}
-      className={`h-[230px] productCard snap-start group ${
-        isGrid ? "flex-row flex items-start" : "flex-col flex-center"
+      href={`/productDetails/${item.id}`}
+      className={`h-57.5 productCard snap-start group ${
+        isGrid ? "flex-row flex items-center" : "flex-col flex-center"
       } gap-2 cursor-pointer`}
     >
       {/* Img + Icons */}
-      <ImgProduct isGrid={isGrid} item={item} />
+      <ImgProduct toggleProducts={toggleProducts} isGrid={isGrid} item={item} />
       <TextProduct isGrid={isGrid} item={item} />
     </Link>
   );

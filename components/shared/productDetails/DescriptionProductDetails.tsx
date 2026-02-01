@@ -6,7 +6,7 @@ import { Star } from "lucide-react";
 import { useProductContext } from "../../../context/productContext";
 import "../Card/Card.css";
 import { usePathname, useRouter } from "next/navigation";
-import { isInWishList } from "@/lib/userWishlistFn";
+// import { isInWishList } from "@/lib/userWishlistFn";
 import { iconsDescription } from "../../../constant/index";
 import Counter from "./Counter";
 import Options from "./Options";
@@ -18,24 +18,13 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
   const { name, description, options, rate, active } = item;
   const [count, setCount] = useState(1);
   const [getOptions, setGetOptions] = useState<optionType[]>([]);
-  const [heart, setHeart] = useState(false);
   const { replace } = useRouter();
   const pathName = usePathname();
-  const {
-    userId,
-    cartData,
-    setCartData,
-    setIsCartDataUpdated,
-    setWishListStatus,
-  } = useProductContext();
-
-  useEffect(() => {
-    isInWishList({ item, setHeart });
-  }, [item]);
+  const { userId, cartData, setCartData } = useProductContext();
 
   useEffect(() => {
     const getURl = getOptions.map(
-      ({ optionTitle, values }) => `${optionTitle + "=" + values}`
+      ({ optionTitle, values }) => `${optionTitle + "=" + values}`,
     );
     replace(`?${getURl}`, { scroll: false });
   }, [getOptions, pathName, replace]);
@@ -86,13 +75,9 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
         count={count}
         item={item}
         userId={userId || ""}
-        setHeart={setHeart}
-        heart={heart}
-        setIsCartDataUpdated={setIsCartDataUpdated}
         cartData={cartData}
         setCartData={setCartData}
         getOptions={getOptions}
-        setWishListStatus={setWishListStatus}
       />
 
       {/* Free delivery */}

@@ -1,6 +1,6 @@
 export const firstProduct = [
   {
-    product_id: "550e8400-e29b-41d4-a716-446655440000",
+    id: "550e8400-e29b-41d4-a716-446655440000",
     name: "Leather Bag",
     img: "/images/productImages/bag.webp",
     description: "A stylish leather bag perfect for daily use and travel.",
@@ -28,7 +28,7 @@ export const firstProduct = [
     ],
   },
   {
-    product_id: "550e8400-e29b-41d4-a716-446655440001",
+    id: "550e8400-e29b-41d4-a716-446655440001",
     name: "Wireless Controller",
     img: "/images/productImages/Controller.webp",
     description: "Ergonomic wireless controller with haptic feedback.",
@@ -60,7 +60,7 @@ export const firstProduct = [
     ],
   },
   {
-    product_id: "550e8400-e29b-41d4-a716-446655440002",
+    id: "550e8400-e29b-41d4-a716-446655440002",
     name: "Gaming Cooler",
     img: "/images/productImages/cooler.webp",
     description: "High-performance gaming cooler with RGB lighting.",
@@ -82,7 +82,7 @@ export const firstProduct = [
     ],
   },
   {
-    product_id: "550e8400-e29b-41d4-a716-446655440003",
+    id: "550e8400-e29b-41d4-a716-446655440003",
     name: "Mechanical Keyboard",
     img: "/images/productImages/keyboard.webp",
     description: "RGB mechanical keyboard with customizable keys.",
@@ -104,7 +104,7 @@ export const firstProduct = [
     ],
   },
   {
-    product_id: "550e8400-e29b-41d4-a716-446655440004",
+    id: "550e8400-e29b-41d4-a716-446655440004",
     name: "Mini Bookshelf",
     img: "/images/productImages/Library.webp",
     description: "Compact bookshelf perfect for small spaces.",
@@ -126,7 +126,161 @@ export const firstProduct = [
     ],
   },
   {
-    product_id: "550e8400-e29b-41d4-a716-446655440005",
+    id: "550e8400-e29b-41d4-a716-446655440005",
+    name: "Smart TV 55”",
+    img: "/images/productImages/TV.webp",
+    description: "4K Ultra HD Smart TV with voice control.",
+    imgGallery: ["/images/productImages/TV.webp"],
+    rate: 4.9,
+    stock: 5,
+    discount: 0,
+    discount_type: "",
+    price: 7000,
+    options: [{ optionTitle: "Size", values: ["55 inch", "65 inch"] }],
+    active: true,
+    reviews: [
+      {
+        userId: "U8",
+        username: "Mona",
+        rating: 5,
+        comment: "Picture quality is stunning!",
+      },
+      {
+        userId: "U9",
+        username: "David",
+        rating: 5,
+        comment: "Easy to use and excellent sound system.",
+      },
+    ],
+  },
+  {
+    id: "550e8400-e29b-41d4-a716-446655440011",
+    name: "Leather Bag",
+    img: "/images/productImages/bag.webp",
+    description: "A stylish leather bag perfect for daily use and travel.",
+    imgGallery: ["/images/productImages/bag.webp"],
+    rate: 4.5,
+    stock: 12,
+    discount: 15,
+    discount_type: "percentage",
+    price: 1200,
+    options: [{ optionTitle: "Color", values: ["Black", "Brown"] }],
+    active: true,
+    reviews: [
+      {
+        userId: "U1",
+        username: "Alice",
+        rating: 5,
+        comment: "Great quality and very durable!",
+      },
+      {
+        userId: "U2",
+        username: "Mohamed",
+        rating: 4,
+        comment: "Nice design but a bit heavy.",
+      },
+    ],
+  },
+  {
+    id: "550e8400-e29b-41d4-a716-446655440006",
+    name: "Wireless Controller",
+    img: "/images/productImages/Controller.webp",
+    description: "Ergonomic wireless controller with haptic feedback.",
+    imgGallery: ["/images/productImages/Controller.webp"],
+
+    rate: 4.7,
+    stock: 0,
+    discount: 0,
+    discount_type: "",
+    price: 1500,
+    options: [
+      { optionTitle: "Color", values: ["White", "Black", "Red"] },
+      { optionTitle: "Size", values: ["lg", "md", "sm"] },
+    ],
+    active: false,
+    reviews: [
+      {
+        userId: "U3",
+        username: "Sarah",
+        rating: 5,
+        comment: "Best controller I’ve ever used!",
+      },
+      {
+        userId: "U4",
+        username: "Omar",
+        rating: 4,
+        comment: "Very responsive, but a bit pricey.",
+      },
+    ],
+  },
+  {
+    id: "550e8400-e29b-41d4-a716-446655440007",
+    name: "Gaming Cooler",
+    img: "/images/productImages/cooler.webp",
+    description: "High-performance gaming cooler with RGB lighting.",
+    imgGallery: ["/images/productImages/cooler.webp"],
+    rate: 4.2,
+    stock: 8,
+    discount: 10,
+    discount_type: "percentage",
+    price: 800,
+    options: [{ optionTitle: "Size", values: ["120mm", "240mm"] }],
+    active: true,
+    reviews: [
+      {
+        userId: "U5",
+        username: "James",
+        rating: 4,
+        comment: "Keeps my PC cool even under heavy load.",
+      },
+    ],
+  },
+  {
+    id: "550e8400-e29b-41d4-a716-446655440008",
+    name: "Mechanical Keyboard",
+    img: "/images/productImages/keyboard.webp",
+    description: "RGB mechanical keyboard with customizable keys.",
+    imgGallery: ["/images/productImages/keyboard.webp"],
+    rate: 4.8,
+    stock: 20,
+    discount: 100,
+    discount_type: "fixed",
+    price: 600,
+    options: [{ optionTitle: "Switch Type", values: ["Blue", "Red", "Brown"] }],
+    active: true,
+    reviews: [
+      {
+        userId: "U6",
+        username: "Ahmed",
+        rating: 5,
+        comment: "Amazing typing experience and beautiful lights!",
+      },
+    ],
+  },
+  {
+    id: "550e8400-e29b-41d4-a716-446655440009",
+    name: "Mini Bookshelf",
+    img: "/images/productImages/Library.webp",
+    description: "Compact bookshelf perfect for small spaces.",
+    imgGallery: ["/images/productImages/Library.webp"],
+    rate: 4.0,
+    stock: 0,
+    discount: 0,
+    discount_type: "",
+    price: 350,
+    options: [{ optionTitle: "Color", values: ["White", "Oak"] }],
+    active: false,
+    reviews: [
+      {
+        userId: "U7",
+        username: "Hana",
+        rating: 4,
+        comment: "Good quality but a bit smaller than expected.",
+      },
+    ],
+  },
+  {
+    id: "550e8400-e29b-41d4-a716-446655440010",
     name: "Smart TV 55”",
     img: "/images/productImages/TV.webp",
     description: "4K Ultra HD Smart TV with voice control.",
@@ -157,7 +311,7 @@ export const firstProduct = [
 
 export const secondProduct = [
   {
-    product_id: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    id: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
     name: "Leather Bag 2",
     img: "/images/productImages/bag.webp",
     description: "A stylish leather bag perfect for daily use and travel.",
@@ -185,7 +339,7 @@ export const secondProduct = [
     ],
   },
   {
-    product_id: "d94f5b7c-91a2-4e1b-8c17-9d8b5f6a7e88",
+    id: "d94f5b7c-91a2-4e1b-8c17-9d8b5f6a7e88",
     name: "Wireless Controller 2",
     img: "/images/productImages/Controller.webp",
     description: "Ergonomic wireless controller with haptic feedback.",
@@ -213,7 +367,7 @@ export const secondProduct = [
     ],
   },
   {
-    product_id: "e05b6c7d-89f0-4a12-9bcd-5e6f7a8b9012",
+    id: "e05b6c7d-89f0-4a12-9bcd-5e6f7a8b9012",
     name: "Gaming Cooler 2",
     img: "/images/productImages/cooler.webp",
     description: "High-performance gaming cooler with RGB lighting.",
@@ -235,7 +389,7 @@ export const secondProduct = [
     ],
   },
   {
-    product_id: "f67a8b9c-0123-4d56-9abc-1234567890ab",
+    id: "f67a8b9c-0123-4d56-9abc-1234567890ab",
     name: "Mechanical Keyboard 2",
     img: "/images/productImages/keyboard.webp",
     description: "RGB mechanical keyboard with customizable keys.",
@@ -257,7 +411,7 @@ export const secondProduct = [
     ],
   },
   {
-    product_id: "a8b9c0d1-2345-6e78-9abc-3456789012de",
+    id: "a8b9c0d1-2345-6e78-9abc-3456789012de",
     name: "Mini Bookshelf 2",
     img: "/images/productImages/Library.webp",
     description: "Compact bookshelf perfect for small spaces.",
@@ -279,7 +433,7 @@ export const secondProduct = [
     ],
   },
   {
-    product_id: "b9c0d1e2-4567-8a90-1bcd-5678901234f0",
+    id: "b9c0d1e2-4567-8a90-1bcd-5678901234f0",
     name: "Smart TV 55” 2",
     img: "/images/productImages/TV.webp",
     description: "4K Ultra HD Smart TV with voice control.",
@@ -310,7 +464,7 @@ export const secondProduct = [
 
 export const thirdProduct = [
   {
-    product_id: "a1b2c3d4-1111-2222-3333-444455556666",
+    id: "a1b2c3d4-1111-2222-3333-444455556666",
     name: "Leather Bag 3",
     img: "/images/productImages/bag.webp",
     description: "A stylish leather bag perfect for daily use and travel.",
@@ -338,7 +492,7 @@ export const thirdProduct = [
     ],
   },
   {
-    product_id: "b2c3d4e5-1111-2222-3333-555566667777",
+    id: "b2c3d4e5-1111-2222-3333-555566667777",
     name: "Wireless Controller 3",
     img: "/images/productImages/Controller.webp",
     description: "Ergonomic wireless controller with haptic feedback.",
@@ -366,7 +520,7 @@ export const thirdProduct = [
     ],
   },
   {
-    product_id: "c3d4e5f6-1111-2222-3333-666677778888",
+    id: "c3d4e5f6-1111-2222-3333-666677778888",
     name: "Gaming Cooler 3",
     img: "/images/productImages/cooler.webp",
     description: "High-performance gaming cooler with RGB lighting.",
@@ -388,7 +542,7 @@ export const thirdProduct = [
     ],
   },
   {
-    product_id: "d4e5f6a7-1111-2222-3333-777788889999",
+    id: "d4e5f6a7-1111-2222-3333-777788889999",
     name: "Mechanical Keyboard 3",
     img: "/images/productImages/keyboard.webp",
     description: "RGB mechanical keyboard with customizable keys.",
@@ -410,7 +564,7 @@ export const thirdProduct = [
     ],
   },
   {
-    product_id: "e5f6a7b8-1111-2222-3333-888899990000",
+    id: "e5f6a7b8-1111-2222-3333-888899990000",
     name: "Mini Bookshelf 3",
     img: "/images/productImages/Library.webp",
     description: "Compact bookshelf perfect for small spaces.",
@@ -432,7 +586,7 @@ export const thirdProduct = [
     ],
   },
   {
-    product_id: "f6a7b8c9-1111-2222-3333-999900001111",
+    id: "f6a7b8c9-1111-2222-3333-999900001111",
     name: "Smart TV 55” 3",
     img: "/images/productImages/TV.webp",
     description: "4K Ultra HD Smart TV with voice control.",
