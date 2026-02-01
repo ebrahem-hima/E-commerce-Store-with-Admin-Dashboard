@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import { typeUserOrder } from "../../types/productTypes";
 import { getUser } from "@/app/(root)/(auth)/authActions/getUser";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
+import { TypeUserOrder } from "@/types/adminTableCheckboxtype";
+// import { TypeUserOrder } from "@/types/adminTableCheckboxtype";
 
 const UserOrdersFn = (isUserOrderUpdated: boolean) => {
-  const [userOrders, setUserOrders] = useState<typeUserOrder[]>([]);
+  const [userOrders, setUserOrders] = useState<TypeUserOrder[]>([]);
   useEffect(() => {
     const getUserOrders = async () => {
       const user = await getUser();
