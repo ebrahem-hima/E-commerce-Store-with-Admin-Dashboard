@@ -1,5 +1,5 @@
 import { OrderDetailsType } from "@/types/productTypes";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 import { useEffect, useState } from "react";
 
 const GetOrderDetails = (orderId: string) => {
@@ -18,18 +18,19 @@ const GetOrderDetails = (orderId: string) => {
 
         if (orderError) throw orderData;
         const { data, error } = await supabase
-          .from("user_ordersItems")
+          .from("order_details")
           .select(
             `
+              id,
               product_id,
               img,
               name,
               price,
               discount,
               discount_type,
-              count,
+              quantity,
               options
-            `
+            `,
           )
           .eq("order_id", orderData[0].id);
         if (error) {

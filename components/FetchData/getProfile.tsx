@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { profileType } from "../../types/profileFnTypes";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 
 interface Props {
   isProfileChange: {
@@ -11,22 +11,20 @@ interface Props {
 }
 
 const GetProfile = ({ isProfileChange, isAuth }: Props) => {
-  const saved =
-    typeof window !== "undefined" ? localStorage.getItem("user_profile") : null;
-
-  const getData = saved
-    ? JSON.parse(saved)
-    : {
-        firstName: "",
-        lastName: "",
-        phone: "",
-        address1: "",
-        address2: "",
-        state: "",
-        country: "",
-        email: "",
-      };
-  const [profileData, setProfileData] = useState<profileType>(getData);
+  const [profileData, setProfileData] = useState<profileType>({
+    id: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address1: "",
+    address2: "",
+    country: "",
+    state: "",
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
   useEffect(() => {
     const fetchProfile = async () => {
       const supabase = createClient();
