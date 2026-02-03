@@ -23,6 +23,7 @@ const Page = () => {
         <LoadingSpinner />
       ) : products.length > 0 ? (
         <CustomTable
+          empty_table="There are no order details to display."
           role="admin"
           dataBody={products}
           titles={titleOrderDetails}
