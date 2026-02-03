@@ -1,15 +1,12 @@
-export interface userOrdersType {
-  id: string;
-  product_id: string;
-  img: string;
-  name: string;
-  price: number;
-  count: number;
-}
+import { Dispatch, SetStateAction } from "react";
+import { coupon_type } from "./type";
 
 export interface checkTotalType {
   discount: number;
-  discountType: "percentage" | "fixed";
+  discountType: coupon_type;
   total: number;
   ID: number;
+  setGetCoupon: Dispatch<SetStateAction<typeGetCoupon>>;
+  getCoupon: typeGetCoupon;
+  getValue: RefObject<string | null>;
 }

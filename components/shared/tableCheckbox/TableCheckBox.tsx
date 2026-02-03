@@ -1,23 +1,25 @@
 import React from "react";
-import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table } from "@/components/ui/table";
 import TableBodyCheckbox from "./TableBodyCheckbox";
-import { Checkbox } from "@/components/ui/checkbox";
 import { SelectCheckBox } from "@/types/typeAliases";
 import { typeEditValue } from "@/types/adminType";
 import { tableBodyCheckBoxType } from "@/types/adminTableCheckboxtype";
+import LoadingPage from "../LoadingPage";
+import TableHeadCheckbox from "./TableHeadCheckbox";
 
-export interface Props<T extends { id: string | number }> {
+export interface Props {
   Edit?: boolean;
   setEditValue?: React.Dispatch<React.SetStateAction<typeEditValue[]>>;
-  dataBody: T[];
+  dataBody: tableBodyCheckBoxType;
   titles: { title: string }[];
   emptyMessage: string;
   selectCheckBox: SelectCheckBox[];
   setSelectCheckBox: React.Dispatch<React.SetStateAction<SelectCheckBox[]>>;
   tableWidth?: string;
+  isPending: boolean;
 }
 
-const TableCheckbox = <T extends { id: string | number }>({
+const TableCheckbox = ({
   dataBody,
   titles,
   emptyMessage,
@@ -26,7 +28,8 @@ const TableCheckbox = <T extends { id: string | number }>({
   Edit,
   setEditValue,
   tableWidth,
-}: Props<T>) => {
+  isPending,
+}: Props) => {
   const handleCheckboxChange = (ID: string | number, checked: boolean) => {
     setSelectCheckBox((prev) =>
       prev.some((check) => check.ID === ID)
@@ -37,36 +40,21 @@ const TableCheckbox = <T extends { id: string | number }>({
               ID,
               value: checked,
             },
-          ]
+          ],
     );
   };
+
   return (
-    <>
+    <div className="relative">
+      {isPending && <LoadingPage />}
       {dataBody.length > 0 ? (
         <Table className={`${tableWidth} bg-white rounded-md`}>
-          <TableHeader>
-            <TableRow>
-              <TableHead>
-                <Checkbox
-                  checked={selectCheckBox.length === dataBody.length}
-                  onCheckedChange={(checked) =>
-                    setSelectCheckBox(() =>
-                      checked
-                        ? dataBody.map((check) => ({
-                            ID: check.id,
-                            value: true,
-                          }))
-                        : []
-                    )
-                  }
-                />
-              </TableHead>
-              {titles &&
-                titles.map((title, idx) => (
-                  <TableHead key={idx}>{title.title}</TableHead>
-                ))}
-            </TableRow>
-          </TableHeader>
+          <TableHeadCheckbox
+            titles={titles}
+            selectCheckBox={selectCheckBox}
+            dataBody={dataBody}
+            setSelectCheckBox={setSelectCheckBox}
+          />
           <TableBodyCheckbox
             setEditValue={setEditValue}
             Edit={Edit}
@@ -80,7 +68,7 @@ const TableCheckbox = <T extends { id: string | number }>({
           <div className="text-gray-500 text-lg mb-4">{emptyMessage}</div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

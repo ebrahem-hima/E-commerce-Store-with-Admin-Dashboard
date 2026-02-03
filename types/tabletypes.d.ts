@@ -1,11 +1,6 @@
-// export type tableBodyType = TopMemberType[];
-export type tableBodyType = TopProductType[] | TopMemberType[];
-
 export interface tableType {
   dataBody: tableBodyType;
   titles: { title: string }[];
+  role?: "user" | "admin";
+  empty_table: string;
 }
-
-// export interface titleTable {
-//   [key]: string;
-// }
