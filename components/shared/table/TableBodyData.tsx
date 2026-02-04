@@ -164,7 +164,7 @@ const TableBodyData = ({ dataBody, role = "user" }: Prop) => {
       </TableBody>
     );
   }
-  return <div>There is No Data</div>;
+  return null;
 };
 
 export default TableBodyData;

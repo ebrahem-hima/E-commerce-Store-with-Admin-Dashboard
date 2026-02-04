@@ -107,7 +107,7 @@ const TableBodyCheckbox = ({
       />
     );
   }
-  return <div>There is no data to display</div>;
+  return null;
 };
 
 export default TableBodyCheckbox;
