@@ -1,10 +1,15 @@
-import CouponForm from "../../CouponForm/CouponForm";
+import { Suspense } from "react";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import CouponFormWrapper from "../../CouponComponent/CouponFormWrapper";
 
-const Page = () => {
+const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id: couponId } = await params;
   return (
-    <div>
-      <CouponForm mode="edit" />
-    </div>
+    <>
+      <Suspense fallback={<LoadingSpinner />}>
+        <CouponFormWrapper couponId={couponId} />
+      </Suspense>
+    </>
   );
 };
 

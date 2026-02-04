@@ -7,10 +7,13 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { useParams, useRouter } from "next/navigation";
 import useUserSearchFn from "../../adminHooks/useUserSearch";
-import { categorySelectType, couponDetailType } from "@/types/adminType";
+import {
+  categorySelectType,
+  categoryType,
+  couponDetailType,
+} from "@/types/adminType";
 import UsersList from "./UsersList";
 import { SelectOptions } from "../../shared/selectOptions";
-import useGetAppliesTo from "../../adminHooks/useGetAppliesTo";
 import {
   handleCreateCoupon,
   handleEditCoupon,
@@ -22,13 +25,16 @@ import useGetAllCategories from "../../category/hooks/useGetAllCategories";
 
 interface Props {
   mode: string;
+  couponDetail?: couponDetailType;
+  categorySelected?: categoryType[];
 }
 
-const CouponForm = ({ mode }: Props) => {
+const CouponForm = ({ mode, couponDetail, categorySelected }: Props) => {
   const params = useParams<{ id: string }>();
   const { id } = params;
   const { push } = useRouter();
-  const [couponDetails, setCouponDetails] = useState<couponDetailType>({
+
+  const defaultCoupon: couponDetailType = {
     id: 0,
     couponName: "",
     couponCode: "",
@@ -39,9 +45,14 @@ const CouponForm = ({ mode }: Props) => {
     usage_limit_per_user: 0,
     max_uses_total: 0,
     isPublic: true,
-  });
+  };
+
+  const [couponDetails, setCouponDetails] = useState<couponDetailType>(
+    couponDetail || defaultCoupon,
+  );
+
   const [selectedCategory, setSelectedCategory] = useState<categorySelectType>({
-    categorySelected: [],
+    categorySelected: categorySelected || [],
     categoryDeleted: [],
   });
   const [deletedUsers, setDeletedUsers] = useState<string[]>([]);
@@ -50,14 +61,7 @@ const CouponForm = ({ mode }: Props) => {
   const { userSearch, Loading } = useUserSearchFn({
     searchText: inputSearch,
   });
-
-  useGetAppliesTo({
-    setCouponDetails,
-    id,
-    setSelectedCategory,
-  });
-  // console.log("selectedCategory", selectedCategory);
-  // console.log("couponDetails", couponDetails);
+  const { categories } = useGetAllCategories();
 
   const createCoupon = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -107,7 +111,6 @@ const CouponForm = ({ mode }: Props) => {
   ];
 
   // call categories Name
-  const { categories } = useGetAllCategories();
   const category = categories.map((category) => ({
     name: category?.name,
     id: category?.id,
