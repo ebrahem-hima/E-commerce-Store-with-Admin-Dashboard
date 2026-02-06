@@ -28,17 +28,17 @@ import {
 import { tableBodyCheckBoxType } from "@/types/adminTableCheckboxtype";
 
 interface Props {
-  selectOptions: selectFilterType[];
-  setEdit?: Dispatch<SetStateAction<boolean>>;
-  Edit?: boolean;
+  Edit: boolean;
+  setEdit: Dispatch<SetStateAction<boolean>>;
+  data: tableBodyCheckBoxType;
+  setData: Dispatch<SetStateAction<tableBodyCheckBoxType>>;
   typeTable: string;
-  selectCheckBox: SelectCheckBox[];
-  EditValue?: typeEditValue[];
-  setSelectCheckBox?: Dispatch<SetStateAction<SelectCheckBox[]>>;
+  EditValue: typeEditValue[];
   isPending: boolean;
+  selectOptions: selectFilterType[];
   startTransition: TransitionStartFunction;
-  setData?: Dispatch<SetStateAction<tableBodyCheckBoxType>>;
-  data?: tableBodyCheckBoxType;
+  selectCheckBox: SelectCheckBox[];
+  setSelectCheckBox: Dispatch<SetStateAction<SelectCheckBox[]>>;
 }
 
 const FilterSearch = ({
@@ -127,13 +127,13 @@ const FilterSearch = ({
             if (typeTable === "user_profile") handleDeleteUsers(userIds);
             else if (typeTable === "products")
               handleDeleteProducts(selectCheckBox);
-            else
-              handleDeleteAction({
-                typeTable,
-                selectCheckBox,
-                setData,
-                setSelectCheckBox,
-              });
+            handleDeleteAction({
+              typeTable,
+              selectCheckBox,
+              setData,
+              setSelectCheckBox,
+              data,
+            });
           }}
           className="w-5 h-5 cursor-pointer"
         />

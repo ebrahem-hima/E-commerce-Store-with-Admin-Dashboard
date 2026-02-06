@@ -1,6 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { typeMode } from "@/types/adminType";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { MouseEvent } from "react";
 import { HiArrowSmLeft } from "react-icons/hi";
@@ -8,8 +10,10 @@ import { HiArrowSmLeft } from "react-icons/hi";
 interface Props {
   title?: string;
   link: string;
-  onClick?: (e: MouseEvent<HTMLButtonElement>) => Promise<void>;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => Promise<void | false>;
   hideSave?: boolean;
+  mode?: typeMode;
+  Loading?: boolean;
 }
 
 const HeaderSaveActions = ({
@@ -17,6 +21,8 @@ const HeaderSaveActions = ({
   link,
   onClick,
   hideSave = false,
+  mode,
+  Loading,
 }: Props) => {
   return (
     <div className="flex-between mb-6">
@@ -25,7 +31,7 @@ const HeaderSaveActions = ({
           <HiArrowSmLeft className="mr-1 h-5 w-5" />
           Back
         </Link>
-        <h3 className="text-xl font-semibold">{title || "Clothes"}</h3>
+        <h3 className="text-xl font-semibold">{title}</h3>
       </div>
       {!hideSave && (
         <div className="flex items-center gap-2">
@@ -33,8 +39,14 @@ const HeaderSaveActions = ({
             <Link href={link}>Cancel</Link>
           </Button>
 
-          <Button onClick={onClick} variant="default" size="default">
-            Save
+          <Button
+            disabled={Loading}
+            onClick={onClick}
+            variant="default"
+            size="default"
+          >
+            {Loading ? <Loader2 className=" h-4 w-4 animate-spin" /> : ""}
+            {mode === "edit" ? "Update" : "Add"}
           </Button>
         </div>
       )}

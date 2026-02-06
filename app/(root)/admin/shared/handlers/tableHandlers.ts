@@ -8,12 +8,14 @@ import {
   tableBodyCheckBoxType,
   TypeUserOrder,
 } from "@/types/adminTableCheckboxtype";
+import { MESSAGES } from "@/lib/message";
 
 // Types
 interface sharedTypes {
   typeTable: string;
   setData?: React.Dispatch<React.SetStateAction<tableBodyCheckBoxType>>;
   setSelectCheckBox?: React.Dispatch<React.SetStateAction<SelectCheckBox[]>>;
+  data: tableBodyCheckBoxType;
 }
 export interface DeleteTableOptions extends sharedTypes {
   selectCheckBox: SelectCheckBox[];
@@ -21,7 +23,6 @@ export interface DeleteTableOptions extends sharedTypes {
 
 export interface EditTableOptions extends sharedTypes {
   EditValue: EditValue[];
-  data?: tableBodyCheckBoxType;
   setEdit?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -31,9 +32,11 @@ export const handleDeleteAction = async ({
   selectCheckBox,
   setData,
   setSelectCheckBox,
+  data,
 }: DeleteTableOptions) => {
   const ids = selectCheckBox.map((item) => item.ID);
-  if (!ids.length) return;
+  if (!ids.length || !data) return;
+  const previousData = [...data];
   setData?.(
     (prev) =>
       prev.filter(
@@ -47,9 +50,10 @@ export const handleDeleteAction = async ({
       typeTable,
       ids,
     });
-    toast.success("Successfully deleted");
+    toast.success(MESSAGES.admin.shared.deleteRow);
   } catch (error) {
     console.log(error);
+    setData?.(previousData as tableBodyCheckBoxType);
     return false;
   }
 };
