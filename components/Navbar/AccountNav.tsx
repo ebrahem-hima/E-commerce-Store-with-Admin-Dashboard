@@ -14,7 +14,7 @@ import Link from "next/link";
 import { IoPersonOutline } from "react-icons/io5";
 
 const AccountNav = () => {
-  const { userId, setUser, setCartData, setIsAuth } = useProductContext();
+  const { userId, setCartData, setIsAuth } = useProductContext();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -38,7 +38,6 @@ const AccountNav = () => {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
-                setUser("");
                 setCartData([]);
                 localStorage.removeItem("user_cart");
                 localStorage.removeItem("cart_guest");
