@@ -1,7 +1,5 @@
 "use client";
 
-// import { Label } from "@/components/ui/label";
-// import Badge from "@/components/shared/Badge";
 import HeaderSaveActions from "../shared/HeaderSaveActions";
 import Information from "./AddProduct/Information";
 import { useEffect, useState } from "react";
@@ -11,6 +9,7 @@ import { categoryDetailType, typeMode } from "@/types/adminType";
 import { optionType, typeProduct } from "@/types/productTypes";
 import CategoryList from "./components/categoryList";
 import useGetAllCategories from "../adminHooks/useGetAllCategories";
+import { useSearchParams } from "next/navigation";
 
 interface Props {
   mode: typeMode;
@@ -32,6 +31,10 @@ export default function ProductForm({ mode, product }: Props) {
     active: false,
     stock: 0,
   };
+
+  const searchParams = useSearchParams();
+  const categoryId = searchParams.get("categoryId");
+
   const [showCategory, setShowCategory] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [files, setFiles] = useState<File[]>([]);
@@ -41,8 +44,9 @@ export default function ProductForm({ mode, product }: Props) {
   );
   const [getOptions, setGetOptions] = useState<optionType[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(
-    product?.category_id || null,
+    Number(categoryId) || product?.category_id || null,
   );
+
   const { addProduct, Loading } = useProduct({
     ImageGalleryDeleted,
     mode,

@@ -21,7 +21,7 @@ import {
 } from "../../adminFn/couponFn";
 import { couponTypes } from "@/constant/admin/couponConstant";
 import { Checkbox } from "@/components/ui/checkbox";
-import useGetAllCategories from "../../category/hooks/useGetAllCategories";
+import useGetAllCategories from "../../adminHooks/useGetAllCategories";
 
 interface Props {
   mode: string;

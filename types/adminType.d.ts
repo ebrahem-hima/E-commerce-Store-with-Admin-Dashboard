@@ -4,7 +4,7 @@ export type selectFilterType = {
 };
 
 export type categoryDetailType = {
-  id?: number;
+  id: number;
   name: string;
   type: string;
   description: string;

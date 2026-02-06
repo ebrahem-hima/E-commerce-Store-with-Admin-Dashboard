@@ -62,11 +62,15 @@ export const MESSAGES = {
       createCategory: "Category created successfully!",
       updateCategory: "Category updated successfully!",
       requiredField: "All fields are required",
+      deleteCategory: "Category deleted successfully",
     },
     product: {
       requiredField: "All fields are required",
       createdSuccessfully: "Product added successfully",
       updatedSuccessfully: "Product updated successfully",
+    },
+    shared: {
+      deleteRow: "Row deleted successfully",
     },
   },
   ERROR_MESSAGES: {

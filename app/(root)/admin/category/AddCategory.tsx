@@ -10,12 +10,14 @@ interface Props {
   setShowCategory: Dispatch<SetStateAction<boolean>>;
   categoryDetail?: categoryDetailType;
   Edit?: boolean;
+  handleAddCategoryProductPage?: (newCategory: categoryDetailType) => void;
 }
 
 const AddCategory = ({
   categoryDetail,
   setShowCategory,
   Edit = false,
+  handleAddCategoryProductPage,
 }: Props) => {
   const [category, setCategory] = useState<categoryDetailType>({
     id: categoryDetail?.id,
@@ -25,7 +27,7 @@ const AddCategory = ({
   });
   const inputRef = useRef<HTMLInputElement | null>(null);
   return (
-    <div className="absolute top-1/5 left-1/2 transform -translate-x-1/2 w-[450px] h-auto z-60 bg-white text-black p-4 rounded-lg">
+    <div className="absolute top-1/5 left-1/2 transform -translate-x-1/2 w-112.5 h-auto z-60 bg-white text-black p-4 rounded-lg">
       <h2 className="text-xl font-bold mb-4">Add Category</h2>
 
       <div className="flex flex-col gap-3 mb-4">
@@ -114,6 +116,13 @@ const AddCategory = ({
               category,
               setShowCategory,
               Edit,
+            });
+            handleAddCategoryProductPage?.({
+              id: category?.id,
+              name: category?.name || "",
+              type: category?.type || "",
+              description: category?.description || "",
+              productCount: 0,
             });
           }}
           variant="default"
