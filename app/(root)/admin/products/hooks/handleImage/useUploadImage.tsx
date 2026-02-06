@@ -1,4 +1,4 @@
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 
 interface Props {
   productUUID: string;
@@ -40,7 +40,7 @@ const UploadImage = async ({ productUUID, file, files }: Props) => {
       return supabase.storage
         .from("products-images")
         .getPublicUrl(`${productUUID}/gallery/${file.name}`).data.publicUrl;
-    })
+    }),
   );
   return {
     mainImageUrl,

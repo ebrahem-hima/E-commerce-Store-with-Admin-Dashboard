@@ -1,7 +1,7 @@
 "use client";
 
 import { TypeProductTable } from "@/types/adminTableCheckboxtype";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -19,7 +19,7 @@ const useProducts = ({ searchText, selectFilter }: Props) => {
       const supabase = createClient();
       try {
         let query = supabase.from("products").select(`
-            id,product_id,discount,discount_type,img,name,stock,price,created_at,
+            id,discount,discount_type,img,name,stock,price,created_at,
             categories (
               name
             )

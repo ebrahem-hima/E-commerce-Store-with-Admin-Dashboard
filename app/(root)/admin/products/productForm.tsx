@@ -1,97 +1,109 @@
 "use client";
 
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import Badge from "@/components/shared/Badge";
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Label } from "@/components/ui/label";
+// import Badge from "@/components/shared/Badge";
 import HeaderSaveActions from "../shared/HeaderSaveActions";
-import useCategory from "../adminHooks/useGetCategory";
 import Information from "./AddProduct/Information";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddCategory from "../category/AddCategory";
-import CategoryRealTime from "../category/categoryRealTime";
 import useProduct from "./hooks/useAddProduct";
-import { typeMode } from "@/types/adminType";
+import { categoryDetailType, typeMode } from "@/types/adminType";
+import { optionType, typeProduct } from "@/types/productTypes";
+import CategoryList from "./components/categoryList";
+import useGetAllCategories from "../adminHooks/useGetAllCategories";
 
-export default function ProductForm({ mode }: { mode: typeMode }) {
-  const { categories, setCategories } = useCategory();
+interface Props {
+  mode: typeMode;
+  product?: typeProduct | null;
+}
+
+export default function ProductForm({ mode, product }: Props) {
+  // const { categories, setCategories } = useGetCategory();
+  const productDetailDefault = {
+    id: "",
+    name: "",
+    description: "",
+    price: 0,
+    discount: 0,
+    discount_type: "",
+    img: "",
+    imgGallery: [],
+    category_id: 0,
+    active: false,
+    stock: 0,
+  };
   const [showCategory, setShowCategory] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [ImageGalleryDeleted, setImageGalleryDeleted] = useState<string[]>([]);
-
-  const {
-    addProduct,
-    setProductDetail,
-    selectedCategory,
-    productDetail,
-    setSelectedCategory,
-    setGetOptions,
-    getOptions,
-  } = useProduct({
+  const [productDetail, setProductDetail] = useState<typeProduct>(
+    product || productDetailDefault,
+  );
+  const [getOptions, setGetOptions] = useState<optionType[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(
+    product?.category_id || null,
+  );
+  const { addProduct, Loading } = useProduct({
     ImageGalleryDeleted,
     mode,
     file,
     files,
+    productDetail,
+    getOptions,
+    selectedCategory,
   });
+  const { categories: categoriesDB, Loading: LoadingCategory } =
+    useGetAllCategories();
 
-  // console.log("ImageGalleryDeleted", ImageGalleryDeleted);
+  const [categories, setCategories] =
+    useState<categoryDetailType[]>(categoriesDB);
+
+  useEffect(() => {
+    setCategories(categoriesDB);
+  }, [categoriesDB]);
+
+  const handleAddCategory = (newCategory: categoryDetailType) => {
+    setCategories((prev) => [...prev, newCategory]);
+  };
 
   return (
     <>
-      <CategoryRealTime setCategories={setCategories} />
+      {/* <CategoryRealTime setCategories={setCategories} /> */}
       {showCategory && (
         <div>
           <div className="absolute top-0 left-0 z-50 bg-black/75 w-full h-full"></div>
-          <AddCategory setShowCategory={setShowCategory} />
+          <AddCategory
+            handleAddCategoryProductPage={handleAddCategory}
+            setShowCategory={setShowCategory}
+          />
         </div>
       )}
       <HeaderSaveActions
         onClick={addProduct}
         link="/admin/products"
-        title="Add Product"
+        mode={mode}
+        Loading={Loading}
+        title={mode === "edit" ? "Edit Product" : "Add Product"}
       />
       <div className="grid lg:grid-cols-[minmax(200px,1fr)_250px] sm:grid-cols-1 gap-6">
         <div className="space-y-6 order-1 lg:order-2">
           <h3 className="text-xl font-semibold">Categories</h3>
-          <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-            {categories.map((category) => (
-              <div key={category?.id} className="flex items-center gap-2">
-                <Checkbox
-                  checked={selectedCategory === category?.id}
-                  onCheckedChange={(isChecked) => {
-                    if (isChecked) {
-                      setSelectedCategory(category?.id || null);
-                    } else {
-                      setSelectedCategory(null);
-                    }
-                  }}
-                  id={category?.name}
-                />
-                <Label htmlFor={category?.name}>{category?.name}</Label>
-              </div>
-            ))}
-          </div>
+          <CategoryList
+            Loading={LoadingCategory}
+            setSelectedCategory={setSelectedCategory}
+            selectedCategory={selectedCategory}
+            setShowCategory={setShowCategory}
+            categories={categories}
+          />
 
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              setShowCategory(true);
-            }}
-            variant="link"
-            className="p-0 h-auto text-blue-600"
-          >
-            Create New
-          </Button>
-
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label>Tags</Label>
             <div className="flex flex-wrap gap-2">
               <Badge text="New" />
               <Badge text="Sale" />
               <Badge text="Hot" />
             </div>
-          </div>
+          </div> */}
         </div>
 
         <Information

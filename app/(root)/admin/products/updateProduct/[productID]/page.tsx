@@ -1,9 +1,12 @@
 import ProductForm from "../../productForm";
+import { getProductDetailServer } from "../../services/productDetailService";
 
-const page = () => {
+const page = async ({ params }: { params: Promise<{ productID: string }> }) => {
+  const { productID } = await params;
+  const product = await getProductDetailServer(productID);
   return (
     <>
-      <ProductForm mode="edit" />
+      <ProductForm product={product} mode="edit" />
     </>
   );
 };

@@ -1,11 +1,11 @@
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 
 const UpdateImage = async (
   productID: string,
   file: File | null,
   files: File[],
   galleryDeleted: string[],
-  oldMainImg: string
+  oldMainImg: string,
 ) => {
   const supabase = createClient();
 
@@ -66,7 +66,7 @@ const UpdateImage = async (
       return supabase.storage
         .from("products-images")
         .getPublicUrl(`${productID}/gallery/${file.name}`).data.publicUrl;
-    })
+    }),
   );
 
   return {
