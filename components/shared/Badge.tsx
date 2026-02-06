@@ -7,7 +7,7 @@ interface Props {
   setBadge?: Dispatch<SetStateAction<{ inputName: string; names: string[] }[]>>;
 }
 
-const Badge = ({ text, setBadge }: Props) => {
+const Badge = ({ text }: Props) => {
   // const deleteBadge = (name: string) => {
   //   setBadge?.((prev) => prev.some((item) => ));
   // };

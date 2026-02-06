@@ -17,10 +17,10 @@ const AddCategory = ({
   categoryDetail,
   setShowCategory,
   Edit = false,
-  handleAddCategoryProductPage,
+  // handleAddCategoryProductPage,
 }: Props) => {
   const [category, setCategory] = useState<categoryDetailType>({
-    id: categoryDetail?.id,
+    id: categoryDetail?.id || 0,
     name: categoryDetail?.name || "",
     type: categoryDetail?.type || "",
     description: categoryDetail?.description || "",
@@ -117,13 +117,13 @@ const AddCategory = ({
               setShowCategory,
               Edit,
             });
-            handleAddCategoryProductPage?.({
-              id: category?.id,
-              name: category?.name || "",
-              type: category?.type || "",
-              description: category?.description || "",
-              productCount: 0,
-            });
+            // handleAddCategoryProductPage?.({
+            //   id: category?.id,
+            //   name: category?.name || "",
+            //   type: category?.type || "",
+            //   description: category?.description || "",
+            //   productCount: 0,
+            // });
           }}
           variant="default"
           size="sm"

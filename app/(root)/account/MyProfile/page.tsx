@@ -25,7 +25,6 @@ const Page = () => {
   });
 
   const { push } = useRouter();
-  const isEmailChange = originalProfile.current?.email !== profileData.email;
   const isPasswordChanged =
     password.currentPassword ||
     password.newPassword ||
@@ -72,6 +71,7 @@ const Page = () => {
   if (!userId) return;
   const updateAccount = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    const isEmailChange = originalProfile.current?.email !== profileData.email;
     const checkField = ["firstName", "lastName", "phone", "email"];
     const hasChanges = checkField.some(
       (field) =>
