@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -14,10 +14,9 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Send } from "lucide-react";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 import { sendEmailReply } from "./hooks/sendEmail";
 import { toast } from "sonner";
-import { markMessageAsSeen } from "./InboxActions";
 
 export interface MessageType {
   id: number;
@@ -39,12 +38,6 @@ const InboxPopup = ({ isOpen, onOpenChange, data }: InboxPopupProps) => {
   const [replyText, setReplyText] = useState("");
   const [isSending, setIsSending] = useState(false);
 
-  useEffect(() => {
-    if (data?.id && isOpen && data?.status === "New") {
-      markMessageAsSeen(data?.id);
-    }
-  }, [isOpen, data]);
-
   const handleSendReply = async () => {
     if (!replyText.trim()) return;
 
@@ -53,7 +46,7 @@ const InboxPopup = ({ isOpen, onOpenChange, data }: InboxPopupProps) => {
       data?.email || "",
       data?.name || "",
       replyText,
-      data?.message || ""
+      data?.message || "",
     );
     if (Resend.success) {
       toast.success("Email has been sended");
@@ -82,7 +75,7 @@ const InboxPopup = ({ isOpen, onOpenChange, data }: InboxPopupProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-150 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Message Details</DialogTitle>
           <DialogDescription>
@@ -136,11 +129,9 @@ const InboxPopup = ({ isOpen, onOpenChange, data }: InboxPopupProps) => {
               id="message"
               value={data.message}
               readOnly
-              className="bg-muted/50 min-h-[100px] resize-none focus-visible:ring-0"
+              className="bg-muted/50 min-h-25 resize-none focus-visible:ring-0"
             />
           </div>
-
-          <div className="h-px bg-border w-full my-2"></div>
 
           <div className="grid gap-2">
             <Label htmlFor="reply" className="font-bold text-primary">
@@ -149,7 +140,7 @@ const InboxPopup = ({ isOpen, onOpenChange, data }: InboxPopupProps) => {
             <Textarea
               id="reply"
               placeholder="Type your response here..."
-              className="min-h-[120px]"
+              className="min-h-30"
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
             />

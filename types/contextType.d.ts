@@ -7,10 +7,8 @@ export interface ProductContextType {
   isOpen: typeIsOpen;
   setIsOpen: Dispatch<SetStateAction<typeIsOpen>>;
 
-  wishListStatus: boolean;
-  setWishListStatus: Dispatch<SetStateAction<boolean>>;
-
   userId: string | null;
+  // setUserId: Dispatch<SetStateAction<User | null>>;
 
   profileData: profileType;
   setProfileData: Dispatch<SetStateAction<profileType>>;
@@ -19,9 +17,6 @@ export interface ProductContextType {
   setIsProfileChange: Dispatch<
     SetStateAction<{ address: boolean; profile: boolean }>
   >;
-
-  isCartDataUpdated: boolean;
-  setIsCartDataUpdated: Dispatch<SetStateAction<boolean>>;
 
   cartData: typeProduct[];
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
@@ -37,7 +32,6 @@ export interface ProductContextType {
   isAuth: boolean;
   setIsAuth: Dispatch<SetStateAction<boolean>>;
 
-  setUser: Dispatch<SetStateAction<string | null>>;
-
   total: number;
+  userCartLoading: boolean;
 }

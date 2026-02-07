@@ -1,30 +1,11 @@
 import { MESSAGES } from "@/lib/message";
-import { optionType } from "@/types/productTypes";
-import { createClient } from "@/utils/supabase/client";
+import { typeProduct } from "@/types/productTypes";
+import { createClient } from "@/app/utils/supabase/client";
 import { toast } from "sonner";
-
-interface productType {
-  id?: string;
-  product_id?: string;
-  name: string;
-  img: string;
-  description: string;
-  imgGallery?: string[];
-  rate?: number;
-  stock: number;
-  category_id: number;
-  count?: number;
-  discount?: number;
-  discount_type?: string;
-  price: number;
-  options?: optionType[];
-  active: boolean;
-  created_at?: string;
-}
 
 const useProductActions = () => {
   const supabase = createClient();
-  const createProduct = async (data: productType) => {
+  const createProduct = async (data: typeProduct) => {
     const { error } = await supabase.from("products").insert(data);
 
     if (error) {
@@ -33,7 +14,7 @@ const useProductActions = () => {
     }
     toast.success(MESSAGES.admin.product.createdSuccessfully);
   };
-  const updateProduct = async (productID: string, data: productType) => {
+  const updateProduct = async (productID: string, data: typeProduct) => {
     const { error } = await supabase
       .from("products")
       .update(data)
@@ -43,7 +24,7 @@ const useProductActions = () => {
       console.log(error);
       return;
     }
-    toast.success(MESSAGES.admin.product.createdSuccessfully);
+    toast.success(MESSAGES.admin.product.updatedSuccessfully);
   };
   return { createProduct, updateProduct };
 };

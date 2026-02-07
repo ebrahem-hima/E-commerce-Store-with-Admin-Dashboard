@@ -51,16 +51,29 @@ export const MESSAGES = {
       invalid: "This coupon is no longer valid or has reached its usage limit.",
       InvalidExpirationDate:
         "The coupon's expiration date cannot be earlier than today.",
+      UserLimitExceedsMax:
+        "The usage limit per user cannot be greater than the total coupon limit.",
+      couponLimitMessage:
+        "You have reached the maximum usage limit for this coupon.",
+      couponNotValid: "This coupon is not valid.",
+      couponDateExpired: "Coupon has expired",
     },
     category: {
       createCategory: "Category created successfully!",
       updateCategory: "Category updated successfully!",
       requiredField: "All fields are required",
+      deleteCategory: "Category deleted successfully",
     },
     product: {
       requiredField: "All fields are required",
       createdSuccessfully: "Product added successfully",
       updatedSuccessfully: "Product updated successfully",
     },
+    shared: {
+      deleteRow: "Row deleted successfully",
+    },
+  },
+  ERROR_MESSAGES: {
+    SomethingWentWrong: "Something went wrong. Please try again.",
   },
 };

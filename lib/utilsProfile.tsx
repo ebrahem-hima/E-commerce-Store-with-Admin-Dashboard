@@ -8,7 +8,7 @@ import {
 import { toast } from "sonner";
 import { MESSAGES } from "./message";
 import { addressSchema } from "@/validation/validation";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 
 interface signInType {
   password: string;
@@ -63,7 +63,7 @@ export const updateEmail = async ({
       >
         Open your email
       </a>
-    </div>
+    </div>,
   );
   setChangeInput(true);
   return true;
@@ -145,7 +145,7 @@ export const updateAddress = async ({
   const hasChanges = checkField.some(
     (key) =>
       profileData[key as keyof AddressType] !==
-      originalAddress.current?.[key as keyof AddressType]
+      originalAddress.current?.[key as keyof AddressType],
   );
   if (!hasChanges) {
     toast.info(MESSAGES.account.noChanges);

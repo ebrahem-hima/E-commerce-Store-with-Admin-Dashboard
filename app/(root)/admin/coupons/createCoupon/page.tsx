@@ -1,10 +1,10 @@
-import CouponForm from "../CouponForm/CouponForm";
+import CouponForm from "../CouponComponent/CouponForm";
 
 const Page = () => {
   return (
-    <div>
+    <>
       <CouponForm mode="create" />
-    </div>
+    </>
   );
 };
 

@@ -8,8 +8,13 @@ export async function sendEmailReply(
   userEmail: string,
   userName: string,
   replyMessage: string,
-  originalMessage: string
+  originalMessage: string,
 ) {
+  console.log("resend", resend);
+  console.log("userName", userName);
+  console.log("userEmail", userEmail);
+  console.log("replyMessage", replyMessage);
+  console.log("originalMessage", originalMessage);
   try {
     const { data, error } = await resend.emails.send({
       from: "Exclusive Support <onboarding@resend.dev>",

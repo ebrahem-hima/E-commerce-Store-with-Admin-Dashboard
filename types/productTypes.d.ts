@@ -9,7 +9,6 @@ export interface CategoryType {
 
 export interface typeProduct {
   id: string;
-  // id: string;
   product_id?: string;
   name: string;
   img: string;

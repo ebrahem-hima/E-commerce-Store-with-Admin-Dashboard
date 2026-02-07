@@ -70,9 +70,13 @@ export const AddToCart = withLock(
       options: getOptions || [],
       user_id: userId,
     };
-    // console.log("item", item);
-    // console.log("product", product);
-    setCartData((prev) => [...prev, product]);
+    setCartData((prev) => {
+      const updated = [...prev, product];
+      if (!userId) {
+        localStorage.setItem("cart_guest", JSON.stringify(updated));
+      }
+      return updated;
+    });
     if (userId) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { id, search_text, ...rest } = item;
@@ -85,24 +89,6 @@ export const AddToCart = withLock(
       };
 
       const { error } = await supabase.from("user_cart").insert(product);
-      // const { error } = await supabase.from("user_cart").insert({
-      //   product_id: item.id,
-      //   user_id: userId,
-      //   name: item.name,
-      //   img: item.img,
-      //   description: item.description,
-      //   rate: item.rate,
-      //   count: count || item.count,
-      //   stock: item.stock,
-      //   imgGallery: item.imgGallery,
-      //   discount: item.discount,
-      //   discount_type: item.discount_type,
-      //   price: item.price,
-      //   options: getOptions || [],
-      //   active: item.active,
-      //   created_at: item.created_at,
-      //   category_id: item.category_id,
-      // });
       if (error) {
         console.log("error Add To Cart", error);
         return;
@@ -169,7 +155,11 @@ export const updateProduct = withLock(
 
 export const handleDeleteProductCart = withLock(
   async ({ ID, name, setCartData, userId }: deleteProductCart) => {
-    setCartData((prev) => prev.filter((item) => item.id !== ID));
+    setCartData((prev) => {
+      const data = prev.filter((item) => item.id !== ID);
+      localStorage.setItem("cart_guest", JSON.stringify(data));
+      return data;
+    });
     if (!userId) {
       toast.success(MESSAGES.cart.removed(name));
       return;

@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { typeProduct } from "../../types/productTypes";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 
 const WishListFn = () => {
   const [Loading, setLoading] = useState(true);
   const [wishList, setWishList] = useState<typeProduct[]>([]);
-  const [isDisabled, setIsDisabled] = useState(false);
   useEffect(() => {
     const getProductWishList = async () => {
       const supabase = createClient();
@@ -16,19 +15,13 @@ const WishListFn = () => {
         return;
       }
       if (data) setWishList(data);
+
       setLoading(false);
     };
     getProductWishList();
   }, []);
-  useEffect(() => {
-    if (wishList.length > 0) {
-      setIsDisabled(false);
-      return;
-    } else {
-      setIsDisabled(true);
-    }
-  }, [wishList]);
-  return { Loading, wishList, setWishList, isDisabled };
+
+  return { Loading, wishList, setWishList };
 };
 
 export default WishListFn;

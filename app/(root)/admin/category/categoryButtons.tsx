@@ -14,11 +14,16 @@ interface CategoryButtonsProps {
   item: categoryDetailType;
   handleEditClick: (
     e: MouseEvent<HTMLButtonElement>,
-    category: categoryDetailType
+    category: categoryDetailType,
   ) => void;
+  handleDelete: (id: number) => void;
 }
 
-const CategoryButtons = ({ item, handleEditClick }: CategoryButtonsProps) => {
+const CategoryButtons = ({
+  item,
+  handleEditClick,
+  handleDelete,
+}: CategoryButtonsProps) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   if (!item) return;
@@ -75,6 +80,7 @@ const CategoryButtons = ({ item, handleEditClick }: CategoryButtonsProps) => {
                     categoryID: item.id,
                     setShowDeleteDialog,
                   });
+                  handleDelete(item.id);
                 }}
               >
                 Delete

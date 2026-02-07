@@ -1,51 +1,23 @@
-"use client";
-
-import { useState } from "react";
-import TableSearch from "../shared/TableSearch";
-import { SelectCheckBox } from "@/types/typeAliases";
 import PageHeader from "../shared/PageHeader";
-import useCustomerFn from "../adminHooks/useCustomerFn";
-import CustomerRealTime from "./customerRealTime";
-import { CustomerTableType } from "@/types/adminTableCheckboxtype";
+import { Suspense } from "react";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import CustomerTable from "./components/CustomerTable";
 
-const Page = () => {
-  const [selectCheckBox, setSelectCheckBox] = useState<SelectCheckBox[]>([]);
-  const [searchText, setSearchText] = useState("");
-  const [selectFilter, setSelectFilter] = useState("");
-  const { Loading, customer, setCustomer } = useCustomerFn({
-    searchText,
-    selectFilter,
-  });
+interface Props {
+  searchParams: Promise<{
+    filter: string;
+    search: string;
+  }>;
+}
 
-  const selectOptions = [
-    { label: "Newest", value: "newest" },
-    { label: "Oldest", value: "oldest" },
-  ];
-
-  const headers = [
-    { title: "Name" },
-    { title: "Email" },
-    { title: "orders" },
-    { title: "Spent" },
-  ];
-
+const Page = async ({ searchParams }: Props) => {
+  const getSearchParams = await searchParams;
   return (
     <>
-      <CustomerRealTime setCustomer={setCustomer} />
       <PageHeader title="Customers" />
-      <TableSearch<CustomerTableType>
-        tableWidth="min-w-[600px]"
-        typeTable="user_profile"
-        selectCheckBox={selectCheckBox}
-        setSelectCheckBox={setSelectCheckBox}
-        selectOptions={selectOptions}
-        setSearchText={setSearchText}
-        tableData={customer}
-        headers={headers}
-        Loading={Loading}
-        setSelectFilter={setSelectFilter}
-        emptyMessage="There are no orders to display"
-      />
+      <Suspense fallback={<LoadingSpinner />}>
+        <CustomerTable getSearchParams={getSearchParams} />
+      </Suspense>
     </>
   );
 };

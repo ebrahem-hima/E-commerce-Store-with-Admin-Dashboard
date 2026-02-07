@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 import { TypeProductTable } from "@/types/adminTableCheckboxtype";
 
 export default function ProductsRealtime({
@@ -21,9 +21,9 @@ export default function ProductsRealtime({
         },
         (payload) => {
           setProducts((prev) =>
-            prev.filter((product) => product.id !== payload.old.id)
+            prev.filter((product) => product.id !== payload.old.id),
           );
-        }
+        },
       )
       .subscribe();
 

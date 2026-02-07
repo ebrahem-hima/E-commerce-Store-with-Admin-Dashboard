@@ -7,9 +7,9 @@ import { createClient } from "@/app/utils/supabase/server";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 
 interface SearchPageProps {
-  searchParams: {
+  searchParams: Promise<{
     query?: string;
-  };
+  }>;
 }
 
 const Page = async ({ searchParams }: SearchPageProps) => {
