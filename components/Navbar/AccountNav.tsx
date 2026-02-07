@@ -1,3 +1,5 @@
+"use client";
+
 import { logout } from "@/app/(root)/(auth)/authActions/logout";
 import {
   DropdownMenu,

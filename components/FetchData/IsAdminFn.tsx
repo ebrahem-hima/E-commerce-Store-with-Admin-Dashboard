@@ -1,43 +1,26 @@
-"use client";
+import { createClient } from "@/app/utils/supabase/server";
 
-import { useEffect, useState } from "react";
-import { getUser } from "@/app/(root)/(auth)/authActions/getUser";
-import { useProductContext } from "@/context/productContext";
-import { createClient } from "@/app/utils/supabase/client";
+export const IsAdmin = async (): Promise<boolean> => {
+  const supabase = await createClient();
 
-const IsAdminFn = () => {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [Loading, setLoading] = useState(true);
-  const { isAuth } = useProductContext();
-  useEffect(() => {
-    setLoading(true);
-    const getAdmin = async () => {
-      const user = await getUser();
-      if (!user?.id) {
-        setIsAdmin(false);
-      }
-      const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-      const { data, error } = await supabase
-        .from("user_profile")
-        .select("role")
-        .eq("id", user?.id)
-        .maybeSingle();
-      if (error) {
-        console.log("error", error);
-        return;
-      }
-      if (data?.role === "admin") {
-        setIsAdmin(true);
-      } else {
-        setIsAdmin(false);
-      }
-      setLoading(false);
-    };
+  if (!user) {
+    return false;
+  }
 
-    getAdmin();
-  }, [isAuth]);
-  return { isAdmin, setIsAdmin, Loading };
+  const { data, error } = await supabase
+    .from("user_profile")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (error || !data) {
+    console.error("Error checking admin role:", error);
+    return false;
+  }
+
+  return data.role === "admin";
 };
-
-export default IsAdminFn;

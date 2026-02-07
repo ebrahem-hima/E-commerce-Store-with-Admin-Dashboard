@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { IoMenu } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Sheet,
   SheetContent,
@@ -13,9 +12,22 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import MobileMenuLinks from "./MobileMenuLinks";
+import InputSearchComponent from "./components/InputSearchComponent";
+import { useRouter } from "next/navigation";
 
 export function NavbarMobile() {
   const [click, setClick] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const { push } = useRouter();
+
+  const handleSubmitSearch = (e: FormEvent) => {
+    if (!inputRef.current?.value) return;
+    e.preventDefault();
+    push(`/search?query=${inputValue}`);
+    setInputValue("");
+    if (inputRef.current) inputRef.current.value = "";
+  };
 
   return (
     <Sheet>
@@ -46,7 +58,11 @@ export function NavbarMobile() {
         </SheetHeader>
         <MobileMenuLinks click={click} />
         <SheetFooter className="flex items-end">
-          <Input type="text" placeholder="What are you looking for ?" />
+          <InputSearchComponent
+            inputRef={inputRef}
+            setInputValue={setInputValue}
+            handleSubmitSearch={handleSubmitSearch}
+          />
         </SheetFooter>
       </SheetContent>
     </Sheet>

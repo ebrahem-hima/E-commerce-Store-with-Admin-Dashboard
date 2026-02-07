@@ -1,16 +1,14 @@
-"use client";
-
-import NavbarSearch from "./NavbarSearch";
+import NavbarSearch from "./NavbarSearch/NavbarSearch";
 import Link from "next/link";
 import { IoIosHeartEmpty } from "react-icons/io";
 import AccountNav from "./AccountNav";
 import ShopCart from "../shared/ShopCart";
 import AdminNav from "./AdminNav";
 import NavbarMobile from "./NavbarMobile";
-import IsAdminFn from "../FetchData/IsAdminFn";
+import { IsAdmin } from "../FetchData/IsAdminFn";
 
-const NavbarIcons = () => {
-  const { isAdmin } = IsAdminFn();
+const NavbarIcons = async () => {
+  const isAdmin = await IsAdmin();
   return (
     <div className="flex items-center gap-3">
       {/* Input Search */}
