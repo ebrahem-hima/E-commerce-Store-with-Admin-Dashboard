@@ -21,7 +21,9 @@ interface InputValueType {
 const Page = () => {
   const { profileData, userId } = useProductContext();
   const [inputValue, setInputValue] = useState<InputValueType>({
-    userName: profileData.firstName + " " + profileData.lastName,
+    userName: profileData.firstName
+      ? profileData.firstName + " " + profileData.lastName
+      : "",
     email: profileData.email,
     phone: profileData.phone,
     message: "",
@@ -61,7 +63,6 @@ const Page = () => {
     if (messageRef.current) messageRef.current.value = "";
     toast.success(MESSAGES.contact.success);
   };
-  console.log("inputValue", inputValue);
   return (
     <div className="grid grid-cols-[300px_1fr] max-md:grid-cols-1 gap-6">
       <div className="flex flex-col gap-3 max-md:mx-auto max-md:text-center">
@@ -166,7 +167,7 @@ const Page = () => {
                 [e.target.name]: e.target.value,
               }));
             }}
-            className="h-[150px] p-2 border border-[#646363a4] rounded-sm"
+            className="h-37.5 p-2 border border-[#646363a4] rounded-sm"
             id="message"
             placeholder="Write your message..."
           />
