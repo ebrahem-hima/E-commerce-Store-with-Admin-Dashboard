@@ -27,7 +27,6 @@ const SearchFilterMobile = ({ filter }: { filter: productOptionsType[] }) => {
       >
         Open Filter
       </SheetTrigger>
-      {/*  */}
       <SheetContent className="flex flex-col gap-3">
         <SheetHeader>
           <VisuallyHidden>

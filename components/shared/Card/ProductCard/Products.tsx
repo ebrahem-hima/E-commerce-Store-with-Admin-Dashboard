@@ -5,9 +5,10 @@ import { Dispatch, SetStateAction } from "react";
 interface Props {
   data: typeProduct[];
   setData: Dispatch<SetStateAction<typeProduct[]>>;
+  isGrid: boolean;
 }
 
-const Products = ({ data, setData }: Props) => {
+const Products = ({ data, setData, isGrid }: Props) => {
   const toggleProducts = (productId: string) => {
     setData((prev) => {
       const exist = prev.some((p) => p.id === productId);
@@ -26,6 +27,7 @@ const Products = ({ data, setData }: Props) => {
     <>
       {data.map((item) => (
         <ProductCard
+          isGrid={isGrid}
           key={item.id}
           item={item}
           toggleProducts={toggleProducts}

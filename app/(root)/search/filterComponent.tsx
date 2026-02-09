@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { productOptionsType } from "@/types/type";
+import { Loader2 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState, useTransition } from "react";
 
 import { IoIosArrowDown } from "react-icons/io";
 
@@ -24,11 +25,10 @@ const FilterComponent = ({
   const { push } = useRouter();
   const searchParams = useSearchParams();
   const query = searchParams.get("query") || "";
-
+  const [isPending, startTransition] = useTransition();
   const pathName = usePathname();
 
   const [filters, setFilters] = useState<filterType[]>([]);
-
   const [openFilter, setOpenFilter] = useState<{ [key: string]: boolean }>({});
 
   const handleOpenFilter = (ID: number) => {
@@ -57,32 +57,36 @@ const FilterComponent = ({
   };
 
   const handleReset = () => {
-    setFilters([]);
-    setOpenFilter({});
-    const searchParams = new URLSearchParams(window.location.search);
-    const queryValue = searchParams.get("query");
-    searchParams.forEach((_, key) => {
-      if (key !== "query") searchParams.delete(key);
+    startTransition(() => {
+      setFilters([]);
+      setOpenFilter({});
+      const searchParams = new URLSearchParams(window.location.search);
+      const queryValue = searchParams.get("query");
+      searchParams.forEach((_, key) => {
+        if (key !== "query") searchParams.delete(key);
+      });
+      push(`${pathName}?query=${queryValue}`);
     });
-    push(`${pathName}?query=${queryValue}`);
   };
 
   const handleURLSearch = () => {
-    if (!query) return;
-    const searchParams = new URLSearchParams(window.location.search);
+    startTransition(() => {
+      if (!query) return;
+      const searchParams = new URLSearchParams(window.location.search);
 
-    searchParams.set("query", query);
+      searchParams.set("query", query);
 
-    filters.forEach(({ filterName, items }) => {
-      if (items.length > 0) {
-        searchParams.set(filterName, items.join(","));
-      } else {
-        searchParams.delete(filterName);
-      }
+      filters.forEach(({ filterName, items }) => {
+        if (items.length > 0) {
+          searchParams.set(filterName, items.join(","));
+        } else {
+          searchParams.delete(filterName);
+        }
+      });
+
+      push(`${pathName}?${decodeURIComponent(searchParams.toString())}`);
+      setIsOpen?.(false);
     });
-
-    push(`${pathName}?${decodeURIComponent(searchParams.toString())}`);
-    setIsOpen?.(false);
   };
 
   const searchCount = filters
@@ -91,7 +95,7 @@ const FilterComponent = ({
   return (
     <div className="px-4">
       <div className="flex-between mb-4">
-        <span className="cursor-pointer text-primary font-medium">FILTER</span>
+        <span className="text-primary font-medium">FILTER</span>
         <span onClick={handleReset} className="cursor-pointer">
           Reset
         </span>
@@ -140,9 +144,15 @@ const FilterComponent = ({
             </div>
           </div>
         ))}
-        <Button onClick={handleURLSearch}>
+        <Button disabled={isPending} onClick={handleURLSearch}>
           <span>Search</span>
-          <span>({searchCount})</span>
+          <span>
+            {isPending ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              searchCount > 0 && searchCount
+            )}
+          </span>
         </Button>
       </div>
     </div>
