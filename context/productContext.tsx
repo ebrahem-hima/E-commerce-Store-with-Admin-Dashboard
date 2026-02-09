@@ -3,10 +3,10 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { typeIsOpen } from "../types/productTypes";
 import { typeGetCoupon } from "../types/typeAliases";
-import useUserCart from "../components/FetchData/useUserCart";
-import AuthFn from "../components/FetchData/authFn";
-import UserOrdersFn from "../components/FetchData/userOrdersFn";
-import GetProfile from "../components/FetchData/getProfile";
+import useUserCart from "../app/FetchData/useUserCart";
+import AuthFn from "../app/FetchData/authFn";
+import UserOrdersFn from "../app/FetchData/userOrdersFn";
+import GetProfile from "../app/FetchData/getProfile";
 import { ProductContextType } from "@/types/contextType";
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);

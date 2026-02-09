@@ -1,7 +1,7 @@
 "use client";
 
 import { typeProduct } from "@/types/productTypes";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 import { useEffect, useState } from "react";
 
 export const GetProductsByName = ({ inputValue }: { inputValue: string }) => {

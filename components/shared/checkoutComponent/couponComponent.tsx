@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import CouponFn from "../../FetchData/couponFn";
+import CouponFn from "../../../app/FetchData/couponFn";
 import { useProductContext } from "../../../context/productContext";
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";

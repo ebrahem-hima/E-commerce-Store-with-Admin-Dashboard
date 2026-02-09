@@ -79,10 +79,10 @@ const Page = () => {
       toast.success(MESSAGES.buy.success);
       setIsUserOrderUpdated((prev) => !prev);
       setGetCoupon(null);
-      setTimeout(() => {
-        push(`/thankyou`);
-      }, 100);
-      setLoading(false);
+      // setTimeout(() => {
+      push(`/thankyou`);
+      // }, 100);
+      // setLoading(false);
     } catch (error) {
       console.log("error", error);
     } finally {

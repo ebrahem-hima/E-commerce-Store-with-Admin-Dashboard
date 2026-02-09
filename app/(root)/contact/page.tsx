@@ -9,7 +9,7 @@ import { useProductContext } from "@/context/productContext";
 import { toast } from "sonner";
 import { contactSchema } from "@/validation/validation";
 import { MESSAGES } from "@/lib/message";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/app/utils/supabase/client";
 
 interface InputValueType {
   userName: string;
