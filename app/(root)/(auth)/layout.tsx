@@ -11,7 +11,6 @@ export default function RootLayout({
         <div className="relative h-137.5 gap-4 max-lg:hidden">
           <Image
             src={`/images/auth/Side Image.webp`}
-            // aspect-[1/4]
             fill
             alt="sign-up Image"
             className="rounded-sm object-cover"

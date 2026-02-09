@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,50 +14,44 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { toast } from "sonner";
 import { login } from "../authActions/login";
-import { useRouter } from "next/navigation";
 import { useProductContext } from "@/context/productContext";
 import { MESSAGES } from "@/lib/message";
 import { createClient } from "@/app/utils/supabase/client";
-
-interface userDataType {
-  email: string;
-  password: string;
-}
+import { useRouter } from "next/navigation";
 
 const Page = () => {
-  const [isPending, startTransition] = useTransition();
-  const [userData, setUserData] = useState<userDataType>({
-    email: "",
-    password: "",
-  });
-  const { setIsAuth } = useProductContext();
-  const { push } = useRouter();
-
-  const handleLogin = async (formData: FormData) => {
-    startTransition(async () => {
-      const result = await login(formData);
-      if (result?.success) {
-        toast.success("Successfully Logged In");
-        setIsAuth(true);
-        // setIsAuth((prev) => !prev);
-        push("/");
-      } else if (result?.error) {
-        toast.error(result.error);
-      } else {
-        toast.error("Unknown error occurred");
-      }
-    });
+  const initialState = {
+    success: false,
+    message: "",
+    inputs: { email: "", password: "" },
   };
+  const emailInput = useRef<HTMLInputElement>(null);
+
+  const { setIsAuth } = useProductContext();
+  const [state, formAction, isPending] = useActionState(login, initialState);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state.message) {
+      if (state.success) {
+        toast.success(state.message);
+        setIsAuth(true);
+        router.push("/");
+      } else {
+        toast.error(state.message);
+      }
+    }
+  }, [state, router, setIsAuth]);
 
   const resetPassword = async () => {
-    if (!userData.email) {
+    if (!emailInput.current || !emailInput.current.value) {
       toast.error(MESSAGES.password.resetEnterEmail);
       return;
     }
     const supabase = createClient();
 
     const { error } = await supabase.auth.resetPasswordForEmail(
-      userData.email,
+      emailInput.current.value,
       {
         redirectTo: "http://localhost:3000/reset-password",
       },
@@ -68,8 +62,9 @@ const Page = () => {
     }
     toast.success(MESSAGES.password.resetCheckEmail);
   };
+
   return (
-    <form action={handleLogin}>
+    <form action={formAction}>
       <Card className="w-full max-w-sm">
         <CardHeader>
           <div>
@@ -84,44 +79,32 @@ const Page = () => {
             </Button>
           </Link>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-6">
+        <CardContent className="flex flex-col gap-6">
+          <Input
+            id="email"
+            type="email"
+            name="email"
+            placeholder="Email or Phone Number"
+            className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-none"
+            required
+            defaultValue={state.inputs.email}
+          />
+          <div>
             <Input
-              id="email"
-              type="email"
-              name="email"
-              placeholder="Email or Phone Number"
+              id="password"
+              type="password"
+              name="password"
+              placeholder="Password"
               className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-none"
               required
-              onChange={(e) =>
-                setUserData((prev) => ({
-                  ...prev,
-                  [e.target.name]: e.target.value,
-                }))
-              }
+              defaultValue={state.inputs.password}
             />
-            <div>
-              <Input
-                id="password"
-                type="password"
-                name="password"
-                placeholder="Password"
-                className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-none"
-                required
-                onChange={(e) =>
-                  setUserData((prev) => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }))
-                }
-              />
-              <p
-                onClick={resetPassword}
-                className="flex justify-end cursor-pointer mt-1 text-sm underline-offset-4 hover:underline"
-              >
-                Forgot your password?
-              </p>
-            </div>
+            <p
+              onClick={resetPassword}
+              className="flex justify-end cursor-pointer mt-1 text-sm underline-offset-4 hover:underline"
+            >
+              Forgot your password?
+            </p>
           </div>
         </CardContent>
         <CardFooter className="flex-col gap-2">

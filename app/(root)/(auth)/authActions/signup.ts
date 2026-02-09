@@ -1,28 +1,57 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-
 import { createClient } from "@/app/utils/supabase/server";
+import { signupSchema } from "@/validation/validation";
 
-export async function signup(formData: FormData) {
-  const supabase = await createClient();
+type FormState = {
+  success: boolean;
+  message: string;
+  inputs?: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password?: string;
+  };
+};
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
+export async function signup(
+  _prevState: FormState,
+  formData: FormData,
+): Promise<FormState> {
   const dataAccount = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
     firstName: formData.get("firstName") as string,
     lastName: formData.get("lastName") as string,
   };
+
+  const validation = signupSchema.safeParse(dataAccount);
+  if (!validation.success) {
+    return {
+      success: false,
+      message: validation.error.issues[0].message,
+      inputs: dataAccount,
+    };
+  }
+
+  const supabase = await createClient();
+
   const { data: signUpData, error: authError } = await supabase.auth.signUp({
     email: dataAccount.email,
     password: dataAccount.password,
   });
+
   if (authError) {
-    console.log(authError);
-    redirect("/error");
+    const errorMsg = authError.message.includes("already registered")
+      ? "This email is already registered."
+      : "An unexpected error occurred.";
+
+    return {
+      success: false,
+      message: errorMsg,
+      inputs: dataAccount,
+    };
   }
 
   if (signUpData.user) {
@@ -33,15 +62,20 @@ export async function signup(formData: FormData) {
       email: dataAccount.email,
       role: "user",
     });
+
     if (error) {
-      console.log(error);
-      return;
+      return {
+        success: false,
+        message: "Account created but profile failed.",
+        inputs: dataAccount,
+      };
     }
-  }
-  if (authError) {
-    redirect("/error");
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+
+  return {
+    success: true,
+    message: "Account created successfully! Redirecting...",
+  };
 }

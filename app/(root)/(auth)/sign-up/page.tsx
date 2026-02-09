@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useTransition } from "react";
+import { useActionState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   CardContent,
@@ -14,19 +14,34 @@ import Link from "next/link";
 import { signup } from "../authActions/signup";
 import { toast } from "sonner";
 import { useProductContext } from "@/context/productContext";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
-  const [isPending, startTransition] = useTransition();
   const { setIsAuth } = useProductContext();
+  const initialState = {
+    success: false,
+    message: "",
+    inputs: { firstName: "", lastName: "", email: "" },
+  };
+  const router = useRouter();
+  const [state, formAction, isPending] = useActionState(signup, initialState);
+
+  useEffect(() => {
+    if (state.message) {
+      if (state.success) {
+        toast.success(state.message);
+        router.push("/");
+        setIsAuth(true);
+      } else {
+        toast.error(state.message);
+      }
+    }
+  }, [state, router, setIsAuth]);
 
   return (
     <form
-      action={(formData) => {
-        startTransition(() => signup(formData));
-        toast.success("SignUp successfully");
-        setIsAuth(true);
-        // setIsAuth((prev) => !prev);
-      }}
+      action={formAction}
+      // onSubmit={() => setIsAuth(true)}
       className="w-full max-w-sm"
     >
       <CardHeader>
@@ -40,45 +55,45 @@ const Page = () => {
           <Button variant="link">LogIn</Button>
         </Link>
       </CardHeader>
-      <CardContent>
-        <div className="flex flex-col gap-6">
-          <div className="flex items-center gap-3">
-            <Input
-              id="FirstName"
-              type="text"
-              name="firstName"
-              placeholder="FirstName"
-              className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-[0px]"
-              required
-            />
-            <Input
-              id="LastName"
-              type="text"
-              name="lastName"
-              placeholder="LastName"
-              className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-[0px]"
-              required
-            />
-          </div>
+      <CardContent className="flex flex-col gap-6">
+        <div className="flex items-center gap-3">
           <Input
-            id="email"
-            type="email"
-            name="email"
-            placeholder="Email or Phone Number"
-            className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-[0px]"
+            id="FirstName"
+            type="text"
+            name="firstName"
+            placeholder="FirstName"
+            className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-none"
             required
+            defaultValue={state.inputs?.firstName}
           />
-          <div>
-            <Input
-              id="password"
-              type="password"
-              name="password"
-              placeholder="Password"
-              className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-[0px]"
-              required
-            />
-          </div>
+          <Input
+            id="LastName"
+            type="text"
+            name="lastName"
+            placeholder="LastName"
+            className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-none"
+            required
+            defaultValue={state.inputs?.lastName}
+          />
         </div>
+        <Input
+          id="email"
+          type="email"
+          name="email"
+          placeholder="Email or Phone Number"
+          className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-none"
+          required
+          defaultValue={state.inputs?.email}
+        />
+        <Input
+          id="password"
+          type="password"
+          name="password"
+          placeholder="Password"
+          className="border-b border-transparent placeholder:text-[#a5a5a5] border-b-[#d4d4d4] rounded-none"
+          required
+          defaultValue={state.inputs?.password}
+        />
       </CardContent>
       <CardFooter>
         <Button

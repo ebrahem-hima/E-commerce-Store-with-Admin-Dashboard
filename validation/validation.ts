@@ -8,7 +8,7 @@ export const placeOrderSchema = z.object({
     .min(3, "First name must be at least 3 characters long") // أقل من 3 أحرف
     .regex(
       /^[A-Za-z0-9]+$/,
-      "First name must not contain spaces or special characters"
+      "First name must not contain spaces or special characters",
     )
     .refine((val) => (val.match(/[A-Za-z]/g) || []).length >= 3, {
       message: "First name must contain at least 3 letters",
@@ -19,7 +19,7 @@ export const placeOrderSchema = z.object({
     .min(3, "Last name must be at least 3 characters long")
     .regex(
       /^[A-Za-z0-9]+$/,
-      "Last name must not contain spaces or special characters"
+      "Last name must not contain spaces or special characters",
     )
     .refine((val) => (val.match(/[A-Za-z]/g) || []).length >= 3, {
       message: "Last name must contain at least 3 letters",
@@ -50,7 +50,7 @@ export const profileSchema = z.object({
     .min(3, "First name must be at least 3 characters long") // أقل من 3 أحرف
     .regex(
       /^[A-Za-z0-9]+$/,
-      "First name must not contain spaces or special characters"
+      "First name must not contain spaces or special characters",
     )
     .refine((val) => (val.match(/[A-Za-z]/g) || []).length >= 3, {
       message: "First name must contain at least 3 letters",
@@ -61,7 +61,7 @@ export const profileSchema = z.object({
     .min(3, "Last name must be at least 3 characters long")
     .regex(
       /^[A-Za-z0-9]+$/,
-      "Last name must not contain spaces or special characters"
+      "Last name must not contain spaces or special characters",
     )
     .refine((val) => (val.match(/[A-Za-z]/g) || []).length >= 3, {
       message: "Last name must contain at least 3 letters",
@@ -92,7 +92,7 @@ export const contactSchema = z.object({
     .min(3, "UserName must be at least 3 characters long")
     .regex(
       /^(?!\s)(?!.*\s{2,})([A-Za-z0-9\s]+)(?<!\s)$/,
-      "UserName must not contain special characters or multiple spaces"
+      "UserName must not contain special characters or multiple spaces",
     )
     .refine((val) => (val.match(/[A-Za-z]/g) || []).length >= 3, {
       message: "UserName must contain at least 3 letters",
@@ -100,4 +100,32 @@ export const contactSchema = z.object({
 
   phone: z.string().min(3, "Phone number must be at least 3 characters long"),
   message: z.string().min(3).max(200),
+});
+
+export const signupSchema = z.object({
+  firstName: z
+    .string()
+    .min(1, "First name is required")
+    .max(50, "First name is too long")
+    .regex(/^[A-Za-z]+$/, "First name must contain only letters"),
+  lastName: z
+    .string()
+    .min(1, "Last name is required")
+    .max(50, "Last name is too long")
+    .regex(/^[A-Za-z]+$/, "Last name must contain only letters"),
+  email: z.string().email("Invalid email address"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number")
+    .regex(
+      /[^A-Za-z0-9]/,
+      "Password must contain at least one special character",
+    ),
+});
+
+export const logInSchema = z.object({
+  email: z.email("Invalid email address"),
+  password: z.string(),
 });

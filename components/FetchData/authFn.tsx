@@ -1,30 +1,32 @@
 "use client";
 
-import { getUser } from "@/app/(root)/(auth)/authActions/getUser";
+import { createClient } from "@/app/utils/supabase/client";
 import { useState, useEffect } from "react";
 
-const useAuth = () => {
+const UseAuth = () => {
   const [isAuth, setIsAuth] = useState<boolean>(false);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const user = await getUser();
-        if (user?.id) {
+    const supabase = createClient();
+
+    const { data: subscription } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        console.log(event, session);
+
+        if (session?.user) {
           setIsAuth(true);
         } else {
           setIsAuth(false);
         }
-      } catch (err) {
-        console.error(err);
-        setIsAuth(false);
-      }
-    };
+      },
+    );
 
-    fetchUser();
+    return () => {
+      subscription.subscription.unsubscribe();
+    };
   }, []);
 
   return { isAuth, setIsAuth };
 };
 
-export default useAuth;
+export default UseAuth;

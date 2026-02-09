@@ -1,22 +1,17 @@
-"use client";
-
-import { useEffect } from "react";
 import AdminNavbar from "./AdminNavbar";
-import IsAdminFn from "@/components/FetchData/IsAdminFn";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
+import { IsAdmin } from "@/components/FetchData/IsAdminFn";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { push } = useRouter();
-  const { isAdmin, Loading } = IsAdminFn();
-  useEffect(() => {
-    if (!Loading && !isAdmin) {
-      push(`/`);
-    }
-  }, [push, isAdmin, Loading]);
+  const isAdmin = await IsAdmin();
+
+  if (!isAdmin) {
+    redirect("/");
+  }
   return (
     <div className="grid grid-cols-[calc(100%-264px)] max-lg:grid-cols-1 self-end justify-end gap-4 min-h-screen">
       <AdminNavbar />
