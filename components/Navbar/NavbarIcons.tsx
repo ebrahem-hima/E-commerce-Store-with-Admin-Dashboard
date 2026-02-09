@@ -5,7 +5,7 @@ import AccountNav from "./AccountNav";
 import ShopCart from "../shared/ShopCart";
 import AdminNav from "./AdminNav";
 import NavbarMobile from "./NavbarMobile";
-import { IsAdmin } from "../../app/FetchData/IsAdminFn";
+import { IsAdmin } from "@/app/FetchData/IsAdminFn";
 
 const NavbarIcons = async () => {
   const isAdmin = await IsAdmin();

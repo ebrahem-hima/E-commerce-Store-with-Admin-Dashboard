@@ -4,7 +4,7 @@ import SearchFilterMobile from "./searchFilterMobile";
 import SliderClientComponent from "@/components/shared/SliderComponent/SliderClientComponent";
 import SearchProduct from "./SearchProduct";
 import { createClient } from "@/app/utils/supabase/server";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
 
 interface SearchPageProps {
   searchParams: Promise<{

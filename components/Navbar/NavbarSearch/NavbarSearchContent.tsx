@@ -1,4 +1,4 @@
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
 import PriceDisplay from "@/components/shared/priceDisplay";
 import { typeProduct } from "@/types/productTypes";
 import Image from "next/image";

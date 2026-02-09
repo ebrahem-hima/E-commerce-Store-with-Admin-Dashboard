@@ -7,7 +7,7 @@ import useUserCart from "../app/FetchData/useUserCart";
 import AuthFn from "../app/FetchData/authFn";
 import UserOrdersFn from "../app/FetchData/userOrdersFn";
 import GetProfile from "../app/FetchData/getProfile";
-import { ProductContextType } from "@/types/contextType";
+import { ProductContextType } from "../types/contextType";
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 

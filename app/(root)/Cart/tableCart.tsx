@@ -18,7 +18,7 @@ import PriceDisplay from "@/components/shared/priceDisplay";
 import { Input } from "@/components/ui/input";
 import { useProductContext } from "@/context/productContext";
 import { handleDeleteProductCart } from "@/lib/userCartFn";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
 
 type typeCount = { count: number; id: string }[];
 

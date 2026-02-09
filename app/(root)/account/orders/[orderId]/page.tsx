@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import GetOrderDetails from "@/app/FetchData/getOrderDetails";
 import CustomTable from "@/components/shared/table/customTable";
 import { titleOrderDetails } from "@/constant/table";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
 
 const Page = () => {
   const params = useParams<{ orderId: string }>();
