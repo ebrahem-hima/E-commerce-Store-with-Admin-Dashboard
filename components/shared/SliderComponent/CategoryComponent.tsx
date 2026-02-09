@@ -1,14 +1,13 @@
 import CategoryClientComponent from "./CategoryClientComponent";
+import fetchProductsCategories from "@/app/(root)/(home)/services/fetch-products-categories";
 
-interface Props {
-  titleComponent: string | undefined;
-  categories: { name: string; id: number }[] | undefined;
-}
-const CategoryComponent = ({ titleComponent, categories }: Props) => {
+const CategoryComponent = async () => {
+  const data = await fetchProductsCategories();
+  if (!data || data.length === 0) return null;
   return (
     <CategoryClientComponent
-      titleComponent={titleComponent}
-      categories={categories}
+      titleComponent="Browse By Category"
+      categories={data}
     />
   );
 };
