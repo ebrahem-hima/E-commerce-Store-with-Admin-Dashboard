@@ -1,5 +1,5 @@
 import { typeProduct } from "@/types/productTypes";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/app/utils/supabase/server";
 
 export const getProductDetailServer = async (productID: string) => {
   const supabase = await createClient();

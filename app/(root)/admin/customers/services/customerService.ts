@@ -1,13 +1,12 @@
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/app/utils/supabase/server";
 import { CustomerTableType } from "@/types/adminTableCheckboxtype";
-
 
 export const getCustomers = async (searchParams: {
   search: string;
   filter: string;
 }): Promise<CustomerTableType[]> => {
   const supabase = await createClient();
-  
+
   const searchText = searchParams.search;
   const selectFilter = searchParams.filter;
 

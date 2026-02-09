@@ -1,6 +1,6 @@
 import PageHeader from "../shared/PageHeader";
 import { Suspense } from "react";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
 import CustomerTable from "./components/CustomerTable";
 
 interface Props {

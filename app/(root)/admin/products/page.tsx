@@ -1,7 +1,7 @@
 import PageHeader from "../shared/PageHeader";
 import ProductTable from "./components/productTable";
 import { Suspense } from "react";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
 
 interface Props {
   searchParams: Promise<{

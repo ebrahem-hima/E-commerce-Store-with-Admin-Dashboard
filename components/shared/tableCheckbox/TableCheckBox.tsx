@@ -4,8 +4,8 @@ import TableBodyCheckbox from "./TableBodyCheckbox";
 import { SelectCheckBox } from "@/types/typeAliases";
 import { typeEditValue } from "@/types/adminType";
 import { tableBodyCheckBoxType } from "@/types/adminTableCheckboxtype";
-import LoadingPage from "../LoadingPage";
 import TableHeadCheckbox from "./TableHeadCheckbox";
+import LoadingPage from "@/components/Loaders/LoadingPage";
 
 export interface Props {
   Edit?: boolean;

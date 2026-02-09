@@ -1,6 +1,6 @@
 import HeaderSaveActions from "../../../shared/HeaderSaveActions";
 import { Suspense } from "react";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
 import CustomerContent from "../../components/CustomerContent";
 
 export default async function Page({

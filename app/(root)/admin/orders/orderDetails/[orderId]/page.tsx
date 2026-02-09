@@ -1,8 +1,8 @@
 "use client";
 
 import HeaderSaveActions from "@/app/(root)/admin/shared/HeaderSaveActions";
-import GetOrderDetails from "@/components/FetchData/getOrderDetails";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import GetOrderDetails from "@/app/FetchData/getOrderDetails";
+import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
 import CustomTable from "@/components/shared/table/customTable";
 import { titleOrderDetails } from "@/constant/table";
 import { useParams } from "next/navigation";

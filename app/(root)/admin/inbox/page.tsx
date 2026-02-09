@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import PageHeader from "../shared/PageHeader";
 import InboxTable from "./InboxTable";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
 
 const Page = async ({
   searchParams,

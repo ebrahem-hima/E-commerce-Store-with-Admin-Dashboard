@@ -1,6 +1,6 @@
 import AdminNavbar from "./AdminNavbar";
 import { redirect } from "next/navigation";
-import { IsAdmin } from "@/components/FetchData/IsAdminFn";
+import { IsAdmin } from "@/app/FetchData/IsAdminFn";
 
 export default async function RootLayout({
   children,

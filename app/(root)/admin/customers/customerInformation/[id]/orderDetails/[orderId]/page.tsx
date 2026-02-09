@@ -1,7 +1,7 @@
 import HeaderSaveActions from "@/app/(root)/admin/shared/HeaderSaveActions";
 import OrderTableFetcher from "../../../../components/OrderTableFetcher";
 import { Suspense } from "react";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
 
 const Page = async ({
   params,

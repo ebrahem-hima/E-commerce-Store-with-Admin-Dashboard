@@ -1,5 +1,5 @@
 import { TopMemberType, TopProductType } from "@/types/adminTabletypes";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/app/utils/supabase/server";
 
 export interface DashboardData {
   order_count: number;

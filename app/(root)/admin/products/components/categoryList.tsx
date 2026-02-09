@@ -1,7 +1,7 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dispatch, SetStateAction } from "react";
 import { Label } from "@/components/ui/label";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { categoryDetailType } from "@/types/adminType";
 

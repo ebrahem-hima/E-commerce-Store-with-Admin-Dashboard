@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
 import CategoryWrapper from "./components/CategoryWrapper";
 
 const Page = () => {
