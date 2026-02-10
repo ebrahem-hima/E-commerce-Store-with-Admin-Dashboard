@@ -25,11 +25,13 @@ const GetProfile = ({ isProfileChange, isAuth }: Props) => {
     newPassword: "",
     confirmPassword: "",
   });
+  const [profileLoading, setProfileLoading] = useState(true);
   useEffect(() => {
     const fetchProfile = async () => {
       const supabase = createClient();
 
       try {
+        setProfileLoading(true);
         const { data: userData, error: userError } =
           await supabase.auth.getUser();
         if (userError) throw userError;
@@ -65,13 +67,16 @@ const GetProfile = ({ isProfileChange, isAuth }: Props) => {
         localStorage.setItem("user_profile", JSON.stringify(profile));
       } catch (err) {
         console.log(err);
+        setProfileLoading(false);
+      } finally {
+        setProfileLoading(false);
       }
     };
 
     fetchProfile();
   }, [isProfileChange.address, isProfileChange.profile, isAuth]);
 
-  return { profileData, setProfileData };
+  return { profileData, setProfileData, profileLoading };
 };
 
 export default GetProfile;

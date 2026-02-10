@@ -18,7 +18,6 @@ import PriceDisplay from "@/components/shared/priceDisplay";
 import { Input } from "@/components/ui/input";
 import { useProductContext } from "@/context/productContext";
 import { handleDeleteProductCart } from "@/lib/userCartFn";
-import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
 
 type typeCount = { count: number; id: string }[];
 
@@ -36,8 +35,7 @@ interface handleCountType {
 
 export function TableCart({ count, setCount, setDisableBtn }: Props) {
   const { push } = useRouter();
-  const { userId, setCartData, cartData, userCartLoading } =
-    useProductContext();
+  const { userId, setCartData, cartData } = useProductContext();
 
   const handleCount = ({ item, e }: handleCountType) => {
     const exist = count.some((countItem) => countItem.id === item.id);
@@ -61,9 +59,7 @@ export function TableCart({ count, setCount, setDisableBtn }: Props) {
 
   return (
     <div>
-      {userCartLoading ? (
-        <LoadingSpinner />
-      ) : cartData.length > 0 ? (
+      {cartData.length > 0 ? (
         <>
           <Table className="w-full">
             <TableHeader>

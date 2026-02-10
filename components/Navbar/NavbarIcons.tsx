@@ -2,7 +2,7 @@ import NavbarSearch from "./NavbarSearch/NavbarSearch";
 import Link from "next/link";
 import { IoIosHeartEmpty } from "react-icons/io";
 import AccountNav from "./AccountNav";
-import ShopCart from "../shared/ShopCart";
+import ShopCart from "../shared/Shop/ShopCart";
 import AdminNav from "./AdminNav";
 import NavbarMobile from "./NavbarMobile";
 import { IsAdmin } from "@/app/FetchData/IsAdminFn";

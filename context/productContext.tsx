@@ -25,13 +25,11 @@ export const ProductProvider = ({
   });
 
   // -------------- Start UserId --------------
-
   const { isAuth, setIsAuth } = AuthFn();
   // -------------- End UserId --------------
 
   // -------------- Start UserOrders --------------
-  const [isUserOrderUpdated, setIsUserOrderUpdated] = useState(false);
-  const { userOrders } = UserOrdersFn(isUserOrderUpdated);
+  const { userOrders } = UserOrdersFn();
 
   // -------------- End UserOrders --------------
 
@@ -43,17 +41,15 @@ export const ProductProvider = ({
   // -------------- End CartShop --------------
 
   // -------------- Start  Fetch User Profile --------------
-
   const [isProfileChange, setIsProfileChange] = useState({
     address: false,
     profile: false,
   });
 
-  const { profileData, setProfileData } = GetProfile({
+  const { profileData, setProfileData, profileLoading } = GetProfile({
     isProfileChange,
     isAuth,
   });
-
   // -------------- End Fetch User Profile --------------
 
   // -------------- Start Coupon --------------
@@ -64,17 +60,15 @@ export const ProductProvider = ({
     isOpen,
     setIsOpen,
     userId: initialUser,
+
     profileData,
     setProfileData,
     isProfileChange,
     setIsProfileChange,
+    profileLoading,
 
     cartData,
     setCartData,
-
-    // to update userOrder instantly
-    isUserOrderUpdated,
-    setIsUserOrderUpdated,
 
     userOrders,
 

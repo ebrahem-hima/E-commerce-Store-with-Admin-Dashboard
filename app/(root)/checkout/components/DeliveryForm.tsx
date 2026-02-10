@@ -8,12 +8,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useProductContext } from "@/context/productContext";
+import { FormSkeleton } from "./FormSkeleton";
 
 const DeliveryForm = () => {
-  const { profileData, setProfileData } = useProductContext();
+  const { profileData, setProfileData, profileLoading } = useProductContext();
 
   const countries = ["Egypt", "Saudi Arabia", "UAE", "Kuwait"];
   const states = ["Cairo", "Alexandria", "Giza", "Aswan"];
+
+  if (profileLoading) return <FormSkeleton />;
   return (
     <div>
       {/* Inputs */}

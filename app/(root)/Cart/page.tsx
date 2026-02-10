@@ -10,11 +10,13 @@ import { updateProduct } from "@/lib/userCartFn";
 import CouponComponent from "@/components/shared/checkoutComponent/couponComponent";
 import TotalComponent from "@/components/shared/checkoutComponent/totalComponent";
 import { TableCart } from "./tableCart";
+import { TableCartSkeleton } from "./TableCartSkeleton";
 
 type typeCount = { count: number; id: string }[];
 const Page = () => {
   const [count, setCount] = useState<typeCount>([]);
-  const { getCoupon, setCartData, userId, cartData } = useProductContext();
+  const { getCoupon, setCartData, userId, cartData, userCartLoading } =
+    useProductContext();
   const [disableBtn, setDisableBtn] = useState(true);
   const { push } = useRouter();
   const someDiscount = getCoupon?.value;
@@ -43,12 +45,16 @@ const Page = () => {
         <CouponComponent />
       </div>
       <div className="overflow-auto min-h-12.5 max-h-screen max-md:order-1">
-        <TableCart
-          count={count}
-          setCount={setCount}
-          setDisableBtn={setDisableBtn}
-          disableBtn={disableBtn}
-        />
+        {userCartLoading ? (
+          <TableCartSkeleton />
+        ) : (
+          <TableCart
+            count={count}
+            setCount={setCount}
+            setDisableBtn={setDisableBtn}
+            disableBtn={disableBtn}
+          />
+        )}
         <div className="flex-between mt-6">
           <Button
             asChild

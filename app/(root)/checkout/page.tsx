@@ -1,16 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import { MouseEvent, useState } from "react";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
-import BankForm from "./BankForm";
-import DeliveryForm from "./DeliveryForm";
+import BankForm from "./checkoutFn/BankForm";
+import DeliveryForm from "./components/DeliveryForm";
 import { toast } from "sonner";
 import { useProductContext } from "@/context/productContext";
 import { useRouter } from "next/navigation";
 import { MESSAGES } from "@/lib/message";
-import PriceDisplay from "@/components/shared/priceDisplay";
 import { handleDeleteAllProductCart } from "@/lib/userCartFn";
 import CouponComponent from "@/components/shared/checkoutComponent/couponComponent";
 import TotalComponent from "@/components/shared/checkoutComponent/totalComponent";
@@ -21,6 +18,8 @@ import {
   incrementCouponUsage,
 } from "./checkoutFn/checkout";
 import createOrder from "./hooks/createOrderFn";
+import CartListContent from "./components/CartListContent";
+import PaymentMethodSelector from "./components/PaymentMethodSelector";
 
 const Page = () => {
   const [checkOut, setCheckOut] = useState<"bank" | "delivery">("delivery");
@@ -31,9 +30,9 @@ const Page = () => {
     cartData,
     getCoupon,
     setGetCoupon,
-    setIsUserOrderUpdated,
     total,
     setCartData,
+    userCartLoading,
   } = useProductContext();
   const { push } = useRouter();
   const [Loading, setLoading] = useState(false);
@@ -77,12 +76,8 @@ const Page = () => {
       await handleDeleteAllProductCart({ cartData, setCartData });
 
       toast.success(MESSAGES.buy.success);
-      setIsUserOrderUpdated((prev) => !prev);
       setGetCoupon(null);
-      // setTimeout(() => {
       push(`/thankyou`);
-      // }, 100);
-      // setLoading(false);
     } catch (error) {
       console.log("error", error);
     } finally {
@@ -100,59 +95,19 @@ const Page = () => {
         </div>
         {/* products */}
         <div className="flex flex-col gap-5 max-md:order-1 text-sm">
-          <ul className="flex flex-col gap-4">
-            {/* Item */}
-            {cartData?.length > 0 &&
-              cartData.map((item) => (
-                <li
-                  key={item.id}
-                  className="grid grid-cols-[40px_1fr_auto_auto] items-center gap-4"
-                >
-                  <Image
-                    src={item.img}
-                    alt={item.name || "Product image"}
-                    width={120}
-                    height={120}
-                    priority
-                  />
-                  <span className="line-clamp-1 break-all">{item.name}</span>
-                  <span>x{item.count}</span>
-                  <span>
-                    <PriceDisplay
-                      price={item.price}
-                      discount={item.discount}
-                      discountType={item.discount_type}
-                    />
-                  </span>
-                </li>
-              ))}
-          </ul>
+          <CartListContent
+            userCartLoading={userCartLoading}
+            cartData={cartData}
+          />
           {/* Total */}
           <TotalComponent someDiscount={someDiscount || 0} />
           {/* Checkbox */}
-          <form>
-            <fieldset className="flex-between">
-              <RadioGroup
-                value={checkOut}
-                onValueChange={(value) =>
-                  setCheckOut(value as "bank" | "delivery")
-                }
-                className="flex flex-col gap-2"
-              >
-                <div className="flex items-center gap-3">
-                  <RadioGroupItem value="bank" id="rBank1" />
-                  <label htmlFor="rBank1">Bank</label>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <RadioGroupItem value="delivery" id="delivery" />
-                  <label htmlFor="delivery">Cash on delivery</label>
-                </div>
-              </RadioGroup>
-            </fieldset>
-          </form>
+          <PaymentMethodSelector
+            checkOut={checkOut}
+            setCheckOut={setCheckOut}
+          />
+          {/* Coupon */}
           <CouponComponent />
-
           <Button
             disabled={Loading}
             onClick={placeOrder}

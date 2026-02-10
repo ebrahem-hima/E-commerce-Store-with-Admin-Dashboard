@@ -8,21 +8,17 @@ export interface ProductContextType {
   setIsOpen: Dispatch<SetStateAction<typeIsOpen>>;
 
   userId: string | null;
-  // setUserId: Dispatch<SetStateAction<User | null>>;
 
   profileData: profileType;
   setProfileData: Dispatch<SetStateAction<profileType>>;
-
   isProfileChange: { address: boolean; profile: boolean };
   setIsProfileChange: Dispatch<
     SetStateAction<{ address: boolean; profile: boolean }>
   >;
+  profileLoading: boolean;
 
   cartData: typeProduct[];
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
-
-  isUserOrderUpdated: boolean;
-  setIsUserOrderUpdated: Dispatch<SetStateAction<boolean>>;
 
   userOrders: TypeUserOrder[];
 

@@ -15,11 +15,7 @@ const UseUserCart = ({ isAuth, userId }: Props) => {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    const mergeUnique = (
-      data: typeProduct[],
-      cartGuest: typeProduct[],
-      // userId: string,
-    ) => {
+    const mergeUnique = (data: typeProduct[], cartGuest: typeProduct[]) => {
       const map = new Map<string, typeProduct>();
 
       [...data, ...cartGuest].forEach((item) => {
@@ -37,13 +33,10 @@ const UseUserCart = ({ isAuth, userId }: Props) => {
     const insetDataIntoDB = async ({
       dataSelect,
       getCartGuest,
-      // userId,
     }: {
       dataSelect: typeProduct[];
       getCartGuest: typeProduct[];
-      // userId: string;
     }) => {
-      // console.log("start insertData");
       const supabase = createClient();
       const collectData = mergeUnique(dataSelect, getCartGuest);
       const getNewData =
@@ -66,12 +59,10 @@ const UseUserCart = ({ isAuth, userId }: Props) => {
       if (error) throw error;
     };
     const handleGuestCart = () => {
-      console.log("start guest");
       const getItems = localStorage.getItem("cart_guest") || "[]";
       setCartData(JSON.parse(getItems));
     };
     const handleUserCart = async () => {
-      console.log("start userCart");
       try {
         const supabase = createClient();
         setUserCartLoading(true);
@@ -101,7 +92,6 @@ const UseUserCart = ({ isAuth, userId }: Props) => {
             }),
           );
           setCartData(changeProduct);
-          console.log("start remove cart_guest");
           localStorage.removeItem("cart_guest");
         }
       } catch (err) {
