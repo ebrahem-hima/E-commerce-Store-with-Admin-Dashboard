@@ -1,5 +1,17 @@
 import { Skeleton } from "../ui/skeleton";
 
+export const ProductCardSkeleton = () => {
+  return (
+    <div>
+      <Skeleton className="w-full h-40 bg-gray-300 rounded animate-pulse" />
+      <div className={`flex flex-col gap-2 mt-5 w-full`}>
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-1/2" />
+      </div>
+    </div>
+  );
+};
+
 export const SliderSkeleton = () => {
   return (
     <div className="w-full">
@@ -13,13 +25,7 @@ export const SliderSkeleton = () => {
       </div>
       <div className="productGrid overflow-hidden">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i}>
-            <Skeleton className="w-full h-40 bg-gray-300 rounded animate-pulse" />
-            <div className={`flex flex-col gap-2 mt-5 w-full`}>
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-1/2" />
-            </div>
-          </div>
+          <ProductCardSkeleton key={i} />
         ))}
       </div>
     </div>

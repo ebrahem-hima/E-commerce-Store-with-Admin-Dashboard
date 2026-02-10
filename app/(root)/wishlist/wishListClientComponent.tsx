@@ -11,13 +11,14 @@ import { useState } from "react";
 const WishListClientComponent = ({ data }: { data: typeProduct[] }) => {
   const { setCartData, cartData } = useProductContext();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const productsWishList = data.map(({ id, ...rest }) => ({
-    ...rest,
-    id: rest.product_id || "",
-  }));
+  const [wishList, setWishList] = useState(() =>
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    data.map(({ id, ...rest }) => ({
+      ...rest,
+      id: rest.product_id || "",
+    })),
+  );
 
-  const [wishList, setWishList] = useState(productsWishList);
   return (
     <>
       <div className="flex-between my-4">
@@ -25,7 +26,7 @@ const WishListClientComponent = ({ data }: { data: typeProduct[] }) => {
         <Button
           variant={"white"}
           size={"default"}
-          disabled={wishList.length > 0}
+          disabled={wishList.length === 0}
           onClick={() =>
             moveAllToBag({
               wishList,
