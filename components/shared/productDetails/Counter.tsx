@@ -1,45 +1,23 @@
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import "../Card/Card.css";
-import { HiOutlineHeart } from "react-icons/hi2";
-import { HiMiniHeart } from "react-icons/hi2";
 import { handleAddToCart } from "@/lib/userCartFn";
-import {
-  addWishList,
-  handleDeleteItemWishList,
-  isInWishList,
-} from "@/lib/userWishlistFn";
 import { toast } from "sonner";
 import { optionType, typeProduct } from "../../../types/productTypes";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
-import { useEffect, useState } from "react";
-import { MESSAGES } from "@/lib/message";
+import { useState } from "react";
+import { useProductContext } from "@/context/productContext";
+import HeartWishListButton from "../Card/ProductCard/HeartWishListButton";
 
 interface Props {
-  setCount: React.Dispatch<React.SetStateAction<number>>;
-  count: number;
   item: typeProduct;
-  userId?: string;
-  cartData: typeProduct[];
-  setCartData: React.Dispatch<React.SetStateAction<typeProduct[]>>;
   getOptions: optionType[];
 }
 
-const Counter = ({
-  setCount,
-  count,
-  item,
-  userId,
-  cartData,
-  setCartData,
-  getOptions,
-}: Props) => {
+const Counter = ({ item, getOptions }: Props) => {
   const { active, stock } = item;
-
-  const [heart, setHeart] = useState(false);
-  useEffect(() => {
-    isInWishList({ item, setHeart });
-  }, [item]);
+  const { userId, cartData, setCartData } = useProductContext();
+  const [count, setCount] = useState(1);
 
   const handleMaxCount = () => {
     setCount((c) => {
@@ -54,30 +32,11 @@ const Counter = ({
       return c + 1;
     });
   };
-  const [isExist, setIsExist] = useState(false);
-  console.log("cartData", cartData);
 
-  useEffect(() => {
-    const exist = cartData.some(
-      (cartItem: typeProduct) => cartItem.id === item.id,
-    );
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsExist(exist);
-  }, [cartData, item.id]);
+  const isExist = cartData.some(
+    (cartItem: typeProduct) => cartItem.id === item.id,
+  );
 
-  const toggleWishlist = async () => {
-    if (!userId) return toast.info(MESSAGES.wishlist.loginRequired);
-    if (!heart) {
-      await addWishList({
-        item,
-        userId: userId || "",
-      });
-      setHeart(true);
-    } else {
-      await handleDeleteItemWishList(item.id, item.name);
-      setHeart(false);
-    }
-  };
   return (
     <div className="flex items-center gap-2">
       <div className="flex items-center w-fit rounded-sm">
@@ -137,25 +96,7 @@ const Counter = ({
           </div>
         )}
       </Button>
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          toggleWishlist();
-        }}
-      >
-        {heart ? (
-          <HiMiniHeart
-            size={33}
-            className="text-primary cursor-pointer border border-[#777] rounded-sm p-1"
-          />
-        ) : (
-          <HiOutlineHeart
-            size={33}
-            className="cursor-pointer border border-[#777] rounded-sm p-1"
-          />
-        )}
-      </button>
+      <HeartWishListButton isProductSlider={false} item={item} />
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction } from "react";
 interface Props {
   data: typeProduct[];
   setData: Dispatch<SetStateAction<typeProduct[]>>;
-  isGrid: boolean;
+  isGrid?: boolean;
 }
 
 const Products = ({ data, setData, isGrid }: Props) => {

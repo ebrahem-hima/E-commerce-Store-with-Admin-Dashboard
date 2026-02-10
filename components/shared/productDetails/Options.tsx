@@ -19,7 +19,7 @@ const Options = ({ options, getOptions, setGetOptions }: Props) => {
           return prev.filter((item) => item.optionTitle !== optionTitle);
         }
         return prev.map((item) =>
-          item.optionTitle === optionTitle ? { ...item, values } : item
+          item.optionTitle === optionTitle ? { ...item, values } : item,
         );
       } else {
         return [...prev, { optionTitle, values: [value] }];
@@ -39,7 +39,7 @@ const Options = ({ options, getOptions, setGetOptions }: Props) => {
                 key={idx}
                 className={`${
                   getOptions.some((item) => item.values?.[0] === value)
-                    ? "bg-primary text-white !border-primary"
+                    ? "bg-primary text-white border-primary!"
                     : ""
                 } cursor-pointer duration-200 py-0.5 px-3 border border-gray-400 hover:border-primary hover:text-white hover:bg-primary rounded-sm active:bg-primary active:border-primary active:text-white`}
                 onClick={() => addOptions(value, option.optionTitle)}

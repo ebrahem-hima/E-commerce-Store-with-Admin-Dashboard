@@ -1,33 +1,13 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { optionType, typeProduct } from "../../../types/productTypes";
 import { Star } from "lucide-react";
 
-import { useProductContext } from "../../../context/productContext";
 import "../Card/Card.css";
-import { usePathname, useRouter } from "next/navigation";
-// import { isInWishList } from "@/lib/userWishlistFn";
 import { iconsDescription } from "../../../constant/index";
-import Counter from "./Counter";
-import Options from "./Options";
 import PriceDisplay from "../priceDisplay";
-
-// type optionsType = { optionTitle: string; values: string[] };
+import CounterWithOptions from "./CounterWithOptions";
+import { typeProduct } from "@/types/productTypes";
 
 const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
-  const { name, description, options, rate, active } = item;
-  const [count, setCount] = useState(1);
-  const [getOptions, setGetOptions] = useState<optionType[]>([]);
-  const { replace } = useRouter();
-  const pathName = usePathname();
-  const { userId, cartData, setCartData } = useProductContext();
-
-  useEffect(() => {
-    const getURl = getOptions.map(
-      ({ optionTitle, values }) => `${optionTitle + "=" + values}`,
-    );
-    replace(`?${getURl}`, { scroll: false });
-  }, [getOptions, pathName, replace]);
+  const { name, description, rate, active } = item;
 
   return (
     <div className="flex flex-col gap-4">
@@ -63,23 +43,8 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
       {/* description */}
       <div className="font-poppins font-normal text-sm">{description}</div>
       <div className="w-full h-px bg-[#777] rounded-sm" />
-      {/* Options */}
-      <Options
-        options={options || []}
-        getOptions={getOptions}
-        setGetOptions={setGetOptions}
-      />
-      {/* Counter + buy + wishlist */}
-      <Counter
-        setCount={setCount}
-        count={count}
-        item={item}
-        userId={userId || ""}
-        cartData={cartData}
-        setCartData={setCartData}
-        getOptions={getOptions}
-      />
-
+      {/* Options + Counter + buy + wishlist */}
+      <CounterWithOptions item={item} />
       {/* Free delivery */}
       <div className="border border-[rgba(0, 0, 0, 0.5)] rounded-sm">
         {iconsDescription.map((icons) => (

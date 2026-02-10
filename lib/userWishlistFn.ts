@@ -33,15 +33,17 @@ interface addWishListType {
   e?: MouseEvent<SVGElement>;
   item: typeProduct;
   userId: string;
+  setHeart?: Dispatch<SetStateAction<boolean>>;
 }
 
 export const addWishList = withLock(
-  async ({ e, item, userId }: addWishListType) => {
+  async ({ e, item, userId, setHeart }: addWishListType) => {
     e?.stopPropagation();
     e?.preventDefault();
-    const exist = await isProductWishList(item.id);
+    const exist = await isProductWishList({ productId: item.id });
     if (exist) {
       await handleDeleteItemWishList(item.id, item.name);
+      setHeart?.(false);
       return;
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -56,11 +58,19 @@ export const addWishList = withLock(
       console.log("error", error);
       return;
     }
+    setHeart?.(true);
     toast.success(MESSAGES.wishlist.added(item.name));
   },
 );
+interface isInWishListType {
+  productId: string;
+  setHeart?: Dispatch<SetStateAction<boolean>>;
+}
 
-export const isProductWishList = async (productId: string) => {
+export const isProductWishList = async ({
+  productId,
+  setHeart,
+}: isInWishListType) => {
   if (!productId) return;
   try {
     const { data, error } = await supabase
@@ -75,23 +85,9 @@ export const isProductWishList = async (productId: string) => {
       console.log(error);
       return false;
     }
+    setHeart?.(exists);
     return exists;
   } catch (error) {
     console.log("error", error);
   }
-};
-
-interface isInWishListType {
-  item: typeProduct;
-  setHeart: Dispatch<SetStateAction<boolean>>;
-}
-
-export const isInWishList = async ({ item, setHeart }: isInWishListType) => {
-  const { data: exist } = await supabase
-    .from("user_wishlist")
-    .select()
-    .eq("product_id", item.id)
-    .maybeSingle();
-
-  setHeart(!!exist);
 };
