@@ -1,26 +1,17 @@
 import { Dispatch, SetStateAction } from "react";
-import { typeIsOpen, typeProduct, TypeUserOrder } from "./productTypes";
+import { typeProduct } from "./productTypes";
 import { profileType } from "./profileFnTypes";
 import { typeGetCoupon } from "./typeAliases";
 
 export interface ProductContextType {
-  isOpen: typeIsOpen;
-  setIsOpen: Dispatch<SetStateAction<typeIsOpen>>;
-
   userId: string | null;
 
   profileData: profileType;
   setProfileData: Dispatch<SetStateAction<profileType>>;
-  isProfileChange: { address: boolean; profile: boolean };
-  setIsProfileChange: Dispatch<
-    SetStateAction<{ address: boolean; profile: boolean }>
-  >;
   profileLoading: boolean;
 
   cartData: typeProduct[];
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
-
-  userOrders: TypeUserOrder[];
 
   getCoupon: typeGetCoupon | null;
   setGetCoupon: Dispatch<SetStateAction<typeGetCoupon | null>>;

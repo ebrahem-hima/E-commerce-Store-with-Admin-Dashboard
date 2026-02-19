@@ -3,14 +3,11 @@ import { profileType } from "../../types/profileFnTypes";
 import { createClient } from "@/app/utils/supabase/client";
 
 interface Props {
-  isProfileChange: {
-    address: boolean;
-    profile: boolean;
-  };
   isAuth: boolean;
+  userId: string;
 }
 
-const GetProfile = ({ isProfileChange, isAuth }: Props) => {
+const GetProfile = ({ userId, isAuth }: Props) => {
   const [profileData, setProfileData] = useState<profileType>({
     id: "",
     firstName: "",
@@ -21,60 +18,48 @@ const GetProfile = ({ isProfileChange, isAuth }: Props) => {
     address2: "",
     country: "",
     state: "",
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
   });
   const [profileLoading, setProfileLoading] = useState(true);
   useEffect(() => {
     const fetchProfile = async () => {
+      if (!userId) {
+        setProfileLoading(false);
+        return;
+      }
       const supabase = createClient();
 
       try {
         setProfileLoading(true);
-        const { data: userData, error: userError } =
-          await supabase.auth.getUser();
-        if (userError) throw userError;
-
         const { data: accountData, error: accountError } = await supabase
           .from("user_profile")
           .select()
-          .eq("id", userData.user.id);
+          .eq("id", userId)
+          .maybeSingle();
         if (accountError) throw accountError;
 
-        const account = accountData?.[0] || {};
-
-        // const { data: userData, error: userError } =
-        //   await supabase.auth.getUser();
-        // if (userError) throw userError;
-
-        const email = userData?.user?.email || "";
-
         const profile = {
-          id: account.id || "",
-          firstName: account.first_name || "",
-          lastName: account.last_name || "",
-          phone: account.phone || "",
-          address1: account.address1 || "",
-          address2: account.address2 || "",
-          state: account.state || "",
-          country: account.country || "",
-          email,
+          id: accountData.id || "",
+          firstName: accountData.first_name || "",
+          lastName: accountData.last_name || "",
+          phone: accountData.phone || "",
+          address1: accountData.address1 || "",
+          address2: accountData.address2 || "",
+          state: accountData.state || "",
+          country: accountData.country || "",
+          email: accountData.email || "",
         };
 
         setProfileData(profile);
-
-        localStorage.setItem("user_profile", JSON.stringify(profile));
       } catch (err) {
         console.log(err);
-        setProfileLoading(false);
+        return;
       } finally {
         setProfileLoading(false);
       }
     };
 
     fetchProfile();
-  }, [isProfileChange.address, isProfileChange.profile, isAuth]);
+  }, [userId, isAuth]);
 
   return { profileData, setProfileData, profileLoading };
 };

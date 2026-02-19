@@ -38,13 +38,13 @@ export const updateEmail = async ({
   isEmailChange,
   setChangeInput,
   userEmail,
+  setProfileData,
 }: updateEmailType) => {
   const { error: authError } = await supabase.auth.updateUser({
     email: userEmail,
   });
   if (authError) {
     console.error(authError.message);
-    console.log("securityemail");
     toast.error(authError.message || "Failed to update Email");
     return false;
   }
@@ -65,6 +65,10 @@ export const updateEmail = async ({
       </a>
     </div>,
   );
+  setProfileData((prev) => ({
+    ...prev,
+    email: userEmail,
+  }));
   setChangeInput(true);
   return true;
 };
@@ -112,8 +116,9 @@ export const updateProfile = async ({
   profileData,
   userId,
   setChangeInput,
+  setProfileData,
 }: updateProfileType) => {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("user_profile")
     .update({
       phone: profileData.phone,
@@ -121,31 +126,39 @@ export const updateProfile = async ({
       last_name: profileData.lastName,
     })
     .eq("id", userId)
-    .select();
+    .select()
+    .maybeSingle();
   if (error) {
     console.error(error);
     console.log("securityProfile");
     toast.error(error.message || "Something went wrong");
     return false;
   }
+  console.log("data", data);
+  setProfileData((prev) => ({
+    ...prev,
+    firstName: data.first_name,
+    lastName: data.last_name,
+    phone: data.phone,
+  }));
   setChangeInput(true);
   return true;
 };
 
 export const updateAddress = async ({
   e,
-  profileData,
-  originalAddress,
+  oldAddress,
+  newAddress,
   userId,
-  setIsProfileChange,
+  setProfileData,
   setChangeInput,
 }: updateAddressType) => {
   e.preventDefault();
   const checkField = ["address1", "address2", "country", "state"];
   const hasChanges = checkField.some(
     (key) =>
-      profileData[key as keyof AddressType] !==
-      originalAddress.current?.[key as keyof AddressType],
+      oldAddress[key as keyof AddressType] !==
+      newAddress[key as keyof AddressType],
   );
   if (!hasChanges) {
     toast.info(MESSAGES.account.noChanges);
@@ -153,8 +166,8 @@ export const updateAddress = async ({
   }
   try {
     const result = addressSchema.safeParse({
-      address1: profileData.address1,
-      address2: profileData.address2,
+      address1: newAddress.address1,
+      address2: newAddress.address2,
     });
     if (!result.success) {
       console.log(result.error.issues);
@@ -165,24 +178,31 @@ export const updateAddress = async ({
     console.log(error);
   }
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("user_profile")
     .update({
-      address1: profileData.address1,
-      address2: profileData.address2,
-      country: profileData.country,
-      state: profileData.state,
+      address1: newAddress.address1,
+      address2: newAddress.address2,
+      country: newAddress.country,
+      state: newAddress.state,
     })
-    .eq("id", userId);
+    .eq("id", userId)
+    .select()
+    .maybeSingle();
+
+  setProfileData((prev) => ({
+    ...prev,
+    address1: data.address1,
+    address2: data.address2,
+    country: data.country,
+    state: data.state,
+  }));
+  //
   if (error) {
     console.log("error", error);
     toast.error(error.message);
     return;
   }
-  setIsProfileChange((prev) => ({
-    ...prev,
-    address: !prev.address,
-  }));
   toast.success(MESSAGES.account.update);
   setChangeInput(true);
 };

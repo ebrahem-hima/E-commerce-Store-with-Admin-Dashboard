@@ -41,11 +41,6 @@ export interface OrderDetailsType {
   }[];
 }
 
-// check if searchNavbar or filter open
-export interface typeIsOpen {
-  filter: boolean;
-  searchNavbar: boolean;
-}
 export interface productCategory {
   name: string;
   id: string;

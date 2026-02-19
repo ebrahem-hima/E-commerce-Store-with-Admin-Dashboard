@@ -3,10 +3,6 @@ import { tableType } from "../../../types/tabletypes";
 import TableBodyData from "./TableBodyData";
 
 const CustomTable = ({ dataBody, titles, role, empty_table }: tableType) => {
-  if (!dataBody)
-    return (
-      <p className="text-gray-500 text-sm mt-2">There is not Data to display</p>
-    );
   return (
     <>
       {dataBody.length > 0 ? (

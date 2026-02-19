@@ -27,7 +27,7 @@ const AccountLinks = () => {
           >
             Address Book
           </Link>
-          <Link
+          {/* <Link
             href={`/account/messages`}
             className={`${
               pathName === "/account/messages" ? "text-primary" : "text-[#999]"
@@ -35,7 +35,7 @@ const AccountLinks = () => {
               cursor-pointer duration-200 text-[13px] hover:text-primary active:text-primary font-poppins w-fit max-md:mx-auto`}
           >
             Messages
-          </Link>
+          </Link> */}
         </div>
       </div>
       <div className="flex flex-col gap-1">

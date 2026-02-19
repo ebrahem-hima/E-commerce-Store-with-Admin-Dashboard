@@ -1,54 +1,33 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { updateAddress } from "@/lib/utilsProfile";
-import { AddressType } from "@/types/profileFnTypes";
 import { useProductContext } from "@/context/productContext";
-import { createClient } from "@/app/utils/supabase/client";
+import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
+import { AddressType } from "@/types/profileFnTypes";
 
 const Page = () => {
-  const {
-    profileData,
-    setProfileData,
-    userId,
-    isProfileChange,
-    setIsProfileChange,
-  } = useProductContext();
+  const { profileData, setProfileData, userId, profileLoading } =
+    useProductContext();
 
-  const originalAddress = useRef<AddressType | null>(null);
+  const [address, setAddress] = useState<AddressType>(profileData);
 
   const countries = ["Egypt", "Saudi Arabia", "UAE", "Kuwait"];
   const states = ["Cairo", "Alexandria", "Giza", "Aswan"];
   const [changeInput, setChangeInput] = useState(true);
   const { push } = useRouter();
+
   useEffect(() => {
-    const supabase = createClient();
+    setAddress(profileData);
+  }, [profileData]);
 
-    const getAddress = async () => {
-      const { data, error } = await supabase
-        .from("user_profile")
-        .select()
-        .eq("id", userId)
-        .single();
-      if (error) {
-        console.log("error", error);
-        return false;
-      }
-      originalAddress.current = {
-        address1: data.address1,
-        address2: data.address2,
-        state: data.state,
-        country: data.country,
-      };
-    };
-    getAddress();
-  }, [isProfileChange, userId]);
+  if (!userId) push(`/log-in`);
 
-  if (!userId) return false;
+  if (profileLoading) return <LoadingSpinner />;
   return (
     <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {/* Address 1 */}
@@ -60,9 +39,9 @@ const Page = () => {
           id="address1"
           type="text"
           name="address1"
-          value={profileData.address1}
+          value={address.address1}
           onChange={(e) => {
-            setProfileData({ ...profileData, [e.target.name]: e.target.value });
+            setAddress({ ...address, [e.target.name]: e.target.value });
             setChangeInput(false);
           }}
           placeholder="Address"
@@ -79,9 +58,9 @@ const Page = () => {
           id="address2"
           type="text"
           name="address2"
-          value={profileData.address2}
+          value={address.address2}
           onChange={(e) => {
-            setProfileData({ ...profileData, [e.target.name]: e.target.value });
+            setAddress({ ...address, [e.target.name]: e.target.value });
             setChangeInput(false);
           }}
           placeholder="Address 2"
@@ -97,9 +76,9 @@ const Page = () => {
         <select
           id="country"
           name="country"
-          value={profileData.country}
+          value={address.country}
           onChange={(e) => {
-            setProfileData({ ...profileData, [e.target.name]: e.target.value });
+            setAddress({ ...address, [e.target.name]: e.target.value });
             setChangeInput(false);
           }}
           className="border px-3 py-1 rounded"
@@ -121,9 +100,9 @@ const Page = () => {
         <select
           id="state"
           name="state"
-          value={profileData.state}
+          value={address.state}
           onChange={(e) => {
-            setProfileData({ ...profileData, [e.target.name]: e.target.value });
+            setAddress({ ...address, [e.target.name]: e.target.value });
             setChangeInput(false);
           }}
           className="border px-3 py-1 rounded"
@@ -150,11 +129,11 @@ const Page = () => {
           onClick={(e) =>
             updateAddress({
               e,
-              profileData,
-              originalAddress,
-              userId,
-              setIsProfileChange,
+              oldAddress: profileData,
+              newAddress: address,
+              userId: userId || "",
               setChangeInput,
+              setProfileData,
             })
           }
           disabled={changeInput}

@@ -11,13 +11,10 @@ export interface profileType {
   address2: string;
   country: string;
   state: string;
-  currentPassword?: string;
-  newPassword?: string;
-  confirmPassword?: string;
 }
 
 export interface profileAndDisabled {
-  profileData: profileType;
+  profileData: myProfileType;
   setChangeInput: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -38,6 +35,7 @@ export interface updateEmailType {
   isEmailChange: boolean;
   setChangeInput: Dispatch<SetStateAction<boolean>>;
   userEmail: string;
+  setProfileData: Dispatch<SetStateAction<profileType>>;
 }
 
 export interface PasswordType {
@@ -54,6 +52,7 @@ export interface updatePasswordType {
 
 export interface updateProfileType extends profileAndDisabled {
   userId: string;
+  setProfileData: Dispatch<SetStateAction<profileType>>;
 }
 // End Profile Page
 
@@ -67,11 +66,9 @@ export interface AddressType {
 
 export interface updateAddressType {
   e: MouseEvent<HTMLButtonElement>;
-  profileData: AddressType;
-  originalAddress: React.MutableRefObject<AddressType | null>;
+  oldAddress: AddressType;
+  newAddress: AddressType;
   userId: string;
-  setIsProfileChange: Dispatch<
-    SetStateAction<{ address: boolean; profile: boolean }>
-  >;
+  setProfileData: Dispatch<SetStateAction<profileType>>;
   setChangeInput: Dispatch<SetStateAction<boolean>>;
 }

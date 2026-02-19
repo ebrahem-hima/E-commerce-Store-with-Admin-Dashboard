@@ -1,11 +1,9 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
-import { typeIsOpen } from "../types/productTypes";
 import { typeGetCoupon } from "../types/typeAliases";
 import useUserCart from "../app/FetchData/useUserCart";
 import AuthFn from "@/app/FetchData/authFn";
-import UserOrdersFn from "../app/FetchData/userOrdersFn";
 import GetProfile from "../app/FetchData/getProfile";
 import { ProductContextType } from "../types/contextType";
 
@@ -19,19 +17,9 @@ export const ProductProvider = ({
   initialUser: string | null;
   children: ReactNode;
 }) => {
-  const [isOpen, setIsOpen] = useState<typeIsOpen>({
-    filter: false,
-    searchNavbar: false,
-  });
-
-  // -------------- Start UserId --------------
+  // -------------- Start Auth --------------
   const { isAuth, setIsAuth } = AuthFn();
-  // -------------- End UserId --------------
-
-  // -------------- Start UserOrders --------------
-  const { userOrders } = UserOrdersFn();
-
-  // -------------- End UserOrders --------------
+  // -------------- End Auth --------------
 
   // -------------- Start CartShop --------------
   const { cartData, setCartData, total, userCartLoading } = useUserCart({
@@ -41,14 +29,9 @@ export const ProductProvider = ({
   // -------------- End CartShop --------------
 
   // -------------- Start  Fetch User Profile --------------
-  const [isProfileChange, setIsProfileChange] = useState({
-    address: false,
-    profile: false,
-  });
-
   const { profileData, setProfileData, profileLoading } = GetProfile({
-    isProfileChange,
     isAuth,
+    userId: initialUser || "",
   });
   // -------------- End Fetch User Profile --------------
 
@@ -57,20 +40,15 @@ export const ProductProvider = ({
   // -------------- End Coupon --------------
 
   const values = {
-    isOpen,
-    setIsOpen,
     userId: initialUser,
 
     profileData,
     setProfileData,
-    isProfileChange,
-    setIsProfileChange,
+
     profileLoading,
 
     cartData,
     setCartData,
-
-    userOrders,
 
     getCoupon,
     setGetCoupon,
