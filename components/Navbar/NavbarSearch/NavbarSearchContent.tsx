@@ -3,28 +3,24 @@ import PriceDisplay from "@/components/shared/priceDisplay";
 import { typeProduct } from "@/types/productTypes";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 interface Props {
-  divRef: React.RefObject<HTMLDivElement | null>;
   isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   Loading: boolean;
   productSearch: typeProduct[];
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const NavbarSearchContent = ({
-  setIsOpen,
-  divRef,
-  isOpen,
   Loading,
   productSearch,
+  setIsOpen,
+  isOpen,
 }: Props) => {
   return (
     <div
-      ref={divRef}
       className={`${
-        isOpen ? "hidden" : ""
+        isOpen ? "" : "hidden"
       } absolute flex flex-col gap-2 top-9 w-full rounded-md bg-white p-2 z-20`}
     >
       {Loading ? (
@@ -37,9 +33,7 @@ const NavbarSearchContent = ({
             href={`/productDetails/${item.id}`}
             key={item.id}
             className="grid grid-cols-[110px_1fr] gap-3 cursor-pointer hover:bg-[#9999992c] rounded-md items-center"
-            onClick={() => {
-              setIsOpen(false);
-            }}
+            onClick={() => setIsOpen(false)}
           >
             <div className="relative w-full h-15">
               <Image

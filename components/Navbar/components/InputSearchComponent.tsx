@@ -2,28 +2,26 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React, { Dispatch, FormEvent, RefObject, SetStateAction } from "react";
+import { FormEvent, RefObject } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 
 interface InputSearchComponentProps {
   setInputValue: (value: string) => void;
   inputRef: RefObject<HTMLInputElement | null>;
-  setIsOpen?: Dispatch<SetStateAction<boolean>>;
   handleSubmitSearch: (e: FormEvent) => void;
+  setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const InputSearchComponent = ({
   setInputValue,
   inputRef,
-  setIsOpen,
   handleSubmitSearch,
+  setIsOpen,
 }: InputSearchComponentProps) => {
   return (
     <form
       className="relative w-full flex items-center"
       onSubmit={handleSubmitSearch}
-      onBlur={() => setIsOpen?.(true)}
-      onFocus={() => setIsOpen?.(false)}
     >
       <Input
         ref={inputRef}
@@ -31,8 +29,9 @@ const InputSearchComponent = ({
         placeholder="What are you looking for ?"
         onChange={(e) => {
           setInputValue(e.target.value);
-          setIsOpen?.(false);
+          setIsOpen?.(true);
         }}
+        onMouseEnter={() => setIsOpen?.(true)}
       />
       <Button
         size="sm"

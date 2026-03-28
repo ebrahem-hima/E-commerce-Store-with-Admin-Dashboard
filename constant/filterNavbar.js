@@ -6,6 +6,7 @@ import { BsSmartwatch } from "react-icons/bs";
 import { CiCamera } from "react-icons/ci";
 import { PiHeadphonesLight } from "react-icons/pi";
 import { VscGame } from "react-icons/vsc";
+import { MdPhotoSizeSelectLarge } from "react-icons/md";
 
 export const filter = [
   { text: "Gaming Mice", value: "gaming-mice" },
@@ -30,6 +31,11 @@ export const navbar = [
 ];
 export const adminNavbar = [
   { icon: CiPhone, text: "Dashboard", link: "/admin/dashboard" },
+  {
+    icon: MdPhotoSizeSelectLarge,
+    text: "Hero banners",
+    link: "/admin/hero-banners",
+  },
   { icon: MdOutlineMail, text: "Orders", link: "/admin/orders" },
   { icon: GiSmartphone, text: "Products", link: "/admin/products" },
   { icon: HiOutlineComputerDesktop, text: "Category", link: "/admin/category" },

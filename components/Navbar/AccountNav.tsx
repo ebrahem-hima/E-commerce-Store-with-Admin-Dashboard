@@ -41,9 +41,7 @@ const AccountNav = () => {
             <DropdownMenuItem
               onClick={() => {
                 setCartData([]);
-                localStorage.removeItem("user_cart");
                 localStorage.removeItem("cart_guest");
-                localStorage.removeItem("user_profile");
                 setIsAuth(false);
                 logout();
               }}

@@ -2,7 +2,6 @@
 
 import { FormEvent, useRef, useState } from "react";
 import { IoMenu } from "react-icons/io5";
-import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -32,9 +31,7 @@ export function NavbarMobile() {
   return (
     <Sheet>
       <SheetTrigger asChild className="hidden max-lg:block">
-        <Button className="px-0" variant="outline">
-          <IoMenu />
-        </Button>
+        <IoMenu size={26} className="cursor-pointer" />
       </SheetTrigger>
       <SheetContent className="flex flex-col gap-3">
         <SheetHeader className="flex items-center justify-between mt-3">
