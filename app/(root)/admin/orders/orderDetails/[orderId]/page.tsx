@@ -1,16 +1,11 @@
-"use client";
-
 import HeaderSaveActions from "@/app/(root)/admin/shared/HeaderSaveActions";
-import GetOrderDetails from "@/app/FetchData/getOrderDetails";
-import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
-import CustomTable from "@/components/shared/table/customTable";
-import { titleOrderDetails } from "@/constant/table";
-import { useParams } from "next/navigation";
+import { Suspense } from "react";
+import OrderDetails from "../../components/orderDetails";
+import OrderDetailsTableSkeleton from "@/app/(root)/account/orders/components/OrderDetailsTableSkeleton";
+import OrderAddress from "../../components/OrderAddress";
 
-const Page = () => {
-  const params = useParams<{ orderId: string }>();
-  const { orderId } = params;
-  const { Loading, products } = GetOrderDetails(orderId);
+const Page = async ({ params }: { params: Promise<{ orderId: string }> }) => {
+  const { orderId } = await params;
 
   return (
     <div>
@@ -19,20 +14,10 @@ const Page = () => {
         link={`/admin/orders`}
         hideSave={true}
       />
-      {Loading ? (
-        <LoadingSpinner />
-      ) : products.length > 0 ? (
-        <CustomTable
-          empty_table="There are no order details to display."
-          role="admin"
-          dataBody={products}
-          titles={titleOrderDetails}
-        />
-      ) : (
-        <div className="flex flex-col items-center justify-center py-20">
-          <div className="text-gray-500 text-lg mb-4">There is No Products</div>
-        </div>
-      )}
+      <Suspense fallback={<OrderDetailsTableSkeleton />}>
+        <OrderDetails orderId={orderId} />
+        <OrderAddress orderId={orderId} />
+      </Suspense>
     </div>
   );
 };

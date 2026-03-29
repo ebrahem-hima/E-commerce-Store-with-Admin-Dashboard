@@ -30,7 +30,7 @@ function isOrderCustomer(value: tableBodyType): value is TypeUserOrder[] {
 function isOrderDetails(
   value: tableBodyType,
 ): value is typeOrderDetailsTable[] {
-  return value[0].type === "orderDetails";
+  return value[0].type === "order_details";
 }
 
 const TableBodyData = ({ dataBody, role = "user" }: Prop) => {

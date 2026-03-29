@@ -1,7 +1,7 @@
 import { OrderDetailsType } from "@/types/productTypes";
 import { createClient } from "@/app/utils/supabase/server";
 
-export async function getOrderDetails(orderId: string) {
+const fetchOrderDetails = async (orderId: string) => {
   const supabase = await createClient();
 
   try {
@@ -9,10 +9,12 @@ export async function getOrderDetails(orderId: string) {
       .from("user_order")
       .select("id")
       .eq("order_code", orderId)
-      .maybeSingle();
+      .single();
 
-    if (orderError) throw orderError;
-    if (!orderData) return { products: [] };
+    if (orderError || !orderData) {
+      console.error(orderError);
+      return [];
+    }
 
     const { data, error } = await supabase
       .from("order_details")
@@ -31,17 +33,19 @@ export async function getOrderDetails(orderId: string) {
       )
       .eq("order_id", orderData.id);
 
-    if (error) throw error;
+    if (error) {
+      console.error(error);
+      return [];
+    }
 
-    const products: OrderDetailsType[] =
-      data?.map((item) => ({
-        ...item,
-        type: "order_details",
-      })) || [];
-
-    return { products };
-  } catch (error) {
-    console.error("Error fetching order details:", error);
-    return { products: [] };
+    return (data?.map((item) => ({
+      ...item,
+      type: "order_details",
+    })) || []) as OrderDetailsType[];
+  } catch (err) {
+    console.error(err);
+    return [];
   }
-}
+};
+
+export default fetchOrderDetails;
