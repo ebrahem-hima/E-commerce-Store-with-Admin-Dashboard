@@ -170,10 +170,10 @@ const BannerUploadForm = ({
             {isEdit && (
               <Image
                 src={editingBanner?.image_url || ""}
-                alt={"image"}
-                width={350}
+                alt={"hero-image"}
+                width={500}
                 height={150}
-                className="rounded-md"
+                className="object-contain rounded-md w-auto h-auto"
                 priority
               />
             )}

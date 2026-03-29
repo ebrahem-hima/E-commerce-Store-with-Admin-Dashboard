@@ -103,13 +103,15 @@ const GetProductLink = ({ setSelectedProduct, selectedProduct }: Props) => {
                           )}
                         />
                         <div className="flex items-center gap-2">
-                          <Image
-                            src={product.img}
-                            alt={product.name}
-                            width={50}
-                            height={50}
-                            className="rounded object-cover"
-                          />
+                          <div className="relative w-15 h-10">
+                            <Image
+                              src={product.img}
+                              alt={product.name}
+                              fill
+                              sizes="(max-width: 768px) 15vw, 60px"
+                              className="rounded object-contain"
+                            />
+                          </div>
                           <span>{product.name}</span>
                         </div>
                       </CommandItem>

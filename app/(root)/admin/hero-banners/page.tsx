@@ -37,7 +37,6 @@ const Page = () => {
       .order("created_at", { ascending: false });
 
     if (!error && data) {
-      console.log("data", data);
       setBanners(data);
     }
     setLoading(false);

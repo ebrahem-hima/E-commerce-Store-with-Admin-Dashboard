@@ -19,7 +19,7 @@ const BannerCard = ({ banner, onDelete, handleEdit }: Props) => {
           src={banner.image_url}
           alt="Hero Banner"
           fill
-          className="object-cover"
+          className="object-contain"
           priority
         />
       </div>
