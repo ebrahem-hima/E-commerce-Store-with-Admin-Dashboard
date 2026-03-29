@@ -1,9 +1,9 @@
-import TableSearch from "../shared/TableSearch";
 import {
   orderSortOptions,
   orderTableColumns,
 } from "@/constant/admin/admin-tables/order_table";
-import { getOrders } from "./orderService";
+import { getOrders } from "../orderService";
+import TableSearch from "../../shared/TableSearch";
 
 const OrderTable = async ({
   getSearchParams,

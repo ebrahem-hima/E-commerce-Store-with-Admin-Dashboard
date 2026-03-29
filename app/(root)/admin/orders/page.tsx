@@ -1,7 +1,7 @@
 import PageHeader from "../shared/PageHeader";
 import { Suspense } from "react";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
-import OrderTable from "./orderTable";
+import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
+import OrderTable from "./components/orderTable";
 
 interface Props {
   searchParams: Promise<{

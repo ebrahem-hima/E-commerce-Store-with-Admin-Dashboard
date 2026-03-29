@@ -23,7 +23,7 @@ export interface TopMemberType {
 }
 
 export interface typeOrderDetailsTable {
-  type: "orderDetails";
+  type: "order_details";
   id: string;
   img: string;
   name: string;
