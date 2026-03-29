@@ -72,6 +72,10 @@ export const MESSAGES = {
     shared: {
       deleteRow: "Row deleted successfully",
     },
+    heroBanners: {
+      uploadSuccess: "Banner uploaded successfully",
+      deleteSuccess: "Banner deleted successfully",
+    },
   },
   ERROR_MESSAGES: {
     SomethingWentWrong: "Something went wrong. Please try again.",

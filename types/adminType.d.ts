@@ -56,3 +56,9 @@ export interface categorySelectType {
   categorySelected: categoryType[];
   categoryDeleted: categoryType[];
 }
+
+// Hero Banner Types
+export type Product = {
+  productId: string;
+  name: string;
+};
