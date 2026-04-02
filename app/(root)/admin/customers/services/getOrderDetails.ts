@@ -36,7 +36,7 @@ export async function getOrderDetails(orderId: string) {
     const products: OrderDetailsType[] =
       data?.map((item) => ({
         ...item,
-        type: "orderDetails",
+        type: "order_details",
       })) || [];
 
     return { products };
