@@ -98,3 +98,5 @@ _(Insert ERD or Database Schema Image Here)_
    ```bash
    git clone https://github.com/ebrahem-hima/E-commerce-Store-with-Admin-Dashboard
    ```
+
+<!-- ignore flag -->

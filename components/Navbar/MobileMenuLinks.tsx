@@ -1,49 +1,33 @@
 import { SheetClose } from "../ui/sheet";
 import Link from "next/link";
-import { categoriesLinks, navbar } from "@/constant/filterNavbar";
+import { navbar } from "@/constant/filterNavbar";
+import LoadingSpinner from "../Loaders/LoadingSpinner";
+import useGetFilters from "./Hooks/useGetFilters";
 
-interface Props {
-  click: boolean;
-}
-
-const MobileMenuLinks = ({ click }: Props) => {
+const MobileMenuLinks = ({ click }: { click: boolean }) => {
+  const { filter, Loading } = useGetFilters();
   return (
     <div className="flex flex-col">
       {click ? (
-        <div className="overflow-y-auto h-[500px]">
-          {categoriesLinks.map((category) => (
-            <div key={category.name}>
-              <ul>
-                <SheetClose asChild>
-                  <Link
-                    href={`/search?query=${category.value}`}
-                    className="font-bold cursor-pointer hover:opacity-75"
-                  >
-                    {category.name}
-                  </Link>
-                </SheetClose>
-                <li className="flex flex-col">
-                  {category.values.map((value) => (
-                    <SheetClose asChild key={value.value}>
-                      <Link
-                        href={{
-                          pathname: "/search",
-                          query: {
-                            query: category.value,
-                            category: value.value,
-                          },
-                        }}
-                        className="cursor-pointer hover:opacity-75"
-                        key={value.name}
-                      >
-                        {value.name}
-                      </Link>
-                    </SheetClose>
-                  ))}
-                </li>
-              </ul>
-            </div>
-          ))}
+        <div className="overflow-y-auto h-125">
+          {Loading ? (
+            <LoadingSpinner />
+          ) : (
+            filter.map((category) => (
+              <div key={category.name}>
+                <ul>
+                  <SheetClose asChild>
+                    <Link
+                      href={`/search?query=${category.name}`}
+                      className="font-bol cursor-pointer hover:opacity-75"
+                    >
+                      {category.name}
+                    </Link>
+                  </SheetClose>
+                </ul>
+              </div>
+            ))
+          )}
         </div>
       ) : (
         <div className="flex flex-col font-medium text-[17px] gap-1">
