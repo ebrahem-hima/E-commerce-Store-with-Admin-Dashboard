@@ -15,7 +15,9 @@ const AdminNav = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <RiAdminFill size={22} className="cursor-pointer" />
+        <button aria-label="Admin">
+          <RiAdminFill size={22} className="cursor-pointer" />
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuPortal>
         <DropdownMenuContent className="w-56" align="start" sideOffset={4}>

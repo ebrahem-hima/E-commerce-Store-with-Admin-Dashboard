@@ -20,8 +20,10 @@ export function ShopCart() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <div className="relative inline-block">
-          <IoCartOutline size={25} className="cursor-pointer" />
+        <div className="relative flex">
+          <button aria-label="Shopping cart">
+            <IoCartOutline size={25} className="cursor-pointer" />
+          </button>
           {count > 0 && (
             <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-white text-[10px] shadow-sm">
               {count}

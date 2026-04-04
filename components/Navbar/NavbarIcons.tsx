@@ -14,7 +14,7 @@ const NavbarIcons = async () => {
       {/* Input Search */}
       <NavbarSearch />
       {/* Icons */}
-      <Link href={`/wishlist`}>
+      <Link aria-label="Wishlist" href={`/wishlist`}>
         <IoIosHeartEmpty size={22} className="cursor-pointer" />
       </Link>
       <ShopCart />

@@ -78,6 +78,7 @@ const TitleComponent = ({
       </div>
       <div className="flex items-center gap-3">
         <button
+          aria-label="Previous Slide"
           onClick={() => handleClickArrow("left")}
           disabled={isDisabled.left}
           className="cursor-pointer disabled:opacity-45 disabled:cursor-not-allowed"
@@ -85,6 +86,7 @@ const TitleComponent = ({
           <IoArrowBack size={22} />
         </button>
         <button
+          aria-label="Next Slide"
           onClick={() => handleClickArrow("right")}
           disabled={isDisabled.right}
           className="cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"

@@ -9,10 +9,8 @@ const HomeIcons = () => {
             size={45}
             className="bg-black mb-2 p-1 text-white border-6 border-[#999] rounded-full"
           />
-          <span className="text-[12px] font-medium">
-            {icon.text.toUpperCase()}
-          </span>
-          <span className="text-[10px] text-[#777]">{icon.description}</span>
+          <span className="text-sm font-medium">{icon.text.toUpperCase()}</span>
+          <span className="text-xs text-[#555555]">{icon.description}</span>
         </div>
       ))}
     </div>

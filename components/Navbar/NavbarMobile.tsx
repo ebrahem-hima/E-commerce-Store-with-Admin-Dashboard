@@ -31,7 +31,9 @@ export function NavbarMobile() {
   return (
     <Sheet>
       <SheetTrigger asChild className="hidden max-lg:block">
-        <IoMenu size={26} className="cursor-pointer" />
+        <button aria-label="Menu">
+          <IoMenu size={26} className="cursor-pointer" />
+        </button>
       </SheetTrigger>
       <SheetContent className="flex flex-col gap-3">
         <SheetHeader className="flex items-center justify-between mt-3">

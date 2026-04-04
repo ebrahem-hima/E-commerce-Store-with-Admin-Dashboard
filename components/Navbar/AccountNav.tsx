@@ -20,7 +20,9 @@ const AccountNav = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <IoPersonOutline size={22} className="cursor-pointer" />
+        <button aria-label="account">
+          <IoPersonOutline size={22} className="cursor-pointer" />
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuPortal>
         {userId ? (

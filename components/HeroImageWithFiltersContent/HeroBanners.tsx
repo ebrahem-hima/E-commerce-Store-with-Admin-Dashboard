@@ -108,6 +108,7 @@ const HeroBanners = ({ hero_banners }: Props) => {
               e.preventDefault();
               prevSlide();
             }}
+            aria-label="Previous Slide"
             variant="secondary"
             className="h-10 w-10 bg-black/80 text-white hover:bg-black/60 pointer-events-auto"
           >
@@ -119,6 +120,7 @@ const HeroBanners = ({ hero_banners }: Props) => {
               e.preventDefault();
               nextSlide();
             }}
+            aria-label="Next Slide"
             variant="secondary"
             className="h-10 w-10 bg-black/80 text-white hover:bg-black/60 pointer-events-auto"
           >
@@ -129,7 +131,7 @@ const HeroBanners = ({ hero_banners }: Props) => {
 
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
         {hero_banners.map((_, index) => (
-          <Button
+          <button
             onClick={() => {
               divRef.current?.scrollTo({
                 left: index * divRef.current.offsetWidth,
@@ -138,12 +140,11 @@ const HeroBanners = ({ hero_banners }: Props) => {
               setCurrentIndex(index);
             }}
             key={index}
-            className={`h-2 p-[3.5px] rounded-full border border-black/30 hover:bg-white hover:w-6 cursor-pointer transition-all duration-300 ${
-              currentIndex === index
-                ? "bg-white w-6 border border-black/30"
-                : "bg-white/50 w-1.5 border border-black/30"
-            }`}
-          />
+            className={`rounded-full border border-black/30 cursor-pointer transition-all duration-300
+            h-4 w-4 p-1 md:h-3 md:w-4 sm:h-4 sm:w-5 sm:p-1.5 hover:bg-white
+              ${currentIndex === index ? "bg-white w-8! h-4" : "bg-white/50"} 
+            `}
+          ></button>
         ))}
       </div>
     </div>
