@@ -20,16 +20,18 @@ export function ShopCart() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <div className="relative flex">
-          <button aria-label="Open Cart">
-            <IoCartOutline size={25} className="cursor-pointer" />
-          </button>
+        <button
+          type="button"
+          aria-label={`Open Cart, ${count} items`}
+          className="relative flex items-center justify-center"
+        >
+          <IoCartOutline size={25} className="cursor-pointer" />
           {count > 0 && (
             <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-white text-[10px] shadow-sm">
               {count}
             </span>
           )}
-        </div>
+        </button>
       </SheetTrigger>
       <SheetContent isStrongOverlay>
         <SheetHeader>

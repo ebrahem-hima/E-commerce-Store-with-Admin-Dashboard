@@ -37,6 +37,7 @@ const InputSearchComponent = ({
         size="sm"
         variant="link"
         type="submit"
+        aria-label="Submit search"
         className="absolute right-0 text-[#777]"
       >
         <IoSearchOutline className="w-5! h-5!" />
