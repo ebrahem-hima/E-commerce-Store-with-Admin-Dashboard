@@ -21,7 +21,7 @@ export function ShopCart() {
     <Sheet>
       <SheetTrigger asChild>
         <div className="relative flex">
-          <button aria-label="Shopping cart">
+          <button aria-label="Open Cart">
             <IoCartOutline size={25} className="cursor-pointer" />
           </button>
           {count > 0 && (

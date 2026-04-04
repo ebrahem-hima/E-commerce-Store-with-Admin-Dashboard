@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://e-commerce-store-with-admin-dashboa.vercel.app/
+Sitemap: https://e-commerce-store-with-admin-dashboa.vercel.app/sitemap.xml

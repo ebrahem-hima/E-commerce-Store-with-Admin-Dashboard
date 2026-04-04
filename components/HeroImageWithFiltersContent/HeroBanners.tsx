@@ -80,6 +80,8 @@ const HeroBanners = ({ hero_banners }: Props) => {
                 alt={banner.name}
                 fill
                 priority={index === 0}
+                fetchPriority={index === 0 ? "high" : "auto"}
+                decoding={index === 0 ? "sync" : "async"}
                 sizes="(max-width: 1024px) 100vw, 80vw"
                 className="object-cover object-center rounded-lg"
               />
@@ -94,6 +96,8 @@ const HeroBanners = ({ hero_banners }: Props) => {
                 alt={banner.name}
                 fill
                 priority={index === 0}
+                fetchPriority={index === 0 ? "high" : "auto"}
+                decoding={index === 0 ? "sync" : "async"}
                 sizes="(max-width: 1024px) 100vw, 80vw"
                 className="object-cover object-center rounded-lg"
               />
@@ -132,6 +136,7 @@ const HeroBanners = ({ hero_banners }: Props) => {
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
         {hero_banners.map((_, index) => (
           <button
+            aria-label={`Go to slide ${index + 1}`}
             onClick={() => {
               divRef.current?.scrollTo({
                 left: index * divRef.current.offsetWidth,
@@ -141,8 +146,8 @@ const HeroBanners = ({ hero_banners }: Props) => {
             }}
             key={index}
             className={`rounded-full border border-black/30 cursor-pointer transition-all duration-300
-            h-4 w-4 p-1 md:h-3 md:w-4 sm:h-4 sm:w-5 sm:p-1.5 hover:bg-white
-              ${currentIndex === index ? "bg-white w-8! h-4" : "bg-white/50"} 
+            h-4 hover:bg-white
+              ${currentIndex === index ? "bg-white w-12" : "w-8 bg-white/50"} 
             `}
           ></button>
         ))}

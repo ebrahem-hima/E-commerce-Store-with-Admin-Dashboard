@@ -33,6 +33,7 @@ const HeartWishListButton = ({
     >
       <Button
         variant="link"
+        aria-label={isWishList ? "Remove from Wishlist" : "Add to Wishlist"}
         className={`${isProductSlider ? "p-0" : "p-1! border border-[#777] rounded-sm"} p-0`}
         onClick={(e) => {
           e.preventDefault();
