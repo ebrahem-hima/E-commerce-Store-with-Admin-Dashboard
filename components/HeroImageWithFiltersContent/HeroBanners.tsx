@@ -68,7 +68,7 @@ const HeroBanners = ({ hero_banners }: Props) => {
         onMouseLeave={() => setIsHovered(false)}
         className="rounded-lg scroll-smooth overflow-x-auto scrollbar-hide snap-x snap-mandatory flex gap-1 transition-transform"
       >
-        {hero_banners.map((banner) =>
+        {hero_banners.map((banner, index) =>
           banner.productId ? (
             <Link
               key={banner.id}
@@ -79,7 +79,7 @@ const HeroBanners = ({ hero_banners }: Props) => {
                 src={banner.image_url}
                 alt={banner.name}
                 fill
-                priority
+                priority={index === 0}
                 sizes="(max-width: 1024px) 100vw, 80vw"
                 className="object-cover object-center rounded-lg"
               />
@@ -93,7 +93,7 @@ const HeroBanners = ({ hero_banners }: Props) => {
                 src={banner.image_url}
                 alt={banner.name}
                 fill
-                priority
+                priority={index === 0}
                 sizes="(max-width: 1024px) 100vw, 80vw"
                 className="object-cover object-center rounded-lg"
               />
