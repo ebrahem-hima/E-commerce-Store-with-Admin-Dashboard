@@ -30,6 +30,7 @@ const SliderComponentContent = async ({
           />
         )}
         {/* Products + Sort by */}
+        {otherProducts.length === 0 && <p>No products found</p>}
         {otherProducts.length > 0 && <SearchProduct products={otherProducts} />}
       </div>
       <SearchFilterMobile filter={mergeArray} />
