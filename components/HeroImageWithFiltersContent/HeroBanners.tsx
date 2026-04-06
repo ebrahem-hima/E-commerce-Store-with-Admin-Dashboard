@@ -80,7 +80,6 @@ const HeroBanners = ({ hero_banners }: Props) => {
                 alt={banner.name}
                 fill
                 priority={index === 0}
-                fetchPriority={index === 0 ? "high" : "auto"}
                 decoding={index === 0 ? "sync" : "async"}
                 sizes="(max-width: 1024px) 100vw, 80vw"
                 className="object-cover object-center rounded-lg"
@@ -96,7 +95,6 @@ const HeroBanners = ({ hero_banners }: Props) => {
                 alt={banner.name}
                 fill
                 priority={index === 0}
-                fetchPriority={index === 0 ? "high" : "auto"}
                 decoding={index === 0 ? "sync" : "async"}
                 sizes="(max-width: 1024px) 100vw, 80vw"
                 className="object-cover object-center rounded-lg"

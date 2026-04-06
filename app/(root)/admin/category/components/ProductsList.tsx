@@ -29,6 +29,7 @@ const ProductsList = ({ products }: { products: ProductWithCategory[] }) => {
               alt="product-img"
               width={80}
               height={80}
+              priority
               className="object-cover rounded-sm"
             />
             <div className="">

@@ -12,6 +12,7 @@ export default function RootLayout({
           <Image
             src={`/images/auth/Side Image.webp`}
             fill
+            priority
             alt="sign-up Image"
             className="rounded-sm object-cover"
           />

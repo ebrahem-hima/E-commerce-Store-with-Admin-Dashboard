@@ -72,6 +72,7 @@ const TableBodyData = ({ dataBody, role = "user" }: Prop) => {
                 src={p.product_img}
                 className="object-contain"
                 alt={`img + ${p.product_img}`}
+                priority
               />
               <span className="line-2">{p.product_name}</span>
             </TableCell>
@@ -118,6 +119,7 @@ const TableBodyData = ({ dataBody, role = "user" }: Prop) => {
                   alt={item.name}
                   width={100}
                   height={100}
+                  priority
                 />
                 <span className="font-medium text-gray-800">{item.name}</span>
               </div>

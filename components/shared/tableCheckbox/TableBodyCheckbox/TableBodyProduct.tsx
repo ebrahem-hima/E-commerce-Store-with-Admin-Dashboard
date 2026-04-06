@@ -58,6 +58,7 @@ const TableBodyProduct = ({
               width={55}
               height={55}
               className="rounded-md"
+              priority
             />
             <span className="line-clamp-2 max-w-42.5">{p.name}</span>
           </TableCell>
