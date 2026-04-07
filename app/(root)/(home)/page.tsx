@@ -1,4 +1,4 @@
-import HeroImageFilter from "@/components/shared/HeroImageFilter";
+import HeroImageFilter from "@/components/HeroImageWithFiltersContent/HeroImageFilter";
 import HomeIcons from "@/components/shared/HomeIcons";
 import CategoryComponent from "@/components/shared/SliderComponent/CategoryComponent";
 import { Suspense } from "react";

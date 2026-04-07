@@ -1,4 +1,4 @@
-import Filters from "../Navbar/Filters";
+import Filters from "./Filters";
 import fetchProductsCategories from "@/app/(root)/(home)/services/fetch-products-categories";
 import fetchHeroBanners from "@/app/(root)/(home)/services/fetch-hero-banners";
 import HeroBanners from "./HeroBanners";
