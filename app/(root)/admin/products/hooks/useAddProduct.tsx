@@ -90,6 +90,7 @@ const useProduct = ({
           imgGalleryDeleted: ImageGalleryDeleted,
           oldMainImg: productDetail.img,
         });
+        console.log("updateGalleryUrls", updateGalleryUrls);
         const filterImages = productDetail.imgGallery?.filter(
           (DBImage) => !ImageGalleryDeleted?.includes(DBImage),
         );

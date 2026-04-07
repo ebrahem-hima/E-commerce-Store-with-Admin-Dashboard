@@ -41,6 +41,7 @@ const Counter = ({ item, getOptions }: Props) => {
     <div className="flex items-center gap-2">
       <div className="flex items-center w-fit rounded-sm">
         <button
+          aria-label="Decrease quantity"
           onClick={() => setCount((c) => Math.max(1, c - 1))}
           className="cursor-pointer active:text-white active:border-primary active:bg-primary hover:text-white flex-center h-8 w-8 border border-[#777] hover:bg-primary hover:border-primary rounded-l-[3px] duration-200"
         >
@@ -51,6 +52,7 @@ const Counter = ({ item, getOptions }: Props) => {
           {count}
         </span>
         <button
+          aria-label="Increase quantity"
           className="cursor-pointer active:text-white active:border-primary active:bg-primary hover:text-white flex-center h-8 w-8 border border-[#777] hover:bg-primary hover:border-primary rounded-r-[3px] duration-200"
           onClick={handleMaxCount}
         >

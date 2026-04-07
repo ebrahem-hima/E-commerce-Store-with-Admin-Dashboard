@@ -17,7 +17,7 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
           {name}
         </span>
         {/* Reviews + Stock */}
-        <div className="text-[#999] font-poppins text-sm flex items-center gap-2">
+        <div className="text-gray-600 font-poppins text-sm flex items-center gap-2">
           <div className="flex items-center">
             {[1, 2, 3, 4].map((start) => (
               <Star key={start} size={18} />
@@ -25,7 +25,7 @@ const DescriptionProductDetails = ({ item }: { item: typeProduct }) => {
           </div>
           <span>({rate}) Reviews | </span>
           {active ? (
-            <span className="text-[#47B486] font-poppins font-normal text-sm">
+            <span className="text-green-700 font-poppins font-normal text-sm">
               In Stock
             </span>
           ) : (
