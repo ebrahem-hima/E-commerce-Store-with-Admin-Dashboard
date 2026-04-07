@@ -1,8 +1,8 @@
 import { Suspense } from "react";
-import LoadingSpinner from "@/components/Loaders/LoadingSpinner";
 import FilterContent from "./components/FilterContent";
 import SliderComponentContent from "./components/SliderComponentContent";
-import LoadingPage from "@/components/Loaders/LoadingPage";
+import LoadingFilter from "./components/loadingPage/loadingFilter";
+import LoadingContentSearchPage from "./components/loadingPage/loadingContentSearchPage";
 
 interface SearchPageProps {
   searchParams: Promise<{
@@ -28,10 +28,11 @@ const Page = async ({ searchParams }: SearchPageProps) => {
   }));
   return (
     <>
+      {/* <LoadingSearchPage /> */}
       <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-4">
         {/* Filter Component */}
         <div className="hidden lg:block">
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense fallback={<LoadingFilter />}>
             <FilterContent
               querySearch={querySearch}
               filtersArray={filtersArray}
@@ -40,7 +41,7 @@ const Page = async ({ searchParams }: SearchPageProps) => {
         </div>
         {/* Best Sellers */}
         <div className="relative">
-          <Suspense fallback={<LoadingPage />}>
+          <Suspense fallback={<LoadingContentSearchPage />}>
             <SliderComponentContent
               sortSearch={sortSearch}
               querySearch={querySearch}

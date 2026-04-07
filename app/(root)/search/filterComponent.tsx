@@ -144,7 +144,11 @@ const FilterComponent = ({
             </div>
           </div>
         ))}
-        <Button disabled={isPending} onClick={handleURLSearch}>
+        <Button
+          aria-label="Apply filters"
+          disabled={isPending}
+          onClick={handleURLSearch}
+        >
           <span>Search</span>
           <span>
             {isPending ? (
