@@ -1,97 +1,66 @@
-import { Skeleton } from "@/components/ui/skeleton";
-
-export const ProductDetailsSkeleton = () => {
+const ProductDetailsSkeleton = () => {
   return (
-    <div className="grid grid-cols-[1fr_350px] gap-2 max-tablet:grid-cols-1! mb-6">
-      {/* Image Gallery Skeleton */}
-      <div className="grid grid-cols-[100px_minmax(0,550px)] max-md:grid-cols-1 max-md:grid-flow-dense justify-center gap-3">
-        {/* Thumbnails */}
-        <div className="self-start max-md:order-2 flex flex-col max-md:flex-row gap-2 w-full">
-          {[1, 2, 3, 4].map((i) => (
-            <Skeleton
-              key={i}
-              className="w-25 h-25 max-md:w-20 max-md:h-20 shrink-0"
-            />
-          ))}
+    <div className="animate-pulse grid grid-cols-[1fr_350px] gap-2 max-tablet:grid-cols-1! mb-6">
+      <div className="grid grid-cols-[100px_minmax(0,550px)] max-lg:grid-cols-1 max-lg:grid-flow-dense justify-center items-center gap-3">
+        <div className="max-lg:flex self-start max-lg:order-2 max-sm:overflow-x-auto h-fi">
+          <div className="max-lg:flex self-start max-lg:order-2 max-sm:overflow-x-auto gap-4">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="min-w-20 w-27.5 h-27.5 bg-gray-300 rounded-sm mb-2"
+              ></div>
+            ))}
+          </div>
         </div>
-
-        {/* Main Image */}
-        <div className="flex-center max-md:order-1 w-full h-full">
-          <Skeleton className="w-1/2 h-1/2 aspect-square max-w-137.5 rounded-lg" />
+        {/* bigImg */}
+        <div className="grid justify-center self-start max-lg:order-1">
+          <div className="max-lg:h-60 h-90 aspect-square bg-gray-300 rounded-md w-100"></div>
         </div>
       </div>
-
-      {/* 2. Right Column: Product Description Skeleton */}
-      <div className="flex flex-col gap-4 w-full">
-        {/* Title + Price + Rate */}
+      {/* start Details */}
+      <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          {/* Title */}
-          <Skeleton className="h-8 w-3/4" />
+          {/* الاسم */}
+          <div className="h-8 bg-gray-300 rounded-md w-3/4"></div>
 
-          {/* Reviews + Stock */}
-          <div className="flex items-center gap-2 mt-1">
-            <div className="flex items-center gap-1">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <Skeleton key={i} className="h-4 w-4 rounded-full" />
-              ))}
-            </div>
-            <Skeleton className="h-4 w-24" />
-            <Skeleton className="h-4 w-16" />
-          </div>
+          {/* السعر */}
+          <div className="h-6 bg-gray-300 rounded-md w-24"></div>
 
-          {/* Price */}
-          <div className="mt-2">
-            <Skeleton className="h-8 w-32" />
-          </div>
+          {/* التقييم والحالة */}
+          <div className="h-4 bg-gray-300 rounded-md w-32"></div>
         </div>
 
-        {/* Description Paragraph */}
-        <div className="flex flex-col gap-2 mt-2">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-2/3" />
+        {/* الوصف */}
+        <div className="space-y-1">
+          <div className="h-4.5 bg-gray-300 rounded-md w-full"></div>
+          <div className="h-4.5 bg-gray-300 rounded-md w-full"></div>
+          <div className="h-4.5 bg-gray-300 rounded-md w-2/3"></div>
         </div>
 
-        {/* Divider */}
-        <div className="w-full h-px bg-gray-200 rounded-sm my-2" />
+        <div className="w-full h-px bg-gray-100 my-2" />
 
-        {/* Counter + Options (Color/Size) */}
-        <div className="flex flex-col gap-4">
-          {/* Option 1 */}
-          <div className="flex gap-2">
-            <Skeleton className="h-8 w-16 rounded-md" />
-            <Skeleton className="h-8 w-16 rounded-md" />
-            <Skeleton className="h-8 w-16 rounded-md" />
-          </div>
-          {/* Counter + Buttons */}
-          <div className="flex gap-4 h-12">
-            <Skeleton className="h-full w-32 rounded-md" /> {/* Counter */}
-            <Skeleton className="h-full flex-1 rounded-md" />{" "}
-            {/* Add to cart */}
-            <Skeleton className="h-full w-12 rounded-md" /> {/* Wishlist */}
-          </div>
+        {/* الخيارات والعداد (CounterWithOptions) */}
+        <div className="flex gap-2 items-center">
+          <div className="h-9 bg-gray-300 rounded-md w-29"></div>
+          <div className="h-9 bg-gray-300 rounded-md w-34"></div>
+          <div className="h-9 bg-gray-300 rounded-md w-10"></div>
         </div>
 
-        {/* Delivery Info Box */}
-        <div className="border border-gray-200 rounded-sm mt-2">
-          {/* Item 1 */}
-          <div className="px-2 py-4 flex gap-3 items-center border-b border-gray-200">
-            <Skeleton className="h-10 w-10 rounded-full shrink-0" />
-            <div className="flex flex-col gap-2 w-full">
-              <Skeleton className="h-4 w-1/2" />
-              <Skeleton className="h-3 w-3/4" />
+        {/* معلومات التوصيل (Free delivery section) */}
+        <div className="border border-gray-200 rounded-sm p-2 space-y-4">
+          {[1, 2].map((i) => (
+            <div key={i} className="flex gap-1 items-center py-2">
+              <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+              <div className="flex flex-col gap-1 flex-1">
+                <div className="h-4 bg-gray-300 rounded-md w-1/2"></div>
+                <div className="h-4 bg-gray-200 rounded-md w-full"></div>
+              </div>
             </div>
-          </div>
-          {/* Item 2 */}
-          <div className="px-2 py-4 flex gap-3 items-center">
-            <Skeleton className="h-10 w-10 rounded-full shrink-0" />
-            <div className="flex flex-col gap-2 w-full">
-              <Skeleton className="h-4 w-1/2" />
-              <Skeleton className="h-3 w-3/4" />
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>
   );
 };
+
+export default ProductDetailsSkeleton;

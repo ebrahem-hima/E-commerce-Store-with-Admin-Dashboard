@@ -27,14 +27,14 @@ const HeroImage = ({ productDetail }: { productDetail: typeProduct }) => {
       </div>
       {/* bigImg */}
       <div className="grid justify-center self-start max-lg:order-1">
-        <Image
-          width={500}
-          height={500}
-          src={getImg}
-          alt="img-gallery"
-          priority
-          className="object-contain"
-        />
+        <div className="relative max-lg:h-60 h-90 aspect-square">
+          <Image
+            src={getImg}
+            fill
+            className="object-contain"
+            alt={`${productDetail.name} image`}
+          />
+        </div>
       </div>
     </div>
   );

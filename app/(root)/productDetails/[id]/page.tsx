@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import ProductDetailsContent from "../components/ProductDetailsContnet";
 import SliderComponentWrapper from "../components/SliderComponentWrapper";
-import { ProductDetailsSkeleton } from "../components/ProductDetailsSkeleton";
+import ProductDetailsSkeleton from "../components/ProductDetailsSkeleton";
 import { SliderSkeleton } from "@/components/Loaders/SliderSkeleton";
 
 interface PageProps {

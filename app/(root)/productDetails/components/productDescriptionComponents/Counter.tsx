@@ -1,13 +1,12 @@
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import "../Card/Card.css";
 import { handleAddToCart } from "@/lib/userCartFn";
 import { toast } from "sonner";
-import { optionType, typeProduct } from "../../../types/productTypes";
+import { optionType, typeProduct } from "../../../../../types/productTypes";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
 import { useState } from "react";
 import { useProductContext } from "@/context/productContext";
-import HeartWishListButton from "../Card/ProductCard/HeartWishListButton";
+import HeartWishListButton from "../../../../../components/shared/Card/ProductCard/HeartWishListButton";
 
 interface Props {
   item: typeProduct;
