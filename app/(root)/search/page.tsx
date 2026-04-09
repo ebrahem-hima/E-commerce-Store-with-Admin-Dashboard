@@ -27,30 +27,25 @@ const Page = async ({ searchParams }: SearchPageProps) => {
     values: typeof values === "string" ? (values as string).split(",") : [],
   }));
   return (
-    <>
-      {/* <LoadingSearchPage /> */}
+    <Suspense fallback={<LoadingContentSearchPage />}>
       <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-4">
         {/* Filter Component */}
         <div className="hidden lg:block">
-          <Suspense fallback={<LoadingFilter />}>
-            <FilterContent
-              querySearch={querySearch}
-              filtersArray={filtersArray}
-            />
-          </Suspense>
+          <FilterContent
+            querySearch={querySearch}
+            filtersArray={filtersArray}
+          />
         </div>
         {/* Best Sellers */}
         <div className="relative">
-          <Suspense fallback={<LoadingContentSearchPage />}>
-            <SliderComponentContent
-              sortSearch={sortSearch}
-              querySearch={querySearch}
-              filtersArray={filtersArray}
-            />
-          </Suspense>
+          <SliderComponentContent
+            sortSearch={sortSearch}
+            querySearch={querySearch}
+            filtersArray={filtersArray}
+          />
         </div>
       </div>
-    </>
+    </Suspense>
   );
 };
 
