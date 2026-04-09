@@ -1,6 +1,27 @@
 const LoadingContentSearchPage = () => {
   return (
-    <>
+    <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-4">
+      <div className="hidden lg:block">
+        <div className="px-4">
+          <div className="flex justify-between items-center mb-4">
+            <div className="h-5 w-16 bg-gray-200 animate-pulse rounded" />{" "}
+            {/* FILTER text */}
+            <div className="h-4 w-12 bg-gray-200 animate-pulse rounded" />{" "}
+            {/* Reset text */}
+          </div>
+
+          <div className="flex flex-col gap-3">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="flex flex-col gap-2">
+                {/* Filter Header Box */}
+                <div className="h-10 w-full bg-gray-300 animate-pulse border border-gray-300 rounded-sm" />
+              </div>
+            ))}
+            <div className="h-10 w-full bg-gray-300 animate-pulse rounded mt-4" />{" "}
+            {/* Search Button */}
+          </div>
+        </div>
+      </div>
       <div className="relative">
         <div className="flex flex-col gap-6">
           <div className="w-full flex flex-col gap-4">
@@ -34,8 +55,8 @@ const LoadingContentSearchPage = () => {
           </div>
 
           {/* Search Products Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+          <div className="searchGrid overflow-hidden">
+            {[1, 2, 3, 4].map((i) => (
               <SkeletonCard key={i} />
             ))}
           </div>
@@ -43,7 +64,7 @@ const LoadingContentSearchPage = () => {
       </div>
 
       <div className="lg:hidden fixed z-50 bottom-3 left-1/2 transform -translate-x-1/2 h-10 w-32 bg-black/20 animate-pulse rounded-md" />
-    </>
+    </div>
   );
 };
 
