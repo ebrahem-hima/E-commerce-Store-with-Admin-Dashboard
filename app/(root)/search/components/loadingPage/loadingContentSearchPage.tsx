@@ -1,6 +1,6 @@
 const LoadingContentSearchPage = () => {
   return (
-    <>
+    <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-4">
       <div className="hidden lg:block">
         <div className="px-4">
           <div className="flex justify-between items-center mb-4">
@@ -64,7 +64,7 @@ const LoadingContentSearchPage = () => {
       </div>
 
       <div className="lg:hidden fixed z-50 bottom-3 left-1/2 transform -translate-x-1/2 h-10 w-32 bg-black/20 animate-pulse rounded-md" />
-    </>
+    </div>
   );
 };
 

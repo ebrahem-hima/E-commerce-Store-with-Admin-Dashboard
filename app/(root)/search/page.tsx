@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import FilterContent from "./components/FilterContent";
 import SliderComponentContent from "./components/SliderComponentContent";
-import LoadingFilter from "./components/loadingPage/loadingFilter";
 import LoadingContentSearchPage from "./components/loadingPage/loadingContentSearchPage";
 
 interface SearchPageProps {
