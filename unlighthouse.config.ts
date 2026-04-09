@@ -1,39 +1,31 @@
-// unlighthouse.config.ts
-import type { Page } from "playwright";
+import type { Page } from "puppeteer";
 
-const email = "ebrahemh636@gmail.com";
-const pass = "hima122";
+const email = "ebrahem@gmail.com";
+const pass = "hima";
 
 const config = {
   site: "https://e-commerce-store-with-admin-dashboa.vercel.app/",
 
   hooks: {
     authenticate: async (page: Page) => {
-      // حددنا نوع page
-      // 1. فتح صفحة login
       await page.goto(
         "https://e-commerce-store-with-admin-dashboa.vercel.app/login",
+        {
+          waitUntil: "networkidle2",
+        },
       );
 
-      // 2. التأكد إن الصفحة حملت
       await page.waitForSelector('input[name="email"]');
+      await page.type('input[name="email"]', email);
+      await page.type('input[name="password"]', pass);
 
-      // 3. إدخال البيانات
-      await page.fill('input[name="email"]', email);
-      await page.fill('input[name="password"]', pass);
+      await Promise.all([
+        page.waitForNavigation({ waitUntil: "networkidle2" }),
+        page.click('button[type="submit"]'),
+      ]);
 
-      // 4. تسجيل الدخول
-      await page.click('button[type="submit"]');
-
-      // 5. انتظار نجاح login
-      await page.waitForURL("**/admin**");
-
-      console.log("✅ Authenticated successfully!");
+      console.log("✅ Logged in successfully!");
     },
-  },
-
-  scanner: {
-    skipJavascript: false,
   },
 };
 
