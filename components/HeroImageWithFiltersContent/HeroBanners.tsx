@@ -52,7 +52,7 @@ const HeroBanners = ({ hero_banners }: Props) => {
 
   useEffect(() => {
     if (!isHovered && totalImages > 1) {
-      const interval = setInterval(nextSlide, 5000);
+      const interval = setInterval(nextSlide, 3000);
       return () => clearInterval(interval);
     }
   }, [isHovered, totalImages, nextSlide]);
@@ -68,40 +68,34 @@ const HeroBanners = ({ hero_banners }: Props) => {
         onMouseLeave={() => setIsHovered(false)}
         className="rounded-lg scroll-smooth overflow-x-auto scrollbar-hide snap-x snap-mandatory flex gap-1 transition-transform"
       >
-        {hero_banners.map((banner, index) =>
-          banner.productId ? (
-            <Link
-              key={banner.id}
-              href={`/productDetails/${banner.productId}`}
-              className="relative min-w-full h-75 md:h-80 snap-center"
-            >
-              <Image
-                src={banner.image_url}
-                alt={banner.name}
-                fill
-                priority={index === 0}
-                decoding={index === 0 ? "sync" : "async"}
-                sizes="(max-width: 1024px) 100vw, 80vw"
-                className="object-cover object-center rounded-lg"
-              />
-            </Link>
-          ) : (
-            <div
-              key={banner.id}
-              className="relative min-w-full h-75 md:h-80 snap-center"
-            >
-              <Image
-                src={banner.image_url}
-                alt={banner.name}
-                fill
-                priority={index === 0}
-                decoding={index === 0 ? "sync" : "async"}
-                sizes="(max-width: 1024px) 100vw, 80vw"
-                className="object-cover object-center rounded-lg"
-              />
-            </div>
-          ),
-        )}
+        {hero_banners.map((banner, index) => (
+          <div
+            key={banner.id}
+            className="relative min-w-full h-75 md:h-80 snap-center"
+          >
+            <Image
+              src={banner.image_url}
+              alt={banner.name}
+              fill
+              priority={index === 0}
+              decoding={index === 0 ? "sync" : "async"}
+              sizes="(max-width: 1024px) 100vw, 80vw"
+              className="object-cover object-center rounded-lg"
+            />
+            {banner.productId && (
+              <Link
+                href={`/productDetails/${banner.productId}`}
+                className="absolute bottom-5 left-10 px-4 py-2 rounded-md 
+              bg-black/50 text-white 
+              backdrop-blur-md 
+              border border-white/30 
+              hover:bg-black/70 hover:scale-105 transition"
+              >
+                Shop Now
+              </Link>
+            )}
+          </div>
+        ))}
       </div>
       {totalImages > 1 && (
         <div className="absolute inset-0 flex items-center justify-between p-4 transition-opacity pointer-events-none">
