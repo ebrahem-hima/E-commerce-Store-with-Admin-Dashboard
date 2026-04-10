@@ -9,8 +9,7 @@ interface Props {
   titleComponent: string | undefined;
   parentRef: React.RefObject<HTMLDivElement | null>;
   products: typeProduct[] | undefined;
-  stopScroll: boolean;
-  setStopScroll: React.Dispatch<React.SetStateAction<boolean>>;
+  stopScroll?: boolean;
 }
 
 const TitleComponent = ({
@@ -18,7 +17,6 @@ const TitleComponent = ({
   parentRef,
   products,
   stopScroll,
-  setStopScroll,
 }: Props) => {
   const [isDisabled, setIsDisabled] = useState({ left: false, right: false });
   useEffect(() => {
@@ -89,7 +87,7 @@ const TitleComponent = ({
     if (!products || products.length <= 1 || stopScroll) return;
     const interval = setInterval(() => handleAutoScroll(), 5000);
     return () => clearInterval(interval);
-  }, [handleAutoScroll, products, stopScroll, setStopScroll]);
+  }, [handleAutoScroll, products, stopScroll]);
 
   return (
     <div className="flex-between">

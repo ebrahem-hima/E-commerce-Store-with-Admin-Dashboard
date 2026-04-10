@@ -29,7 +29,6 @@ const SliderClientComponent = ({
         parentRef={parentRef}
         titleComponent={titleComponent}
         stopScroll={stopScroll}
-        setStopScroll={setStopScroll}
       />
       <Slider
         setStopScroll={setStopScroll}
