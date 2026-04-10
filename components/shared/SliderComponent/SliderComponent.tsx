@@ -5,7 +5,6 @@ import SliderClientComponent from "./SliderClientComponent";
 
 const SliderComponent = async ({
   titleComponent,
-  search = false,
   categoryId,
   Product,
 }: SliderComponentType) => {
@@ -24,7 +23,6 @@ const SliderComponent = async ({
       <SliderClientComponent
         titleComponent={titleComponent}
         Product={products || undefined}
-        search={search}
       />
     </div>
   );

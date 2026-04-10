@@ -73,8 +73,8 @@ export interface SliderComponentType {
   titleComponent?: string;
   Product?: typeProduct[];
   categories?: { name: string; id: number }[];
-  search?: boolean;
   categoryId?: number;
+  sliderType?: "category" | "product" | "search";
 }
 
 export interface deleteProductCart {

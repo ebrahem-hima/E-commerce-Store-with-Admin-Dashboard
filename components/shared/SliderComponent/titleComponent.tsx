@@ -1,7 +1,7 @@
 "use client";
 
 import { typeProduct } from "@/types/productTypes";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { IoMdArrowForward } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
 
@@ -9,21 +9,15 @@ interface Props {
   titleComponent: string | undefined;
   parentRef: React.RefObject<HTMLDivElement | null>;
   products: typeProduct[] | undefined;
-  categories?: { name: string; id: number }[] | undefined;
 }
 
-const TitleComponent = ({
-  titleComponent,
-  parentRef,
-  products,
-  categories,
-}: Props) => {
+const TitleComponent = ({ titleComponent, parentRef, products }: Props) => {
   const [isDisabled, setIsDisabled] = useState({ left: false, right: false });
 
   useEffect(() => {
     const parent = parentRef.current;
-    const firstChild = parent?.children[0].firstElementChild as Element;
-    const lastChild = parent?.children[0].lastElementChild as Element;
+    const firstChild = parent?.firstElementChild as Element;
+    const lastChild = parent?.lastElementChild as Element;
     const options = {
       root: parent,
       threshold: 1.0,
@@ -48,28 +42,48 @@ const TitleComponent = ({
       if (firstChild) observe.unobserve(firstChild);
       if (lastChild) observe.unobserve(lastChild);
     };
-  }, [parentRef, products, categories]);
+  }, [parentRef]);
 
-  const handleClickArrow = (direction: string) => {
-    const parent = parentRef.current;
-    if (!parent) return;
+  const handleClickArrow = useCallback(
+    (direction: string) => {
+      const parent = parentRef.current;
+      if (!parent) return;
 
-    const firstChild = parent?.children[0].firstChild as HTMLElement;
-    if (!firstChild) return;
+      const firstChild = parent?.children[0].firstChild as HTMLElement;
+      if (!firstChild) return;
 
-    const computedStyle = window.getComputedStyle(parent.children[0]);
-    const gapValue = parseFloat(computedStyle.columnGap || "0");
+      const computedStyle = window.getComputedStyle(parent.children[0]);
+      const gapValue = parseFloat(computedStyle.columnGap || "0");
 
-    const scrollAmount =
-      direction === "right"
-        ? firstChild.clientWidth + gapValue
-        : -(firstChild.clientWidth + gapValue);
+      const scrollAmount =
+        direction === "right"
+          ? firstChild.clientWidth + gapValue
+          : -(firstChild.clientWidth + gapValue);
 
-    parent.scrollBy({
-      left: scrollAmount,
-      behavior: "smooth",
-    });
-  };
+      parent.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
+    },
+    [parentRef],
+  );
+
+  const handleAutoScroll = useCallback(() => {
+    if (isDisabled.right) {
+      parentRef.current?.scrollTo({
+        left: 0,
+        behavior: "smooth",
+      });
+    } else {
+      handleClickArrow("right");
+    }
+  }, [handleClickArrow, isDisabled.right, parentRef]);
+
+  useEffect(() => {
+    if (!products || products.length === 1) return;
+    const interval = setInterval(() => handleAutoScroll(), 5000);
+    return () => clearInterval(interval);
+  }, [handleAutoScroll, products]);
 
   return (
     <div className="flex-between">

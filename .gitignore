@@ -42,3 +42,6 @@ next-env.d.ts
 
 # unlhighthouse
 .unlighthouse/
+
+/public/banners
+/public/images/productImages

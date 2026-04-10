@@ -18,21 +18,18 @@ const CategoryClientComponent = ({
     <div className="w-full flex flex-col gap-3 overflow-hidden">
       <Suspense fallback={<SliderSkeleton />}>
         <TitleComponent
-          categories={categories || undefined}
           products={Product || undefined}
           parentRef={parentRef}
           titleComponent={titleComponent}
         />
-        <Slider parentRef={parentRef}>
-          <div className="categoryGrid">
-            {categories?.map((category) => (
-              <CardCategory
-                key={category.id}
-                // icon={category.icon}
-                text={category.name}
-              />
-            ))}
-          </div>
+        <Slider sliderType={"category"} parentRef={parentRef}>
+          {categories?.map((category) => (
+            <CardCategory
+              key={category.id}
+              // icon={category.icon}
+              text={category.name}
+            />
+          ))}
         </Slider>
       </Suspense>
     </div>

@@ -26,7 +26,7 @@ const SliderComponentContent = async ({
           <SliderClientComponent
             titleComponent="Best Sellers"
             Product={bestSellersProducts}
-            search={true}
+            sliderType="search"
           />
         )}
         {/* Products + Sort by */}

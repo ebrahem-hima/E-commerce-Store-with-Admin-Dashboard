@@ -10,7 +10,7 @@ import { useProductContext } from "@/context/productContext";
 const SliderClientComponent = ({
   titleComponent,
   Product,
-  search,
+  sliderType,
 }: SliderComponentType) => {
   const parentRef = useRef<HTMLDivElement | null>(null);
   const { setCartData } = useProductContext();
@@ -22,10 +22,8 @@ const SliderClientComponent = ({
         parentRef={parentRef}
         titleComponent={titleComponent}
       />
-      <Slider parentRef={parentRef}>
-        <div className={search ? "searchGrid" : "productGrid"}>
-          <Products data={Product || []} setData={setCartData} />
-        </div>
+      <Slider parentRef={parentRef} sliderType={sliderType || "product"}>
+        <Products data={Product || []} setData={setCartData} />
       </Slider>
     </div>
   );

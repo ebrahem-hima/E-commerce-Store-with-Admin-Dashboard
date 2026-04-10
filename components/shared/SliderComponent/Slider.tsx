@@ -3,9 +3,13 @@ import { MouseEvent, useRef, useState } from "react";
 const Slider = ({
   children,
   parentRef,
+  // search,
+  sliderType,
 }: Readonly<{
   children: React.ReactNode;
   parentRef: React.RefObject<HTMLDivElement | null>;
+  search?: boolean;
+  sliderType: "category" | "product" | "search";
 }>) => {
   const slider = parentRef.current;
   const [startX, setStartX] = useState(0);
@@ -31,7 +35,24 @@ const Slider = ({
     if (!isDragging.current) return false;
     if (slider) slider.scrollLeft = scrollLeft - (e.pageX - startX);
   };
+  let style = "";
+  switch (sliderType) {
+    case "category":
+      style = "categoryGrid";
+      break;
 
+    case "product":
+      style = "productGrid";
+      break;
+
+    case "search":
+      style = "searchGrid";
+      break;
+
+    default:
+      style = "productGrid";
+      break;
+  }
   return (
     <div
       onMouseDown={startDragging}
@@ -41,7 +62,7 @@ const Slider = ({
       onDragStart={(e) => {
         e.preventDefault();
       }}
-      className={`flex-center slider scroll-smooth overflow-x-auto scrollbar-hide snap-x snap-mandatory`}
+      className={`${style} slider scroll-smooth overflow-x-auto scrollbar-hide snap-x snap-mandatory`}
       ref={parentRef}
     >
       {children}
