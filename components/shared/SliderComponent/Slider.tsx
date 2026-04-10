@@ -3,65 +3,111 @@ import { MouseEvent, useRef, useState } from "react";
 const Slider = ({
   children,
   parentRef,
-  // search,
   sliderType,
+  setStopScroll,
 }: Readonly<{
   children: React.ReactNode;
   parentRef: React.RefObject<HTMLDivElement | null>;
-  search?: boolean;
   sliderType: "category" | "product" | "search";
+  setStopScroll?: React.Dispatch<React.SetStateAction<boolean>>;
 }>) => {
   const slider = parentRef.current;
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const isDragging = useRef(false);
+  const wasMoved = useRef(false);
 
-  const startDragging = (e: MouseEvent<HTMLDivElement>) => {
+  const startDragging = (clientX: number) => {
+    setStopScroll?.(true);
     isDragging.current = true;
-    slider?.classList.add("dragging");
+    wasMoved.current = false;
 
-    setStartX(e.pageX);
+    if (slider) {
+      slider.classList.add("dragging");
+      slider.style.scrollBehavior = "auto";
+      slider.style.scrollSnapType = "none";
+    }
+
+    setStartX(clientX);
     setScrollLeft(slider?.scrollLeft || 0);
   };
 
-  const stopDragging = (e: MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    isDragging.current = false;
-    slider?.classList.remove("dragging");
+  const onDragging = (clientX: number) => {
+    if (!isDragging.current) return;
+
+    const walk = clientX - startX;
+
+    if (Math.abs(walk) > 5) {
+      wasMoved.current = true;
+    }
+
+    if (slider) {
+      slider.scrollLeft = scrollLeft - walk;
+    }
   };
 
-  const Dragging = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!isDragging.current) return false;
-    if (slider) slider.scrollLeft = scrollLeft - (e.pageX - startX);
+  const stopDragging = () => {
+    isDragging.current = false;
+
+    if (slider) {
+      slider.classList.remove("dragging");
+      slider.style.scrollBehavior = "smooth";
+      slider.style.scrollSnapType = "x mandatory";
+    }
   };
+
+  const handleMouseDown = (e: MouseEvent<HTMLDivElement>) => {
+    startDragging(e.pageX);
+  };
+
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    onDragging(e.pageX);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    startDragging(e.touches[0].pageX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    onDragging(e.touches[0].pageX);
+    setStopScroll?.(true);
+  };
+
+  const handleChildClick = (e: MouseEvent<HTMLDivElement>) => {
+    if (wasMoved.current) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
   let style = "";
   switch (sliderType) {
     case "category":
       style = "categoryGrid";
       break;
-
     case "product":
       style = "productGrid";
       break;
-
     case "search":
       style = "searchGrid";
       break;
-
     default:
       style = "productGrid";
       break;
   }
+
   return (
     <div
-      onMouseDown={startDragging}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
       onMouseUp={stopDragging}
-      onMouseMove={Dragging}
       onMouseLeave={stopDragging}
-      onDragStart={(e) => {
-        e.preventDefault();
-      }}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={stopDragging}
+      // onScroll={() => setStopScroll?.(true)}
+      onClickCapture={handleChildClick}
+      onDragStart={(e) => e.preventDefault()}
       className={`${style} slider scroll-smooth overflow-x-auto scrollbar-hide snap-x snap-mandatory`}
       ref={parentRef}
     >

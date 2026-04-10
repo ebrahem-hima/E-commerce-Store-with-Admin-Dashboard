@@ -3,7 +3,7 @@
 import Slider from "./Slider";
 import TitleComponent from "./titleComponent";
 import { SliderComponentType } from "@/types/productTypes";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Products from "../Card/ProductCard/Products";
 import { useProductContext } from "@/context/productContext";
 
@@ -14,15 +14,28 @@ const SliderClientComponent = ({
 }: SliderComponentType) => {
   const parentRef = useRef<HTMLDivElement | null>(null);
   const { setCartData } = useProductContext();
+  const [stopScroll, setStopScroll] = useState(false);
   if (Product?.length === 0) return null;
   return (
-    <div className="w-full flex flex-col gap-3 overflow-hidden">
+    <div
+      onMouseLeave={() => setStopScroll(false)}
+      onMouseEnter={() => setStopScroll(true)}
+      onTouchStart={() => setStopScroll(true)}
+      onTouchEnd={() => setStopScroll(false)}
+      className="w-full flex flex-col gap-3 overflow-hidden"
+    >
       <TitleComponent
         products={Product || undefined}
         parentRef={parentRef}
         titleComponent={titleComponent}
+        stopScroll={stopScroll}
+        setStopScroll={setStopScroll}
       />
-      <Slider parentRef={parentRef} sliderType={sliderType || "product"}>
+      <Slider
+        setStopScroll={setStopScroll}
+        parentRef={parentRef}
+        sliderType={sliderType || "product"}
+      >
         <Products data={Product || []} setData={setCartData} />
       </Slider>
     </div>

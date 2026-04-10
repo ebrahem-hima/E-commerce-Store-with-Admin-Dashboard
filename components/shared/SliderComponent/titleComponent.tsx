@@ -9,11 +9,18 @@ interface Props {
   titleComponent: string | undefined;
   parentRef: React.RefObject<HTMLDivElement | null>;
   products: typeProduct[] | undefined;
+  stopScroll: boolean;
+  setStopScroll: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const TitleComponent = ({ titleComponent, parentRef, products }: Props) => {
+const TitleComponent = ({
+  titleComponent,
+  parentRef,
+  products,
+  stopScroll,
+  setStopScroll,
+}: Props) => {
   const [isDisabled, setIsDisabled] = useState({ left: false, right: false });
-
   useEffect(() => {
     const parent = parentRef.current;
     const firstChild = parent?.firstElementChild as Element;
@@ -21,7 +28,6 @@ const TitleComponent = ({ titleComponent, parentRef, products }: Props) => {
     const options = {
       root: parent,
       threshold: 1.0,
-      // threshold: 0.9,
       rootMargin: "0px 10px",
     };
     const observe = new IntersectionObserver((entries) => {
@@ -80,10 +86,10 @@ const TitleComponent = ({ titleComponent, parentRef, products }: Props) => {
   }, [handleClickArrow, isDisabled.right, parentRef]);
 
   useEffect(() => {
-    if (!products || products.length === 1) return;
+    if (!products || products.length <= 1 || stopScroll) return;
     const interval = setInterval(() => handleAutoScroll(), 5000);
     return () => clearInterval(interval);
-  }, [handleAutoScroll, products]);
+  }, [handleAutoScroll, products, stopScroll, setStopScroll]);
 
   return (
     <div className="flex-between">
