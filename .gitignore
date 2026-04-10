@@ -42,3 +42,7 @@ next-env.d.ts
 
 # unlhighthouse
 .unlighthouse/
+
+# ignore images and banners
+/public/banners
+/public/images/productImages
