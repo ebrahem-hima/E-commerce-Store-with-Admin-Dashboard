@@ -32,6 +32,7 @@ const CategoryButtons = ({
     name: item.name,
     description: item.description,
     type: item.type,
+    productCount: item.productCount,
   };
   return (
     <div className="flex flex-col gap-2 ml-2">
@@ -40,7 +41,8 @@ const CategoryButtons = ({
         size="sm"
         onClick={(e) => handleEditClick(e, categoryData)}
         title="isEdit"
-        className="p-2 rounded-lg hover:bg-gray-100 transition"
+        aria-label="Edit Category"
+        className="border-none p-2 rounded-lg hover:bg-gray-100 transition"
       >
         <Edit className="w-5 h-5 text-gray-700" />
       </Button>
@@ -48,7 +50,8 @@ const CategoryButtons = ({
         variant="outline"
         size="sm"
         title="Delete"
-        className="p-2 rounded-lg hover:bg-red-100 transition"
+        aria-label="Delete Category"
+        className="border-none p-2 rounded-lg hover:bg-red-100 transition"
         onClick={(e) => {
           e.preventDefault();
           setShowDeleteDialog(true);

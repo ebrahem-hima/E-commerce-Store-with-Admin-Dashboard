@@ -17,7 +17,6 @@ interface Props {
 }
 
 export default function ProductForm({ mode, product }: Props) {
-  // const { categories, setCategories } = useGetCategory();
   const productDetailDefault = {
     id: "",
     name: "",
@@ -28,7 +27,7 @@ export default function ProductForm({ mode, product }: Props) {
     img: "",
     imgGallery: [],
     category_id: 0,
-    active: false,
+    active: true,
     stock: 0,
   };
 
@@ -66,18 +65,14 @@ export default function ProductForm({ mode, product }: Props) {
     setCategories(categoriesDB);
   }, [categoriesDB]);
 
-  const handleAddCategory = (newCategory: categoryDetailType) => {
-    setCategories((prev) => [...prev, newCategory]);
-  };
 
   return (
     <>
-      {/* <CategoryRealTime setCategories={setCategories} /> */}
       {showCategory && (
         <div>
           <div className="absolute top-0 left-0 z-50 bg-black/75 w-full h-full"></div>
           <AddCategory
-            handleAddCategoryProductPage={handleAddCategory}
+            setCategories={setCategories}
             setShowCategory={setShowCategory}
           />
         </div>
@@ -99,15 +94,6 @@ export default function ProductForm({ mode, product }: Props) {
             setShowCategory={setShowCategory}
             categories={categories}
           />
-
-          {/* <div className="space-y-2">
-            <Label>Tags</Label>
-            <div className="flex flex-wrap gap-2">
-              <Badge text="New" />
-              <Badge text="Sale" />
-              <Badge text="Hot" />
-            </div>
-          </div> */}
         </div>
 
         <Information

@@ -7,17 +7,15 @@ export const getProducts = async (searchParams: {
   const supabase = await createClient();
   let query = supabase.from("products").select(
     `
-          id,discount,discount_type,img,name,stock,price,created_at,
-          categories (
-            name
-          )
-        `,
+      id,discount,discount_type,img,name,stock,price,created_at,
+      categories (
+        name
+      )
+    `,
   );
 
   const searchText = searchParams.search;
   const selectFilter = searchParams.filter;
-
-  console.log("selectFilter", selectFilter);
 
   if (searchText) {
     query = query.ilike("name", `%${searchText}%`);
@@ -42,8 +40,6 @@ export const getProducts = async (searchParams: {
   }
 
   const { data, error } = await query;
-
-  console.log("data", data);
 
   if (error) throw error;
   if (!data) return;

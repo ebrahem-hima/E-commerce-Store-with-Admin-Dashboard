@@ -5,30 +5,39 @@ import { Label } from "@/components/ui/label";
 import { categoryDetailType } from "@/types/adminType";
 import { handleAddCategory, handleClose } from "../adminFn/category/categoryFn";
 import { Textarea } from "@/components/ui/textarea";
+import { Boxes } from "lucide-react";
 
 interface Props {
   setShowCategory: Dispatch<SetStateAction<boolean>>;
   categoryDetail?: categoryDetailType;
   Edit?: boolean;
-  handleAddCategoryProductPage?: (newCategory: categoryDetailType) => void;
+  setCategories: Dispatch<SetStateAction<categoryDetailType[]>>;
 }
 
 const AddCategory = ({
   categoryDetail,
   setShowCategory,
   Edit = false,
-  // handleAddCategoryProductPage,
+  setCategories,
 }: Props) => {
   const [category, setCategory] = useState<categoryDetailType>({
     id: categoryDetail?.id || 0,
     name: categoryDetail?.name || "",
     type: categoryDetail?.type || "",
     description: categoryDetail?.description || "",
+    productCount: categoryDetail?.productCount || 0,
   });
+
   const inputRef = useRef<HTMLInputElement | null>(null);
   return (
-    <div className="absolute top-1/5 left-1/2 transform -translate-x-1/2 w-112.5 h-auto z-60 bg-white text-black p-4 rounded-lg">
-      <h2 className="text-xl font-bold mb-4">Add Category</h2>
+    <div className="fixed top-1/5 left-1/2 transform -translate-x-1/2 w-112.5 h-auto z-60 bg-white text-black p-4 rounded-lg">
+      <div className="flex-between mb-4">
+        <h2 className="text-xl font-bold">Add Category</h2>
+        <div className="flex items-center gap-2 text-primary">
+          <Boxes className="w-5 h-5" />
+          <strong>{category?.productCount}</strong> Products
+        </div>
+      </div>
 
       <div className="flex flex-col gap-3 mb-4">
         <div>
@@ -96,9 +105,10 @@ const AddCategory = ({
         </div>
       </div>
 
-      <div className="mt-3 flex-end">
+      <div className="mt-3 flex-end gap-2">
         <Button
           variant="outline"
+          size="sm"
           onClick={(e) =>
             handleClose({
               e,
@@ -113,17 +123,11 @@ const AddCategory = ({
           onClick={(e) => {
             handleAddCategory({
               e,
-              category,
-              setShowCategory,
               Edit,
+              category,
+              setCategories,
+              setShowCategory,
             });
-            // handleAddCategoryProductPage?.({
-            //   id: category?.id,
-            //   name: category?.name || "",
-            //   type: category?.type || "",
-            //   description: category?.description || "",
-            //   productCount: 0,
-            // });
           }}
           variant="default"
           size="sm"
