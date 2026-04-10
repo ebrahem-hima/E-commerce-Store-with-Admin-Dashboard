@@ -6,7 +6,6 @@ const SliderComponentWrapper = async ({ productId }: { productId: string }) => {
   return (
     <>
       <SliderComponent
-        search={false}
         titleComponent="Related Item"
         Product={relatedProducts || []}
       />
