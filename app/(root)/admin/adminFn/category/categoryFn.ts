@@ -14,6 +14,7 @@ interface handleAddCategoryType {
   category: categoryDetailType;
   setShowCategory: Dispatch<SetStateAction<boolean>>;
   Edit: boolean;
+  setCategories: Dispatch<SetStateAction<categoryDetailType[]>>;
 }
 
 const supabase = createClient();
@@ -23,6 +24,7 @@ export const handleAddCategory = async ({
   category,
   setShowCategory,
   Edit,
+  setCategories,
 }: handleAddCategoryType) => {
   e.preventDefault();
   const emptyArr = ["name", "type", "description"];
@@ -36,6 +38,9 @@ export const handleAddCategory = async ({
     return;
   }
   if (Edit) {
+    setCategories((cat) =>
+      cat.map((c) => (c?.id === category.id ? category : c)),
+    );
     const { error } = await supabase
       .from("categories")
       .update({
@@ -50,11 +55,11 @@ export const handleAddCategory = async ({
     }
     toast.success(MESSAGES.admin.category.updateCategory);
   } else {
+    setCategories((cat) => [...cat, category]);
     const { error } = await supabase.from("categories").insert({
       name: category?.name,
       type: category?.type,
       description: category?.description,
-      created_at: getTodayDate(),
     });
     if (error) {
       console.log(error);

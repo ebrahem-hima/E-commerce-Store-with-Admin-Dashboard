@@ -93,6 +93,7 @@ const useProduct = ({
         const filterImages = productDetail.imgGallery?.filter(
           (DBImage) => !ImageGalleryDeleted?.includes(DBImage),
         );
+
         await updateProduct(productID, {
           id: productDetail.id,
           name: productDetail?.name,
