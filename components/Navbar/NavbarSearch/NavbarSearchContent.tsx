@@ -21,7 +21,7 @@ const NavbarSearchContent = ({
     <div
       className={`${
         isOpen ? "" : "hidden"
-      } absolute flex flex-col gap-2 top-9 w-full rounded-md bg-white p-2 z-20`}
+      } max-h-86 overflow-y-auto overflow-x-hidden absolute flex flex-col gap-2 top-9 w-full rounded-md bg-white p-2 z-20 shadow-lg scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent`}
     >
       {Loading ? (
         <LoadingSpinner />
