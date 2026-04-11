@@ -85,7 +85,7 @@ const TitleComponent = ({
 
   useEffect(() => {
     if (!products || products.length <= 1 || stopScroll) return;
-    const interval = setInterval(() => handleAutoScroll(), 5000);
+    const interval = setInterval(() => handleAutoScroll(), 4000);
     return () => clearInterval(interval);
   }, [handleAutoScroll, products, stopScroll]);
 
