@@ -23,7 +23,7 @@ import { categorySelectType } from "@/types/adminType";
 
 type categoryType = {
   name: string | undefined;
-  id: number | undefined;
+  id: string | undefined;
 };
 
 interface Props {
@@ -41,22 +41,22 @@ export function SelectOptions({
 
   const handleDuplicate = (
     name: string | undefined,
-    id: number | undefined
+    id: string | undefined,
   ) => {
     setSelectedCategory((prev) =>
       prev.categorySelected.some((cat) => cat.id === id)
         ? {
             categoryDeleted: [...prev.categoryDeleted, { name, id }],
             categorySelected: prev.categorySelected.filter(
-              (cat) => cat.name !== name
+              (cat) => cat.name !== name,
             ),
           }
         : {
             categoryDeleted: prev.categoryDeleted.filter(
-              (cat) => cat.name !== name
+              (cat) => cat.name !== name,
             ),
             categorySelected: [...prev.categorySelected, { name, id }],
-          }
+          },
     );
   };
   return (
@@ -94,7 +94,7 @@ export function SelectOptions({
                       "mr-2 h-4 w-4",
                       selectedCategory.some((cat) => cat.id === category.id)
                         ? "opacity-100"
-                        : "opacity-0"
+                        : "opacity-0",
                     )}
                   />
                   {category.name}
@@ -110,7 +110,7 @@ export function SelectOptions({
                 setSelectedCategory((prev) => ({
                   categoryDeleted: [...prev.categoryDeleted, category],
                   categorySelected: prev.categorySelected.filter(
-                    (item) => item.name !== category.name
+                    (item) => item.name !== category.name,
                   ),
                 }))
               }

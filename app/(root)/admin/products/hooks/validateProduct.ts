@@ -4,12 +4,12 @@ import { typeProduct } from "@/types/productTypes";
 export const validateProduct = (
   productDetail: typeProduct,
   file: string | null,
-  selectedCategory: number | null
+  selectedCategory: string | null,
 ) => {
   const fields = ["name", "description", "price", "stock"];
 
   const checkEmpty = fields.some(
-    (field) => productDetail[field as keyof typeProduct] === ""
+    (field) => productDetail[field as keyof typeProduct] === "",
   );
   if (!file) return "Main image is required";
 

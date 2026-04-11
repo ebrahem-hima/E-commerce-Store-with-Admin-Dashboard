@@ -4,7 +4,7 @@ export type selectFilterType = {
 };
 
 export type categoryDetailType = {
-  id: number;
+  id: string;
   name: string;
   type: string;
   description: string;
@@ -49,7 +49,7 @@ export type typeMode = "create" | "edit";
 
 export type categoryType = {
   name: string | undefined;
-  id: number | undefined;
+  id: string | undefined;
 };
 
 export interface categorySelectType {

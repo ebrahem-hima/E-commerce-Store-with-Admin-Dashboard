@@ -16,7 +16,7 @@ interface Props {
   ImageGalleryDeleted: string[];
   productDetail: typeProduct;
   getOptions: optionType[];
-  selectedCategory: number | null;
+  selectedCategory: string | null;
 }
 
 const useProduct = ({
