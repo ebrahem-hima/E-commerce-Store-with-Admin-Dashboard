@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction } from "react";
 
 interface handleDeleteCategoryType {
   setShowDeleteDialog: Dispatch<SetStateAction<boolean>>;
-  categoryID: number | undefined;
+  categoryID: string | undefined;
 }
 
 const supabase = createClient();

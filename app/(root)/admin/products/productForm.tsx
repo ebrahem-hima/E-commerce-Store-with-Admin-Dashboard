@@ -26,7 +26,7 @@ export default function ProductForm({ mode, product }: Props) {
     discount_type: "",
     img: "",
     imgGallery: [],
-    category_id: 0,
+    category_id: "",
     active: true,
     stock: 0,
   };
@@ -42,8 +42,8 @@ export default function ProductForm({ mode, product }: Props) {
     product || productDetailDefault,
   );
   const [getOptions, setGetOptions] = useState<optionType[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(
-    Number(categoryId) || product?.category_id || null,
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(
+    categoryId || product?.category_id || null,
   );
 
   const { addProduct, Loading } = useProduct({
@@ -65,6 +65,7 @@ export default function ProductForm({ mode, product }: Props) {
     setCategories(categoriesDB);
   }, [categoriesDB]);
 
+  console.log("categories", categories);
 
   return (
     <>

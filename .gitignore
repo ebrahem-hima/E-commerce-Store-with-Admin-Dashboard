@@ -40,9 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# unlhighthouse
-.unlighthouse/
-
 # to ignore uploaded images
 /public/images/images has uploaded
 /public/banners

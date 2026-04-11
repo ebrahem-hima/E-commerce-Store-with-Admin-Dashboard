@@ -79,7 +79,7 @@ const TableBodyProduct = ({
               discountType={p.discount_type}
             />
           </TableCell>
-          <TableCell>{p.categories?.name}</TableCell>
+          <TableCell>{p.categories?.name || "Null"}</TableCell>
           <TableCell>{p.created_at}</TableCell>
         </TableRow>
       ))}

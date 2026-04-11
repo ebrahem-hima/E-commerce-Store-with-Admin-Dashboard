@@ -43,7 +43,7 @@ const CategoryContent = ({
     setShowCategory(true);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     setCategories((prevCategories) =>
       prevCategories.filter((category) => category?.id !== id),
     );
@@ -58,6 +58,7 @@ const CategoryContent = ({
           <AddCategory
             Edit={Edit}
             setCategories={setCategories}
+            Categories={Categories}
             categoryDetail={categoryDetail}
             setShowCategory={setShowCategory}
           />

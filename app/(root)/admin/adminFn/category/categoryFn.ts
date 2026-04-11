@@ -15,59 +15,79 @@ interface handleAddCategoryType {
   setShowCategory: Dispatch<SetStateAction<boolean>>;
   Edit: boolean;
   setCategories: Dispatch<SetStateAction<categoryDetailType[]>>;
+  Categories: categoryDetailType[] | undefined;
 }
 
 const supabase = createClient();
 
 export const handleAddCategory = async ({
   e,
-  category,
-  setShowCategory,
   Edit,
+  category,
+  Categories,
   setCategories,
+  setShowCategory,
 }: handleAddCategoryType) => {
   e.preventDefault();
-  const emptyArr = ["name", "type", "description"];
 
-  if (!category) return;
-  const checkEmpty = emptyArr.some(
-    (field) => category[field as keyof categoryDetailType] === "",
-  );
-  if (checkEmpty) {
-    toast.error(MESSAGES.admin.category.requiredField);
-    return;
-  }
-  if (Edit) {
-    setCategories((cat) =>
-      cat.map((c) => (c?.id === category.id ? category : c)),
+  const previousCategories = Categories || [];
+  try {
+    const emptyArr = ["name", "type", "description"];
+    if (!category) return;
+    const checkEmpty = emptyArr.some(
+      (field) => category[field as keyof categoryDetailType] === "",
     );
-    const { error } = await supabase
-      .from("categories")
-      .update({
+    if (checkEmpty) {
+      toast.error(MESSAGES.admin.category.requiredField);
+      return;
+    }
+    if (Edit) {
+      setCategories((cat) =>
+        cat.map((c) => (c?.id === category.id ? category : c)),
+      );
+      const { error } = await supabase
+        .from("categories")
+        .update({
+          name: category?.name,
+          type: category?.type,
+          description: category?.description,
+          created_at: getTodayDate(),
+        })
+        .eq("id", category?.id);
+      if (error) {
+        console.log(error);
+      }
+      toast.success(MESSAGES.admin.category.updateCategory);
+    } else {
+      const categoryID = crypto.randomUUID();
+      setCategories((cat) => [
+        ...cat,
+        {
+          id: categoryID,
+          name: category?.name,
+          type: category?.type,
+          description: category?.description,
+        },
+      ]);
+      const { error } = await supabase.from("categories").insert({
+        id: categoryID,
         name: category?.name,
         type: category?.type,
         description: category?.description,
-        created_at: getTodayDate(),
-      })
-      .eq("id", category?.id);
-    if (error) {
-      console.log(error);
+      });
+      if (error) {
+        console.log(error);
+        return;
+      }
+      toast.success(MESSAGES.admin.category.createCategory);
     }
-    toast.success(MESSAGES.admin.category.updateCategory);
-  } else {
-    setCategories((cat) => [...cat, category]);
-    const { error } = await supabase.from("categories").insert({
-      name: category?.name,
-      type: category?.type,
-      description: category?.description,
-    });
-    if (error) {
-      console.log(error);
-      return;
-    }
-    toast.success(MESSAGES.admin.category.createCategory);
+  } catch (error) {
+    setShowCategory(false);
+    console.log(error);
+    setCategories(previousCategories);
+  } finally {
+    setShowCategory(false);
   }
-  setShowCategory(false);
 };
 
 interface handleCloseType {
@@ -77,7 +97,7 @@ interface handleCloseType {
 }
 
 export const handleDeleteCategory = async (
-  categoryIds: (number | undefined)[],
+  categoryIds: (string | undefined)[],
   couponId: number,
 ) => {
   const { error } = await supabase

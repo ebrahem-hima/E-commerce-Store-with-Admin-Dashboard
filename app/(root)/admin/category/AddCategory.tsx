@@ -12,6 +12,7 @@ interface Props {
   categoryDetail?: categoryDetailType;
   Edit?: boolean;
   setCategories: Dispatch<SetStateAction<categoryDetailType[]>>;
+  Categories?: categoryDetailType[];
 }
 
 const AddCategory = ({
@@ -19,9 +20,10 @@ const AddCategory = ({
   setShowCategory,
   Edit = false,
   setCategories,
+  Categories,
 }: Props) => {
   const [category, setCategory] = useState<categoryDetailType>({
-    id: categoryDetail?.id || 0,
+    id: categoryDetail?.id || "",
     name: categoryDetail?.name || "",
     type: categoryDetail?.type || "",
     description: categoryDetail?.description || "",
@@ -125,6 +127,7 @@ const AddCategory = ({
               e,
               Edit,
               category,
+              Categories,
               setCategories,
               setShowCategory,
             });

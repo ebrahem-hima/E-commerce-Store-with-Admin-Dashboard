@@ -16,7 +16,7 @@ interface CategoryButtonsProps {
     e: MouseEvent<HTMLButtonElement>,
     category: categoryDetailType,
   ) => void;
-  handleDelete: (id: number) => void;
+  handleDelete: (id: string) => void;
 }
 
 const CategoryButtons = ({

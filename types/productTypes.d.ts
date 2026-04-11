@@ -16,7 +16,7 @@ export interface typeProduct {
   imgGallery?: string[];
   rate?: number;
   stock: number;
-  category_id: number;
+  category_id: string;
   count?: number;
   discount?: number;
   discount_type?: string;

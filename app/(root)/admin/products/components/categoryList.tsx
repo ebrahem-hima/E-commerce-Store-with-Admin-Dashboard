@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { categoryDetailType } from "@/types/adminType";
 
 interface Props {
-  selectedCategory: number | null;
-  setSelectedCategory: Dispatch<SetStateAction<number | null>>;
+  selectedCategory: string | null;
+  setSelectedCategory: Dispatch<SetStateAction<string | null>>;
   setShowCategory: Dispatch<SetStateAction<boolean>>;
   categories: categoryDetailType[];
   Loading: boolean;
