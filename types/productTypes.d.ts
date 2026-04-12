@@ -7,24 +7,30 @@ export interface CategoryType {
   name?: string;
 }
 
+export interface DB_WishList {
+  id: string;
+  user_id: string;
+  product_id: string;
+  created_at: string;
+  products: typeProduct;
+}
+
 export interface typeProduct {
   id: string;
-  product_id?: string;
   name: string;
   img: string;
   description: string;
-  imgGallery?: string[];
-  rate?: number;
+  imgGallery: string[] | undefined;
+  rate: number | undefined;
   stock: number;
-  category_id: number;
-  count?: number;
-  discount?: number;
-  discount_type?: string;
+  category_id: string;
+  discount: number | undefined;
+  discount_type: string | undefined;
   price: number;
-  options?: optionType[];
+  options: optionType[] | undefined;
   active: boolean;
-  created_at?: string;
-  search_text?: string;
+  created_at: string | undefined;
+  search_text: string | undefined;
 }
 
 export interface OrderDetailsType {

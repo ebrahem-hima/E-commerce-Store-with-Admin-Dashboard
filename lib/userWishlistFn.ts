@@ -46,11 +46,8 @@ export const addWishList = withLock(
       setHeart?.(false);
       return;
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, search_text: _, ...rest } = item;
     const product = {
-      ...rest,
-      product_id: id,
+      product_id: item.id,
       user_id: userId,
     };
     const { error } = await supabase.from("user_wishlist").insert(product);
