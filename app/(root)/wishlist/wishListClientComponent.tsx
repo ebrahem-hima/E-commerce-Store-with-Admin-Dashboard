@@ -4,20 +4,33 @@ import Products from "@/components/shared/Card/ProductCard/Products";
 import { Button } from "@/components/ui/button";
 import { useProductContext } from "@/context/productContext";
 import { moveAllToBag } from "@/lib/userCartFn";
-import { typeProduct } from "@/types/productTypes";
+import { DB_WishList } from "@/types/productTypes";
 import Link from "next/link";
 import { useState } from "react";
 
-const WishListClientComponent = ({ data }: { data: typeProduct[] }) => {
+const WishListClientComponent = ({ data }: { data: DB_WishList[] }) => {
   const { setCartData, cartData } = useProductContext();
 
-  const [wishList, setWishList] = useState(() =>
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    data.map(({ id, ...rest }) => ({
-      ...rest,
-      id: rest.product_id || "",
-    })),
-  );
+  const products = data.map((item) => ({
+    id: item.product_id,
+    // product_id: item.product_id,
+    name: item.products.name,
+    img: item.products.img,
+    description: item.products.description,
+    imgGallery: item.products.imgGallery,
+    rate: item.products.rate,
+    stock: item.products.stock,
+    category_id: item.products.category_id,
+    discount: item.products.discount,
+    discount_type: item.products.discount_type,
+    price: item.products.price,
+    options: item.products.options,
+    active: item.products.active,
+    created_at: item.products.created_at,
+    search_text: item.products.search_text,
+  }));
+
+  const [wishList, setWishList] = useState(products);
 
   return (
     <>
@@ -40,7 +53,7 @@ const WishListClientComponent = ({ data }: { data: typeProduct[] }) => {
       </div>
       {wishList.length > 0 ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-          <Products data={wishList} setData={setWishList} />
+          <Products data={products} setData={setWishList} />
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-20">
