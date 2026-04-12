@@ -11,26 +11,25 @@ import { useState } from "react";
 const WishListClientComponent = ({ data }: { data: DB_WishList[] }) => {
   const { setCartData, cartData } = useProductContext();
 
-  const products = data.map((item) => ({
-    id: item.product_id,
-    // product_id: item.product_id,
-    name: item.products.name,
-    img: item.products.img,
-    description: item.products.description,
-    imgGallery: item.products.imgGallery,
-    rate: item.products.rate,
-    stock: item.products.stock,
-    category_id: item.products.category_id,
-    discount: item.products.discount,
-    discount_type: item.products.discount_type,
-    price: item.products.price,
-    options: item.products.options,
-    active: item.products.active,
-    created_at: item.products.created_at,
-    search_text: item.products.search_text,
-  }));
-
-  const [wishList, setWishList] = useState(products);
+  const [wishList, setWishList] = useState(() =>
+    data.map((item) => ({
+      id: item.product_id,
+      name: item.products.name,
+      img: item.products.img,
+      description: item.products.description,
+      imgGallery: item.products.imgGallery,
+      rate: item.products.rate,
+      stock: item.products.stock,
+      category_id: item.products.category_id,
+      discount: item.products.discount,
+      discount_type: item.products.discount_type,
+      price: item.products.price,
+      options: item.products.options,
+      active: item.products.active,
+      created_at: item.products.created_at,
+      search_text: item.products.search_text,
+    })),
+  );
 
   return (
     <>
@@ -53,7 +52,7 @@ const WishListClientComponent = ({ data }: { data: DB_WishList[] }) => {
       </div>
       {wishList.length > 0 ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-          <Products data={products} setData={setWishList} />
+          <Products data={wishList} setData={setWishList} />
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-20">
