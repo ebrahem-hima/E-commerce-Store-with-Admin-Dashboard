@@ -41,11 +41,12 @@ const AccountNav = () => {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={() => {
-                setCartData([]);
+              onClick={async () => {
+                localStorage.removeItem("user_cart");
                 localStorage.removeItem("cart_guest");
                 setIsAuth(false);
-                logout();
+                await logout();
+                setCartData([]);
               }}
             >
               Log Out

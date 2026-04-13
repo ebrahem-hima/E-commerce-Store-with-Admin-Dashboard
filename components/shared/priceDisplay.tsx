@@ -4,7 +4,7 @@ interface PriceDisplayProps {
   price: number;
   discount?: number;
   discountType?: string;
-  count?: number;
+  quantity?: number;
   isProduct?: boolean;
   productDetail?: boolean;
 }
@@ -13,7 +13,7 @@ const PriceDisplay = ({
   price,
   discount,
   discountType,
-  count = 1,
+  quantity = 1,
   isProduct = false,
   productDetail,
 }: PriceDisplayProps) => {
@@ -29,11 +29,11 @@ const PriceDisplay = ({
   if (productDetail) {
     return hasDiscount ? (
       <div className="flex items-center gap-2 font-poppins text-2xl tracking-[0.03em]">
-        <span className="text-black">${discountedPrice * count}</span>
-        <span className="line-through text-gray-500">${price * count}</span>
+        <span className="text-black">${discountedPrice * quantity}</span>
+        <span className="line-through text-gray-500">${price * quantity}</span>
       </div>
     ) : (
-      <span className="line-through text-gray-500">${price * count}</span>
+      <span className="line-through text-gray-500">${price * quantity}</span>
     );
   }
 
@@ -41,20 +41,20 @@ const PriceDisplay = ({
     hasDiscount ? (
       <div className="flex items-center gap-2 text-sm">
         <span className="text-primary text-sm font-poppins font-medium">
-          {discountedPrice * count} EGP
+          {discountedPrice * quantity} EGP
         </span>
         <span className="font-poppins line-through text-gray-500 font-medium">
-          {price * count} EGP
+          {price * quantity} EGP
         </span>
       </div>
     ) : (
       <span className="text-primary text-sm font-poppins font-medium">
-        {price * count} EGP
+        {price * quantity} EGP
       </span>
     )
   ) : (
     <span className="text-black font-poppins font-medium">
-      ${discountedPrice * count}
+      ${discountedPrice * quantity}
     </span>
   );
 };

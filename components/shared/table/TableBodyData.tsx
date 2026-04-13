@@ -140,7 +140,7 @@ const TableBodyData = ({ dataBody, role = "user" }: Prop) => {
                 price={item.price}
                 discount={item.discount}
                 discountType={item.discount_type}
-                count={item.quantity}
+                quantity={item.quantity}
               />
             </TableCell>
             <TableCell>

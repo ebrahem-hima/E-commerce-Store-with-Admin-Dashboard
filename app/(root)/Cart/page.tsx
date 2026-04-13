@@ -11,8 +11,8 @@ import CouponComponent from "@/components/shared/checkoutComponent/couponCompone
 import TotalComponent from "@/components/shared/checkoutComponent/totalComponent";
 import { TableCart } from "./tableCart";
 import { TableCartSkeleton } from "./TableCartSkeleton";
+import { typeCount } from "@/types/productTypes";
 
-type typeCount = { count: number; id: string }[];
 const Page = () => {
   const [count, setCount] = useState<typeCount>([]);
   const { getCoupon, setCartData, userId, cartData, userCartLoading } =

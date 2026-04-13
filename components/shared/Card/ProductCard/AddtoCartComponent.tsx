@@ -18,7 +18,6 @@ const AddToCartComponent = ({ item, isGrid }: Props) => {
   const isExist = cartData.some(
     (cartItem: typeProduct) => cartItem.id === item.id,
   );
-  // }, [cartData, item.id]);
 
   const isOutOfStock = item.stock === 0;
   return (

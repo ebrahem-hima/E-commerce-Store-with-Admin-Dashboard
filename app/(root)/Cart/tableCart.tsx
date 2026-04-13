@@ -12,14 +12,12 @@ import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { typeProduct } from "@/types/productTypes";
+import { typeCount, typeProduct } from "@/types/productTypes";
 import { IoIosClose } from "react-icons/io";
 import PriceDisplay from "@/components/shared/priceDisplay";
 import { Input } from "@/components/ui/input";
 import { useProductContext } from "@/context/productContext";
 import { handleDeleteProductCart } from "@/lib/userCartFn";
-
-type typeCount = { count: number; id: string }[];
 
 interface Props {
   count: typeCount;
@@ -43,13 +41,13 @@ export function TableCart({ count, setCount, setDisableBtn }: Props) {
       exist
         ? prev.map((countItem) =>
             countItem.id === item.id
-              ? { ...countItem, count: Number(e.target.value) }
+              ? { ...countItem, quantity: Number(e.target.value) }
               : countItem,
           )
         : [
             ...prev,
             {
-              count: Number(e.target.value),
+              quantity: Number(e.target.value),
               id: item.id || "",
             },
           ],
@@ -111,8 +109,8 @@ export function TableCart({ count, setCount, setDisableBtn }: Props) {
                         onChange={(e) => handleCount({ item, e })}
                         type="number"
                         value={
-                          count.find((c) => c.id === item.id)?.count ||
-                          item.count
+                          count.find((c) => c.id === item.id)?.quantity ||
+                          item.quantity
                         }
                         min={1}
                       />
@@ -122,7 +120,7 @@ export function TableCart({ count, setCount, setDisableBtn }: Props) {
                         discount={item.discount}
                         price={item.price}
                         discountType={item.discount_type}
-                        count={item.count}
+                        quantity={item.quantity}
                       />
                     </TableCell>
                   </TableRow>

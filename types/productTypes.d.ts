@@ -12,6 +12,12 @@ export interface DB_WishList {
   user_id: string;
   product_id: string;
   created_at: string;
+}
+export interface useCartType {
+  id: string;
+  user_id: string;
+  product_id: string;
+  quantity: string;
   products: typeProduct;
 }
 
@@ -19,6 +25,7 @@ export interface typeProduct {
   id: string;
   name: string;
   img: string;
+  user_id: string;
   description: string;
   imgGallery: string[] | undefined;
   rate: number | undefined;
@@ -26,6 +33,8 @@ export interface typeProduct {
   category_id: string;
   discount: number | undefined;
   discount_type: string | undefined;
+  category_id: number;
+  quantity?: number;
   price: number;
   options: optionType[] | undefined;
   active: boolean;
@@ -89,3 +98,5 @@ export interface deleteProductCart {
   userId: string;
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
 }
+
+export type typeCount = { quantity: number; id: string }[];
