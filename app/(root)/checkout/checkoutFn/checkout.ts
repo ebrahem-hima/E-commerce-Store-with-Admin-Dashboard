@@ -42,7 +42,7 @@ export const addOrderItems = async ({
     name: item.name,
     price: item.price,
     order_id: orderId,
-    quantity: item.count,
+    quantity: item.quantity,
     options: item.options,
     discount: item.discount,
     product_id: item.id,

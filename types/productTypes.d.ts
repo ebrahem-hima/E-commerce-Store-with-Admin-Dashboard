@@ -7,17 +7,25 @@ export interface CategoryType {
   name?: string;
 }
 
+export interface useCartType {
+  id: string;
+  user_id: string;
+  product_id: string;
+  quantity: string;
+  products: typeProduct;
+}
+
 export interface typeProduct {
   id: string;
-  product_id?: string;
   name: string;
   img: string;
+  user_id: string;
   description: string;
   imgGallery?: string[];
   rate?: number;
   stock: number;
   category_id: number;
-  count?: number;
+  quantity?: number;
   discount?: number;
   discount_type?: string;
   price: number;
@@ -88,3 +96,5 @@ export interface deleteProductCart {
   userId: string;
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
 }
+
+export type typeCount = { quantity: number; id: string }[];

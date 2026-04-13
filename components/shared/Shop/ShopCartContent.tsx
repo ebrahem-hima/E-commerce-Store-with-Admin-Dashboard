@@ -56,7 +56,7 @@ const ShopCartContent = ({
                     discount={item.discount}
                     discountType={item.discount_type}
                   />
-                  <span>x</span> {item.count || 1}
+                  <span>x</span> {item.quantity || 1}
                 </span>
                 {/* Options */}
                 <div className="flex flex-wrap gap-1 text-sm">

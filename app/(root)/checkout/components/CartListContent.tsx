@@ -29,7 +29,7 @@ const CartListContent = ({ userCartLoading, cartData }: Props) => {
               priority
             />
             <span className="line-clamp-1 break-all">{item.name}</span>
-            <span>x{item.count}</span>
+            <span>x{item.quantity}</span>
             <span>
               <PriceDisplay
                 price={item.price}

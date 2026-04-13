@@ -17,19 +17,19 @@ interface Props {
 const Counter = ({ item, getOptions }: Props) => {
   const { active, stock } = item;
   const { userId, cartData, setCartData } = useProductContext();
-  const [count, setCount] = useState(1);
+  const [quantity, setQuantity] = useState(1);
 
   const handleMaxCount = () => {
-    setCount((c) => {
+    setQuantity((q) => {
       if (!active) {
         toast.error("Product is out of stock");
-        return c;
+        return q;
       }
-      if (c === stock) {
+      if (q === stock) {
         toast.info("Sorry, no more stock available");
-        return c;
+        return q;
       }
-      return c + 1;
+      return q + 1;
     });
   };
 
@@ -41,14 +41,14 @@ const Counter = ({ item, getOptions }: Props) => {
     <div className="flex items-center gap-2">
       <div className="flex items-center w-fit rounded-sm">
         <button
-          onClick={() => setCount((c) => Math.max(1, c - 1))}
+          onClick={() => setQuantity((q) => Math.max(1, q - 1))}
           className="cursor-pointer active:text-white active:border-primary active:bg-primary hover:text-white flex-center h-8 w-8 border border-[#777] hover:bg-primary hover:border-primary rounded-l-[3px] duration-200"
         >
           <Minus size={17} />
         </button>
 
         <span className="flex-center w-13 text-center border-t border-b h-8  border-[#777]">
-          {count}
+          {quantity}
         </span>
         <button
           className="cursor-pointer active:text-white active:border-primary active:bg-primary hover:text-white flex-center h-8 w-8 border border-[#777] hover:bg-primary hover:border-primary rounded-r-[3px] duration-200"
@@ -78,6 +78,7 @@ const Counter = ({ item, getOptions }: Props) => {
             cartData,
             item,
             getOptions,
+            quantity,
           });
         }}
       >

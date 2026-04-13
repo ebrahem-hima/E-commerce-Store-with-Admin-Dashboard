@@ -12,7 +12,7 @@ import { createClient } from "@/app/utils/supabase/client";
 interface AddToCartType {
   item: typeProduct;
   userId: string;
-  count?: number;
+  quantity?: number;
   options?: { optionTitle: string; values: string[] }[];
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
   cartData: typeProduct[];
@@ -27,6 +27,7 @@ interface handleAddToCartType {
   cartData: typeProduct[];
   item: typeProduct;
   getOptions?: optionType[];
+  quantity?: number;
 }
 export const handleAddToCart = withLock(
   async ({
@@ -36,6 +37,7 @@ export const handleAddToCart = withLock(
     cartData,
     item,
     getOptions,
+    quantity,
   }: handleAddToCartType) => {
     if (isExist) {
       await handleDeleteProductCart({
@@ -53,20 +55,27 @@ export const handleAddToCart = withLock(
       cartData,
       getOptions,
       setCartData,
+      quantity,
     });
   },
 );
 export const AddToCart = withLock(
-  async ({ item, userId, count, getOptions, setCartData }: AddToCartType) => {
+  async ({
+    item,
+    userId,
+    quantity,
+    getOptions,
+    setCartData,
+  }: AddToCartType) => {
     if (!item.active) {
       toast.info(MESSAGES.cart.outOfStock(item.name));
       return;
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { product_id, search_text, ...rest } = item;
+    const { search_text, ...rest } = item;
     const product = {
       ...rest,
-      count: count || item.count || 1,
+      quantity: quantity || item.quantity || 1,
       options: getOptions || [],
       user_id: userId,
     };
@@ -78,14 +87,10 @@ export const AddToCart = withLock(
       return updated;
     });
     if (userId) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { id, search_text, ...rest } = item;
       const product = {
-        ...rest,
-        product_id: id,
-        count: count || item.count || 1,
-        options: getOptions || [],
+        product_id: item.id,
         user_id: userId,
+        quantity: 1,
       };
 
       const { error } = await supabase.from("user_cart").insert(product);
@@ -102,7 +107,7 @@ export const AddToCart = withLock(
 interface updateProductCount {
   setDisableBtn: Dispatch<SetStateAction<boolean>>;
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
-  count: { count: number; id: string }[];
+  count: { quantity: number; id: string }[];
   userId: string;
   cartData: typeProduct[];
 }
@@ -115,24 +120,20 @@ export const updateProduct = withLock(
     userId,
     cartData,
   }: updateProductCount) => {
+    setCartData((prev) =>
+      prev.map((item) => ({
+        ...item,
+        quantity:
+          count.find((c) => c.id === item.id)?.quantity || item.quantity,
+      })),
+    );
     const updateProductCount = cartData.map((product) => ({
-      product_id: product.id,
       user_id: userId,
-      name: product.name,
-      img: product.img,
-      description: product.description,
-      rate: product.rate,
-      stock: product.stock,
-      imgGallery: product.imgGallery,
-      discount: product.discount,
-      discount_type: product.discount_type,
-      price: product.price,
-      options: product.options || [],
-      active: product.active,
-      created_at: product.created_at,
-      category_id: product.category_id,
-      count: count.find((c) => c.id === product.id)?.count || product.count,
+      quantity:
+        count.find((c) => c.id === product.id)?.quantity || product.quantity,
+      product_id: product.id,
     }));
+
     const { error } = await supabase
       .from("user_cart")
       .upsert(updateProductCount, { onConflict: "product_id, user_id" });
@@ -141,12 +142,6 @@ export const updateProduct = withLock(
       console.log(error);
       return false;
     }
-    setCartData((prev) =>
-      prev.map((item) => ({
-        ...item,
-        count: count.find((c) => c.id === item.id)?.count || item.count,
-      })),
-    );
 
     toast.success(MESSAGES.table.tableUpdate);
     setDisableBtn(true);
@@ -157,7 +152,9 @@ export const handleDeleteProductCart = withLock(
   async ({ ID, name, setCartData, userId }: deleteProductCart) => {
     setCartData((prev) => {
       const data = prev.filter((item) => item.id !== ID);
-      localStorage.setItem("cart_guest", JSON.stringify(data));
+      if (!userId) {
+        localStorage.setItem("cart_guest", JSON.stringify(data));
+      }
       return data;
     });
     if (!userId) {

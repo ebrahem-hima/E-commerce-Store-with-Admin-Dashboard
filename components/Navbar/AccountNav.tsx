@@ -39,13 +39,13 @@ const AccountNav = () => {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={() => {
-                setCartData([]);
+              onClick={async () => {
                 localStorage.removeItem("user_cart");
                 localStorage.removeItem("cart_guest");
                 localStorage.removeItem("user_profile");
                 setIsAuth(false);
-                logout();
+                await logout();
+                setCartData([]);
               }}
             >
               Log Out
