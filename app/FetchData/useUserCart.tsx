@@ -69,6 +69,7 @@ const UseUserCart = ({ isAuth, userId }: Props) => {
     const handleGuestCart = () => {
       const getItems = localStorage.getItem("cart_guest") || "[]";
       setCartData(JSON.parse(getItems));
+      setUserCartLoading(false);
     };
     const handleUserCart = async () => {
       try {
@@ -127,8 +128,12 @@ const UseUserCart = ({ isAuth, userId }: Props) => {
       }
     };
     const syncCart = async () => {
-      if (!userId) return handleGuestCart();
-      if (userId) await handleUserCart();
+      if (isAuth && !userId) return;
+      if (!userId) {
+        handleGuestCart();
+      } else {
+        await handleUserCart();
+      }
     };
     syncCart();
   }, [isAuth, userId, insetDataIntoDB]);
