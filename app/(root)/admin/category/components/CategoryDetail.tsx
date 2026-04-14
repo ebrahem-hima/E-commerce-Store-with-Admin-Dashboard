@@ -5,9 +5,7 @@ import { getProductsByCategory } from "../services/CategoryDetailService";
 import ProductsList from "./ProductsList";
 
 const CategoryDetail = async ({ categoryId }: { categoryId: string }) => {
-  const { products, categoryInfo } = await getProductsByCategory(
-    Number(categoryId),
-  );
+  const { products, categoryInfo } = await getProductsByCategory(categoryId);
   return (
     <div>
       <HeaderSaveActions
