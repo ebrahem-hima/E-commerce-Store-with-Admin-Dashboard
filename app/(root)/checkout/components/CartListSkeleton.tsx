@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export function CartListSkeleton() {
   return (
     <ul className="flex flex-col gap-4 w-full">
-      {[1, 2, 3].map((i) => (
+      {[1, 2, 3, 4].map((i) => (
         <li
           key={i}
           className="grid grid-cols-[40px_1fr_auto_auto] items-center gap-4"
