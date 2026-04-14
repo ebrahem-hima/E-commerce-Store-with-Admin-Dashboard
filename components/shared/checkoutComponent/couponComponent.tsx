@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import CouponFn from "../../../app/FetchData/couponFn";
-import { useProductContext } from "../../../context/productContext";
+// import { useProductContext } from "@/context/productContext";
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
+import { useProductContext } from "@/context/productContext";
 
 const CouponComponent = () => {
   const { setGetCoupon } = useProductContext();

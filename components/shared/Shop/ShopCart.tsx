@@ -8,10 +8,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useProductContext } from "../../../context/productContext";
+// import { useProductContext } from "../../../context/productContext";
 import { handleDeleteProductCart } from "@/lib/userCartFn";
 import { CartSkeleton } from "../../Loaders/CartSkeleton";
 import ShopCartContent from "./ShopCartContent";
+import { useProductContext } from "@/context/productContext";
 
 export function ShopCart() {
   const { cartData, setCartData, userId, total, userCartLoading } =

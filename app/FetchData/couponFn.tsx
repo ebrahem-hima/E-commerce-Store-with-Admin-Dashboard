@@ -1,5 +1,5 @@
 import { FormEvent, useRef } from "react";
-import { useProductContext } from "../../context/productContext";
+import { useProductContext } from "@/context/productContext";
 import {
   checkCouponDate,
   checkCouponValid,

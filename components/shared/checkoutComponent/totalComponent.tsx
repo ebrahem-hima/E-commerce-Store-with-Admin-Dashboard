@@ -1,5 +1,6 @@
+import { useProductContext } from "@/context/productContext";
 import React from "react";
-import { useProductContext } from "../../../context/productContext";
+// import { useProductContext } from "../../../context/productContext";
 
 interface Props {
   someDiscount: number;

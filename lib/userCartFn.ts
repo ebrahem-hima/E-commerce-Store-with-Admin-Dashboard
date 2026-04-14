@@ -71,10 +71,8 @@ export const AddToCart = withLock(
       toast.info(MESSAGES.cart.outOfStock(item.name));
       return;
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { search_text, ...rest } = item;
     const product = {
-      ...rest,
+      ...item,
       quantity: quantity || item.quantity || 1,
       options: getOptions || [],
       user_id: userId,

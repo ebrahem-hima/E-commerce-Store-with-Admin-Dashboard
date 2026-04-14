@@ -1,8 +1,8 @@
 "use client";
 
+import { useProductContext } from "@/context/productContext";
 import { footer } from "../constant/filterNavbar";
 import Link from "next/link";
-import { useProductContext } from "../context/productContext";
 
 const Footer = () => {
   const register = "Register";

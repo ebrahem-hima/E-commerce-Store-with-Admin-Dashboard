@@ -29,11 +29,11 @@ export default async function RootLayout({
 }) {
   const user = await getUser();
   return (
-    <ProductProvider initialUser={user?.id || null}>
-      <html lang="en">
-        <body
-          className={`${poppins.className} ${inter.variable} grid grid-rows-[auto_1fr_auto] antialiased`}
-        >
+    <html lang="en">
+      <body
+        className={`${poppins.className} ${inter.variable} grid grid-rows-[auto_1fr_auto] antialiased`}
+      >
+        <ProductProvider initialUser={user?.id || null}>
           <Navbar />
           <main className="pt-20 flex flex-col min-h-screen">
             <div className="grow px-10! max-md:px-1! max-sm:px-0">
@@ -43,8 +43,8 @@ export default async function RootLayout({
           </main>
           <Toaster expand richColors />
           <SpeedInsights />
-        </body>
-      </html>
-    </ProductProvider>
+        </ProductProvider>
+      </body>
+    </html>
   );
 }
