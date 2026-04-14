@@ -4,18 +4,19 @@ import Products from "@/components/shared/Card/ProductCard/Products";
 import { Button } from "@/components/ui/button";
 import { useProductContext } from "@/context/productContext";
 import { moveAllToBag } from "@/lib/userCartFn";
-import { DB_WishList } from "@/types/productTypes";
+import { DB_WishList, typeProduct } from "@/types/productTypes";
 import Link from "next/link";
 import { useState } from "react";
 
 const WishListClientComponent = ({ data }: { data: DB_WishList[] }) => {
   const { setCartData, cartData } = useProductContext();
 
-  const [wishList, setWishList] = useState(() =>
+  const [wishList, setWishList] = useState<typeProduct[]>(() =>
     data.map((item) => ({
       id: item.product_id,
       name: item.products.name,
       img: item.products.img,
+      user_id: item.user_id,
       description: item.products.description,
       imgGallery: item.products.imgGallery,
       stock: item.products.stock,

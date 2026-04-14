@@ -6,7 +6,8 @@ export const MESSAGES = {
     loginRequired: "Please log in to add items to your favorites list.",
   },
   cart: {
-    added: (name?: string) => `${name || "Items"} has been added to your cart.`,
+    added: (name?: string) =>
+      `${name || "Products"} has been added to your cart.`,
     removed: (name: string) => `${name} has been removed from your cart.`,
     outOfStock: (names: string) =>
       names.includes(",")

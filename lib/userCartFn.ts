@@ -222,9 +222,15 @@ export const moveAllToBag = withLock(
       return false;
     }
 
+    const formattedData = addWishList.map((item) => ({
+      product_id: item.id,
+      user_id: item.user_id,
+      quantity: item.quantity || 1,
+    }));
+
     const { error } = await supabase
       .from("user_cart")
-      .upsert(addWishList, { count: "exact" })
+      .upsert(formattedData, { count: "exact" })
       .select();
 
     if (error) {
