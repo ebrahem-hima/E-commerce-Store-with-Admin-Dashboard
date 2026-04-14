@@ -77,8 +77,8 @@ export function TableCart({ count, setCount, setDisableBtn }: Props) {
                         <Image
                           src={item.img}
                           alt="product-img"
-                          width={100}
-                          height={100}
+                          width={60}
+                          height={60}
                           priority
                           className="w-auto h-auto"
                         />

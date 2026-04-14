@@ -94,7 +94,7 @@ const Page = () => {
           {checkOut === "delivery" && <DeliveryForm />}
         </div>
         {/* products */}
-        <div className="flex flex-col gap-5 max-md:order-1 text-sm">
+        <div className="flex flex-col gap-2 max-md:order-1 text-sm">
           <CartListContent
             userCartLoading={userCartLoading}
             cartData={cartData}

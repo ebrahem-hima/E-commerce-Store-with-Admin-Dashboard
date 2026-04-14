@@ -35,7 +35,6 @@ export const addOrderItems = async ({
   orderId,
 }: addOrderItemsProps) => {
   // to get data without id of row and add order_id
-  console.log("cartData", cartData);
   const getData = cartData.map((item) => ({
     img: item.img,
     user_id: userId,

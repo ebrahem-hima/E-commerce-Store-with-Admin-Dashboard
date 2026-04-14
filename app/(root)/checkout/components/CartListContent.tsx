@@ -10,7 +10,7 @@ interface Props {
 
 const CartListContent = ({ userCartLoading, cartData }: Props) => {
   return (
-    <ul className="flex flex-col gap-4">
+    <ul className="flex flex-col gap-4 max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 p-1">
       {/* Item */}
       {userCartLoading ? (
         <CartListSkeleton />
