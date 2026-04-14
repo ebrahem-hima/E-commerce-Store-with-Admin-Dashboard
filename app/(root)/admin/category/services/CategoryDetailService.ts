@@ -12,10 +12,10 @@ export interface ProductWithCategory {
 }
 
 export const getProductsByCategory = async (
-  categoryId: number,
+  categoryId: string,
 ): Promise<{
   products: ProductWithCategory[];
-  categoryInfo: { name: string; id: number } | null;
+  categoryInfo: { name: string; id: string } | null;
 }> => {
   const supabase = await createClient();
 
@@ -60,7 +60,7 @@ export const getProductsByCategory = async (
     img: product.img,
   }));
 
-  const categoryInfo: { name: string; id: number } = {
+  const categoryInfo: { name: string; id: string } = {
     name: categoryData.name,
     id: categoryId,
   };

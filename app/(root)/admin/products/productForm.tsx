@@ -25,6 +25,7 @@ export default function ProductForm({ mode, product }: Props) {
     discount: 0,
     discount_type: "",
     img: "",
+    options: [],
     imgGallery: [],
     category_id: "",
     active: true,
@@ -64,6 +65,10 @@ export default function ProductForm({ mode, product }: Props) {
   useEffect(() => {
     setCategories(categoriesDB);
   }, [categoriesDB]);
+
+  useEffect(() => {
+    setGetOptions(product?.options || []);
+  }, [product?.options]);
 
   console.log("categories", categories);
 
