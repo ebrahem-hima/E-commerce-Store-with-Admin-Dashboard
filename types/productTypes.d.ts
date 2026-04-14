@@ -12,6 +12,7 @@ export interface DB_WishList {
   user_id: string;
   product_id: string;
   created_at: string;
+  products: typeProduct;
 }
 export interface useCartType {
   id: string;
@@ -25,10 +26,10 @@ export interface typeProduct {
   id: string;
   name: string;
   img: string;
-  user_id: string;
+  user_id?: string;
   description: string;
   imgGallery: string[] | undefined;
-  rate: number | undefined;
+  rate?: number;
   stock: number;
   category_id: string;
   discount: number | undefined;
@@ -38,8 +39,8 @@ export interface typeProduct {
   price: number;
   options: optionType[] | undefined;
   active: boolean;
-  created_at: string | undefined;
-  search_text: string | undefined;
+  created_at?: string | undefined;
+  search_text?: string | undefined;
 }
 
 export interface OrderDetailsType {

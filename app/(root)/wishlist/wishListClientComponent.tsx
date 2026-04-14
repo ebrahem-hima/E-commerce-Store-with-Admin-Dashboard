@@ -18,7 +18,6 @@ const WishListClientComponent = ({ data }: { data: DB_WishList[] }) => {
       img: item.products.img,
       description: item.products.description,
       imgGallery: item.products.imgGallery,
-      rate: item.products.rate,
       stock: item.products.stock,
       category_id: item.products.category_id,
       discount: item.products.discount,
@@ -26,8 +25,6 @@ const WishListClientComponent = ({ data }: { data: DB_WishList[] }) => {
       price: item.products.price,
       options: item.products.options,
       active: item.products.active,
-      created_at: item.products.created_at,
-      search_text: item.products.search_text,
     })),
   );
 

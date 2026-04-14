@@ -26,6 +26,7 @@ export default function ProductForm({ mode, product }: Props) {
     discount_type: "",
     img: "",
     imgGallery: [],
+    options: [],
     category_id: "",
     active: true,
     stock: 0,
