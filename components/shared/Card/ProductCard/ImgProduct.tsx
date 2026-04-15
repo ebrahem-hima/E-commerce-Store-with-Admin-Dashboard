@@ -1,12 +1,11 @@
 import Image from "next/image";
-import "../Card.css";
 import { typeProduct } from "@/types/productTypes";
 import HeartWishListButton from "./HeartWishListButton";
 
 interface Props {
   item: typeProduct;
   isGrid?: boolean;
-  toggleProducts: (productId: string) => void;
+  toggleProducts?: (productId: string) => void;
 }
 
 const ImgProduct = ({ item, isGrid, toggleProducts }: Props) => {

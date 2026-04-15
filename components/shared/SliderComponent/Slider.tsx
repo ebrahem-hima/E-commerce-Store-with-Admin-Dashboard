@@ -1,4 +1,5 @@
 import { MouseEvent, useRef, useState } from "react";
+import "../Card/Card.css";
 
 const Slider = ({
   children,
@@ -105,7 +106,6 @@ const Slider = ({
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={stopDragging}
-      // onScroll={() => setStopScroll?.(true)}
       onClickCapture={handleChildClick}
       onDragStart={(e) => e.preventDefault()}
       className={`${style} slider scroll-smooth overflow-x-auto scrollbar-hide snap-x snap-mandatory`}

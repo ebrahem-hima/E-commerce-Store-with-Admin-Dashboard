@@ -12,6 +12,7 @@ const CouponContent = async ({ getSearchParams }: Props) => {
   return (
     <>
       <TableSearch
+        tableWidth="min-w-125"
         typeTable="coupons"
         selectOptions={couponSortOptions}
         tableData={data}

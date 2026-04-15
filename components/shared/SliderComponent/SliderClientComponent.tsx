@@ -5,7 +5,6 @@ import TitleComponent from "./titleComponent";
 import { SliderComponentType } from "@/types/productTypes";
 import { useRef, useState } from "react";
 import Products from "../Card/ProductCard/Products";
-import { useProductContext } from "@/context/productContext";
 
 const SliderClientComponent = ({
   titleComponent,
@@ -13,7 +12,6 @@ const SliderClientComponent = ({
   sliderType,
 }: SliderComponentType) => {
   const parentRef = useRef<HTMLDivElement | null>(null);
-  const { setCartData } = useProductContext();
   const [stopScroll, setStopScroll] = useState(false);
   if (Product?.length === 0) return null;
   return (
@@ -35,7 +33,7 @@ const SliderClientComponent = ({
         parentRef={parentRef}
         sliderType={sliderType || "product"}
       >
-        <Products data={Product || []} setData={setCartData} />
+        <Products data={Product || []} />
       </Slider>
     </div>
   );

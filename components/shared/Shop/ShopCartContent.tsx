@@ -28,8 +28,8 @@ const ShopCartContent = ({
   setCartData,
 }: Props) => {
   return (
-    <div>
-      <div className="flex flex-col gap-4 h-103.75 mt-3 overflow-y-auto scrollbar-hide mb-1">
+    <div className="flex flex-col h-full">
+      <div className="flex-1 flex flex-col gap-4 mt-3 overflow-y-auto scrollbar-hide mb-1">
         {cartData.length > 0 ? (
           cartData.map((item) => (
             <div
@@ -97,7 +97,7 @@ const ShopCartContent = ({
           </div>
         )}
       </div>
-      <SheetFooter className="flex flex-col! gap-2 border-t border-[#77777754] pt-1">
+      <SheetFooter className="flex flex-col! gap-2 border-t border-[#77777754] pt-1 pb-2">
         <div className="flex-between">
           <span className="font-poppins text-[18px]">Subtotal:</span>
           <span>${total}</span>

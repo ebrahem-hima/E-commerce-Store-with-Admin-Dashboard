@@ -1,6 +1,4 @@
 import { typeProduct } from "../../../../types/productTypes";
-import "../Card.css";
-
 import ImgProduct from "./ImgProduct";
 import TextProduct from "./textProduct";
 import Link from "next/link";
@@ -8,15 +6,15 @@ import Link from "next/link";
 interface Props {
   item: typeProduct;
   isGrid?: boolean;
-  toggleProducts: (productId: string) => void;
+  toggleProducts?: (productId: string) => void;
 }
 
 const ProductCard = ({ item, isGrid, toggleProducts }: Props) => {
   return (
     <Link
       href={`/productDetails/${item.id}`}
-      className={`h-57.5 productCard snap-start group ${
-        isGrid ? "flex-row flex items-center" : "flex-col flex-center"
+      className={`h-57.5 min-w-0 snap-start group ${
+        isGrid ? "flex-row flex items-center" : "flex flex-col"
       } gap-2 cursor-pointer`}
     >
       {/* Img + Icons */}

@@ -90,7 +90,7 @@ const Page = () => {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-8">
+    <div className="lg:p-6 max-w-6xl mx-auto space-y-8">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">
           Manage Hero Banners

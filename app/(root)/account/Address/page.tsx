@@ -25,8 +25,6 @@ const Page = () => {
     setAddress(profileData);
   }, [profileData]);
 
-  if (!userId) push(`/log-in`);
-
   if (profileLoading) return <LoadingSpinner />;
   return (
     <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -115,7 +113,7 @@ const Page = () => {
           ))}
         </select>
       </div>
-      <div className="flex gap-2 justify-end col-start-2">
+      <div className="flex gap-2 justify-end md:col-start-2">
         <Button
           onClick={(e) => {
             e.preventDefault();

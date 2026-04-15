@@ -23,7 +23,6 @@ const TableBodyOrder = ({
   Edit,
   setEditValue,
 }: Props) => {
-  console.log("dataBody", dataBody);
   const { push } = useRouter();
 
   const getSelected = selectCheckBox.map((item) => item.ID);
@@ -42,6 +41,7 @@ const TableBodyOrder = ({
   };
 
   const orderStatusClasses: Record<string, string> = {
+    Ready: "bg-primary text-white",
     Pending: "bg-[#F99600] text-white",
     Shipped: "bg-[#5A607F] text-white",
     Delivered: "bg-[#1E5EFF] text-white",
@@ -74,15 +74,20 @@ const TableBodyOrder = ({
             {getSelected.includes(o.id) && Edit ? (
               <select
                 onClick={(e) => e.stopPropagation()}
-                className={`px-2 py-1 rounded bg-transparent border border-gray-300 ${
+                className={`p-1 rounded bg-black! border border-gray-300 ${
                   orderStatusClasses[o.order_status] || "text-gray-500"
                 }`}
                 onChange={(e) => handleEdit(o.id, e.target.value)}
               >
                 <option value={o.order_status}>{o.order_status}</option>
-                <option value="Pending">Pending</option>
-                <option value="Shipped">Shipped</option>
-                <option value="Delivered">Delivered</option>
+
+                {["Ready", "Pending", "Shipped", "Delivered"]
+                  .filter((status) => status !== o.order_status)
+                  .map((status) => (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  ))}
               </select>
             ) : (
               <span

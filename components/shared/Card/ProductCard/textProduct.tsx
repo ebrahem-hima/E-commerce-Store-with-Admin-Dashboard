@@ -1,4 +1,3 @@
-import "../Card.css";
 import PriceDisplay from "../../priceDisplay";
 import { typeProduct } from "@/types/productTypes";
 import AddToCartComponent from "./AddtoCartComponent";
@@ -13,7 +12,7 @@ const TextProduct = ({
   const { name, discount, price, rate, discount_type } = item;
 
   return (
-    <div className={`${isGrid && "w-3/3"} w-full flex flex-col mr-auto`}>
+    <div className={`w-full flex flex-col`}>
       <span
         className={`${
           isGrid ? "line-clamp-4 break-all" : "line-clamp-2 break-all"
@@ -33,7 +32,7 @@ const TextProduct = ({
         <span className="text-sm text-[#777] font-medium">Rate({rate})</span>
       )}
 
-      <AddToCartComponent isGrid={isGrid!} item={item} />
+      <AddToCartComponent item={item} />
     </div>
   );
 };

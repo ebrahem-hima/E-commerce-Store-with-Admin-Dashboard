@@ -143,7 +143,7 @@ const TableBodyCoupon = ({
                   </HoverCardContent>
                 </HoverCard>
               ) : (
-                <span className="px-2 py-1 rounded-sm bg-[#E6E9F4] text-[#5A607F] text-xs font-medium">
+                <span className="flex px-2 py-1 rounded-sm bg-[#E6E9F4] text-[#5A607F] text-xs font-medium">
                   All Users
                 </span>
               )}

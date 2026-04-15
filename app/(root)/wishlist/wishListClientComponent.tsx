@@ -28,6 +28,19 @@ const WishListClientComponent = ({ data }: { data: DB_WishList[] }) => {
       active: item.products.active,
     })),
   );
+  const toggleProducts = (productId: string) => {
+    setWishList?.((prev) => {
+      const exist = prev.some((p) => p.id === productId);
+      if (exist) {
+        return prev.filter((p) => p.id !== productId);
+      } else {
+        const product = prev.find((p) => p.id === productId);
+        if (!product) return prev;
+        return [...prev, product];
+      }
+    });
+    return data;
+  };
 
   return (
     <>
@@ -50,7 +63,7 @@ const WishListClientComponent = ({ data }: { data: DB_WishList[] }) => {
       </div>
       {wishList.length > 0 ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-          <Products data={wishList} setData={setWishList} />
+          <Products data={wishList} toggleProducts={toggleProducts} />
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-20">

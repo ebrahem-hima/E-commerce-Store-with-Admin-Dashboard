@@ -8,7 +8,6 @@ import { SlGrid } from "react-icons/sl";
 
 const SearchProduct = ({ products }: { products: typeProduct[] }) => {
   const [isGrid, setIsGrid] = useState(false);
-  const [productSearch, setProductSearch] = useState(products);
 
   return (
     <div>
@@ -33,11 +32,7 @@ const SearchProduct = ({ products }: { products: typeProduct[] }) => {
             : "grid grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-400:grid-cols-1"
         } gap-4 `}
       >
-        <Products
-          isGrid={isGrid}
-          data={productSearch}
-          setData={setProductSearch}
-        />
+        <Products isGrid={isGrid} data={products} />
       </div>
     </div>
   );

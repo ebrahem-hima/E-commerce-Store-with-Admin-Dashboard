@@ -1,5 +1,4 @@
 import { SliderComponentType } from "../../../types/productTypes";
-import "../Card/Card.css";
 import { createClient } from "@/app/utils/supabase/server";
 import SliderClientComponent from "./SliderClientComponent";
 
