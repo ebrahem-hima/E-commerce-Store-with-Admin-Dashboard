@@ -20,6 +20,7 @@ import {
 import createOrder from "./hooks/createOrderFn";
 import CartListContent from "./components/CartListContent";
 import PaymentMethodSelector from "./components/PaymentMethodSelector";
+import { createClient } from "@/app/utils/supabase/client";
 
 const Page = () => {
   const [checkOut, setCheckOut] = useState<"bank" | "delivery">("delivery");
@@ -38,6 +39,31 @@ const Page = () => {
   const [Loading, setLoading] = useState(false);
   const someDiscount = getCoupon?.value;
 
+  const supabase = createClient();
+
+  const handlePayment = async (
+    cartItems: {
+      id: string;
+      qty: number | undefined;
+    }[],
+  ) => {
+    const { data, error } = await supabase.rpc("payment", {
+      items: cartItems,
+    });
+
+    if (error) {
+      toast.error(error.message);
+      return false;
+    }
+
+    if (!data?.success) {
+      toast.error(data?.message || "Payment failed");
+      return false;
+    }
+
+    return data.success;
+  };
+
   const placeOrder = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -50,6 +76,17 @@ const Page = () => {
       if (!profileData) return;
       const validate = handleCheckOutValidation(profileData);
       if (!validate) return false;
+      const products = cartData.map((p) => ({
+        id: p.id,
+        qty: p.quantity,
+      }));
+
+      const paymentResult = await handlePayment(products);
+
+      if (!paymentResult) {
+        setLoading(false);
+        return;
+      }
 
       const orderData = await createOrder({
         userId: userId || "",

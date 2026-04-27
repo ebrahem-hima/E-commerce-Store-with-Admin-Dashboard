@@ -25,7 +25,10 @@ const checkTotal = async ({
     });
 
     return true;
-  } else if (discountType === "fixed_discount") {
+  } else if (
+    discountType === "price_discount" ||
+    discountType === "fixed_discount"
+  ) {
     const totalDiscount = getCoupon?.value;
     const newTotalDiscount = totalDiscount || 0 + discount;
     if (newTotalDiscount > total) {

@@ -33,7 +33,7 @@ const PriceDisplay = ({
         <span className="line-through text-gray-500">${price * quantity}</span>
       </div>
     ) : (
-      <span className="line-through text-gray-500">${price * quantity}</span>
+      <span>${price * quantity}</span>
     );
   }
 

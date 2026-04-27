@@ -66,7 +66,7 @@ const TableBodyProduct = ({
             {p.stock > 0 ? (
               <span>{p.stock} in stock</span>
             ) : (
-              <span className="bg-[#E6E9F4] text-[#5A607F] rounded-sm px-2 py-1">
+              <span className="flex bg-[#E6E9F4] text-[#5A607F] rounded-sm px-2 py-1">
                 Out of Stock
               </span>
             )}

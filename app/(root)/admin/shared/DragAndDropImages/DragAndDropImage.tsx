@@ -78,13 +78,13 @@ const DragAndDropImage = ({ setFile, Img }: Props) => {
         onDrop={putImage}
         className={clsx(
           "flex-center cursor-pointer border border-dashed border-[#777] rounded-sm p-4",
-          isIn ? "border-blue-500" : ""
+          isIn ? "border-blue-500" : "",
         )}
       >
         <div className="text-center flex flex-col">
           <Input type="file" onChange={handleChange} hidden id="category" />
           {image ? (
-            <div className="relative w-[110px] h-[110px]">
+            <div className="relative w-27.5 h-27.5">
               <IoIosClose
                 size={23}
                 className="absolute -top-3 -right-3 z-20 p-px bg-primary text-white rounded-full"

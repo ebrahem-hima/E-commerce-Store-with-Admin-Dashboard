@@ -1,7 +1,7 @@
 "use client";
 
 import { categoryDetailType } from "@/types/adminType";
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useState } from "react";
 import AddCategory from "../AddCategory";
 import PageHeader from "../../shared/PageHeader";
 import Link from "next/link";
@@ -17,10 +17,6 @@ const CategoryContent = ({
 }) => {
   const [Categories, setCategories] =
     useState<categoryDetailType[]>(categories);
-
-  useEffect(() => {
-    setCategories(categories);
-  }, [categories]);
 
   const [showCategory, setShowCategory] = useState(false);
   const [Edit, setEdit] = useState(false);

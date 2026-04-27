@@ -96,7 +96,7 @@ const DragAndDropImageGallery = ({
         onDrop={putImage}
         className={clsx(
           "flex-center cursor-pointer border border-dashed border-[#777] rounded-sm p-4",
-          isIn ? "border-blue-500" : ""
+          isIn ? "border-blue-500" : "",
         )}
       >
         <div className="text-center flex flex-col">
@@ -117,9 +117,9 @@ const DragAndDropImageGallery = ({
       </Label>
 
       {allImages.length > 0 && (
-        <div className="overflow-x-auto h-[150px] w-full flex items-center gap-4">
+        <div className="overflow-x-auto h-37.5 w-full flex items-center gap-4">
           {allImages.map((img, idx) => (
-            <div key={idx} className="relative w-[100px] h-[90px] shrink-0">
+            <div key={idx} className="relative w-25 h-22.5 shrink-0">
               <IoIosClose
                 size={23}
                 className="absolute -top-3 -right-3 z-20 p-px bg-primary text-white rounded-full"

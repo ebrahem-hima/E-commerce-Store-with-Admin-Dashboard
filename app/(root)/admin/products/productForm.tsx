@@ -70,8 +70,6 @@ export default function ProductForm({ mode, product }: Props) {
     setGetOptions(product?.options || []);
   }, [product?.options]);
 
-  console.log("categories", categories);
-
   return (
     <>
       {showCategory && (

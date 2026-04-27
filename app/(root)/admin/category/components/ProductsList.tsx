@@ -5,20 +5,13 @@ import Image from "next/image";
 import PriceDisplay from "@/components/shared/priceDisplay";
 import Link from "next/link";
 import { Edit2, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
 import { handleDeleteProducts } from "../../shared/adminServices/product_service";
 import { deleteProductById } from "../services/DeleteProduct";
 
 const ProductsList = ({ products }: { products: ProductWithCategory[] }) => {
-  const [getProducts, setGetProducts] = useState(products);
-
-  useEffect(() => {
-    setGetProducts(products);
-  }, [products]);
-
   return (
     <div className="flex flex-col gap-4">
-      {getProducts.map((product) => (
+      {products.map((product) => (
         <div
           key={product.id}
           className="px-4 group flex-between cursor-pointer"

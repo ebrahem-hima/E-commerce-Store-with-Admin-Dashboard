@@ -18,6 +18,8 @@ import PriceDisplay from "@/components/shared/priceDisplay";
 import { Input } from "@/components/ui/input";
 import { useProductContext } from "@/context/productContext";
 import { handleDeleteProductCart } from "@/lib/userCartFn";
+import { toast } from "sonner";
+import { MESSAGES } from "@/lib/message";
 
 interface Props {
   count: typeCount;
@@ -37,6 +39,14 @@ export function TableCart({ count, setCount, setDisableBtn }: Props) {
 
   const handleCount = ({ item, e }: handleCountType) => {
     const exist = count.some((countItem) => countItem.id === item.id);
+
+    const quantity = Number(e.target.value);
+
+    if (quantity > item.stock) {
+      toast.error(MESSAGES.cart.MAX_QUANTITY);
+      return;
+    }
+
     setCount((prev) =>
       exist
         ? prev.map((countItem) =>
@@ -52,6 +62,7 @@ export function TableCart({ count, setCount, setDisableBtn }: Props) {
             },
           ],
     );
+
     setDisableBtn(false);
   };
 

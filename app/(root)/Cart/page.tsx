@@ -57,7 +57,7 @@ const Page = () => {
             />
           )}
         </div>
-        <div className="flex-between mt-6">
+        <div className="flex-between mt-6 mb-2">
           <Button
             asChild
             variant="white"

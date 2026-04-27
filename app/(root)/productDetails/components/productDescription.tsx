@@ -9,7 +9,7 @@ const ProductDescription = async ({
 }: {
   productDetail: typeProduct;
 }) => {
-  const { name, description, active, price, discount, discount_type } =
+  const { name, description, price, discount, discount_type, stock } =
     productDetail;
 
   return (
@@ -34,7 +34,7 @@ const ProductDescription = async ({
             ))}
           </div>
           <span> Reviews | </span> */}
-          {active ? (
+          {stock > 0 ? (
             <span className="text-green-700 font-poppins font-normal text-sm">
               In Stock
             </span>

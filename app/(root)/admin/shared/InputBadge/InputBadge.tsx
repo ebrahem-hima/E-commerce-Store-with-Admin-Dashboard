@@ -100,7 +100,7 @@ const InputBadge = ({ setGetOptions, getOptions }: Props) => {
                   e,
                   input.optionTitle,
                   index,
-                  optionState.isEditing
+                  optionState.isEditing,
                 );
               }}
             >
@@ -114,7 +114,7 @@ const InputBadge = ({ setGetOptions, getOptions }: Props) => {
             <div className="flex items-center gap-2 mt-2">
               {(
                 getOptions.find(
-                  (item) => item.optionTitle === input.optionTitle
+                  (item) => item.optionTitle === input.optionTitle,
                 )?.values ?? []
               ).map((badge, idx) => (
                 <div
@@ -126,11 +126,11 @@ const InputBadge = ({ setGetOptions, getOptions }: Props) => {
                           ? {
                               ...item,
                               values: item.values?.filter(
-                                (name) => name !== badge
+                                (name) => name !== badge,
                               ),
                             }
-                          : item
-                      )
+                          : item,
+                      ),
                     )
                   }
                 >

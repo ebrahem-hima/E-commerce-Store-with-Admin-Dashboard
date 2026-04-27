@@ -120,7 +120,7 @@ const Information = ({
           <Input
             name="stock"
             type="number"
-            value={productDetail.stock === 0 ? "" : productDetail.stock}
+            value={productDetail.stock}
             onChange={(e) => updateField("stock", Number(e.target.value))}
             placeholder="Enter Price"
           />
