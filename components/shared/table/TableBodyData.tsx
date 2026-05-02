@@ -158,7 +158,7 @@ const TableBodyData = ({ dataBody, role = "user" }: Prop) => {
                     </div>
                   ))
                 ) : (
-                  <span className="text-medium">Null</span>
+                  <span className="text-medium">No Options</span>
                 ))}
             </TableCell>
           </TableRow>
