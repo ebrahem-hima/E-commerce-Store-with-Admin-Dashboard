@@ -32,7 +32,7 @@ const TextProduct = ({
         <span className="text-sm text-[#777] font-medium">Rate({rate})</span>
       )}
 
-      <AddToCartComponent item={item} />
+      <AddToCartComponent isGrid={isGrid} item={item} />
     </div>
   );
 };

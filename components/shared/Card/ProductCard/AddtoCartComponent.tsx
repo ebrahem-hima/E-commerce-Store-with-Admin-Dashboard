@@ -10,7 +10,7 @@ import { useState } from "react";
 
 interface Props {
   item: typeProduct;
-  isGrid: boolean;
+  isGrid?: boolean;
 }
 
 const AddToCartComponent = ({ item, isGrid }: Props) => {
