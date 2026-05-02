@@ -29,11 +29,13 @@ const PriceDisplay = ({
   if (productDetail) {
     return hasDiscount ? (
       <div className="flex items-center gap-2 font-poppins text-2xl tracking-[0.03em]">
-        <span className="text-black">${discountedPrice * quantity}</span>
-        <span className="line-through text-gray-500">${price * quantity}</span>
+        <span className="text-black">{discountedPrice * quantity}EGP</span>
+        <span className="line-through text-gray-500">
+          {price * quantity}EGP
+        </span>
       </div>
     ) : (
-      <span className="line-through text-gray-500">${price * quantity}</span>
+      <span className="line-through text-gray-500">{price * quantity}EGP</span>
     );
   }
 
@@ -54,7 +56,7 @@ const PriceDisplay = ({
     )
   ) : (
     <span className="text-black font-poppins font-medium">
-      ${discountedPrice * quantity}
+      {discountedPrice * quantity}EGP
     </span>
   );
 };

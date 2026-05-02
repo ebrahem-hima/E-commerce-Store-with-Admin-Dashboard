@@ -14,3 +14,10 @@ export interface productOptionsType {
   optionTitle: string;
   values: string[];
 }
+
+export type handleUpdateQuantityProps = {
+  type: "inc" | "dec";
+  setQuantity: Dispatch<SetStateAction<number>>;
+  quantity: number;
+  stock: number;
+};

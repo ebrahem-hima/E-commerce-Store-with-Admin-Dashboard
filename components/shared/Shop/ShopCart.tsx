@@ -6,7 +6,6 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
 // import { useProductContext } from "../../../context/productContext";
 import { handleDeleteProductCart } from "@/lib/userCartFn";
@@ -15,25 +14,26 @@ import ShopCartContent from "./ShopCartContent";
 import { useProductContext } from "@/context/productContext";
 
 export function ShopCart() {
-  const { cartData, setCartData, userId, total, userCartLoading } =
-    useProductContext();
+  const {
+    cartData,
+    openCart,
+    setOpenCart,
+    setCartData,
+    userId,
+    total,
+    userCartLoading,
+  } = useProductContext();
   const count = cartData.length;
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <button
-          type="button"
-          aria-label={`Open Cart, ${count} items`}
-          className="relative flex items-center justify-center"
-        >
-          <IoCartOutline size={25} className="cursor-pointer" />
-          {count > 0 && (
-            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-white text-[10px] shadow-sm">
-              {count}
-            </span>
-          )}
-        </button>
-      </SheetTrigger>
+    <Sheet open={openCart} onOpenChange={setOpenCart}>
+      <div onClick={() => setOpenCart(true)} className="relative inline-block">
+        <IoCartOutline size={25} className="cursor-pointer" />
+        {count > 0 && (
+          <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-white text-[10px] shadow-sm">
+            {count}
+          </span>
+        )}
+      </div>
       <SheetContent isStrongOverlay>
         <SheetHeader>
           <SheetTitle>Your Cart</SheetTitle>

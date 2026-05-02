@@ -1,4 +1,7 @@
-import { typeProduct } from "@/types/productTypes";
+import {
+  handleDeleteProductCartProps,
+  typeProduct,
+} from "@/types/productTypes";
 import Image from "next/image";
 import React, { Dispatch, SetStateAction } from "react";
 import { Button } from "@/components/ui/button";
@@ -11,12 +14,7 @@ interface Props {
   cartData: typeProduct[];
   userId: string | null;
   total: number;
-  handleDeleteProductCart: (args: {
-    ID: string;
-    name: string;
-    userId: string;
-    setCartData: Dispatch<SetStateAction<typeProduct[]>>;
-  }) => void;
+  handleDeleteProductCart: (args: handleDeleteProductCartProps) => void;
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
 }
 
@@ -33,7 +31,7 @@ const ShopCartContent = ({
         {cartData.length > 0 ? (
           cartData.map((item) => (
             <div
-              key={item.id}
+              key={item.cartId}
               className="grid grid-cols-[80px_1fr_auto] items-center gap-3 border-t border-[#d4d3d3] pt-3"
             >
               <div className="relative">
@@ -60,9 +58,9 @@ const ShopCartContent = ({
                 </span>
                 {/* Options */}
                 <div className="flex flex-wrap gap-1 text-sm">
-                  {item.options &&
-                    item.options?.length > 0 &&
-                    item.options.map((option) => (
+                  {item.selected_options &&
+                    item.selected_options?.length > 0 &&
+                    item.selected_options.map((option) => (
                       <div
                         key={option.optionTitle}
                         className="flex items-center gap-1"
@@ -82,10 +80,11 @@ const ShopCartContent = ({
                 size={22}
                 onClick={() =>
                   handleDeleteProductCart({
-                    ID: item.id || "",
+                    ID: item.cartId || "",
                     name: item.name,
                     userId: userId || "",
                     setCartData,
+                    cartData,
                   })
                 }
               />

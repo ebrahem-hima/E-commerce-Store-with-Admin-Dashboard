@@ -1,16 +1,11 @@
 "use client";
 
 import Products from "@/components/shared/Card/ProductCard/Products";
-import { Button } from "@/components/ui/button";
-import { useProductContext } from "@/context/productContext";
-import { moveAllToBag } from "@/lib/userCartFn";
 import { DB_WishList, typeProduct } from "@/types/productTypes";
 import Link from "next/link";
 import { useState } from "react";
 
 const WishListClientComponent = ({ data }: { data: DB_WishList[] }) => {
-  const { setCartData, cartData } = useProductContext();
-
   const [wishList, setWishList] = useState<typeProduct[]>(() =>
     data.map((item) => ({
       id: item.product_id,
@@ -44,23 +39,7 @@ const WishListClientComponent = ({ data }: { data: DB_WishList[] }) => {
 
   return (
     <>
-      <div className="flex-between my-4">
-        <span className="font-medium">Wishlist ({wishList.length})</span>
-        <Button
-          variant={"white"}
-          size={"default"}
-          disabled={wishList.length === 0}
-          onClick={() =>
-            moveAllToBag({
-              wishList,
-              setCartData,
-              cartData,
-            })
-          }
-        >
-          Move All to Bag
-        </Button>
-      </div>
+      <p className="my-4 font-medium">Wishlist ({wishList.length})</p>
       {wishList.length > 0 ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           <Products data={wishList} toggleProducts={toggleProducts} />

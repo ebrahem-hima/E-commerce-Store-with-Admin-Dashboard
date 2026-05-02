@@ -1,5 +1,5 @@
 import {
-  deleteProductCart,
+  handleDeleteProductCartProps,
   optionType,
   typeProduct,
 } from "@/types/productTypes";
@@ -17,45 +17,39 @@ interface AddToCartType {
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
   cartData: typeProduct[];
   getOptions?: optionType[];
+  isExist: boolean;
 }
 const supabase = createClient();
 
 interface handleAddToCartType {
   isExist: boolean;
+  setOpenCart: Dispatch<SetStateAction<boolean>>;
+  setOpenProductModal: Dispatch<SetStateAction<boolean>>;
+  item: typeProduct;
   userId: string;
+  quantity: number;
+  getOptions: optionType[];
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
   cartData: typeProduct[];
-  item: typeProduct;
-  getOptions?: optionType[];
-  quantity?: number;
 }
 export const handleAddToCart = withLock(
   async ({
-    userId,
     isExist,
+    item,
+    userId,
+    quantity,
     setCartData,
     cartData,
-    item,
     getOptions,
-    quantity,
   }: handleAddToCartType) => {
-    if (isExist) {
-      await handleDeleteProductCart({
-        ID: item.id || "",
-        name: item.name,
-        userId: userId || "",
-        setCartData,
-      });
-      return;
-    }
-
-    await AddToCart({
+    AddToCart({
       item,
-      userId: userId || "",
-      cartData,
+      userId,
+      quantity,
       getOptions,
       setCartData,
-      quantity,
+      cartData,
+      isExist,
     });
   },
 );
@@ -66,39 +60,59 @@ export const AddToCart = withLock(
     quantity,
     getOptions,
     setCartData,
+    cartData,
+    isExist,
   }: AddToCartType) => {
+    const previousCartData = cartData;
+    if (isExist) {
+      toast.info(MESSAGES.cart.ALREADY_OPTIONS);
+      return;
+    }
     if (!item.active) {
       toast.info(MESSAGES.cart.outOfStock(item.name));
       return;
     }
-    const product = {
-      ...item,
-      quantity: quantity || item.quantity || 1,
-      options: getOptions || [],
-      user_id: userId,
-    };
-    setCartData((prev) => {
-      const updated = [...prev, product];
-      if (!userId) {
-        localStorage.setItem("cart_guest", JSON.stringify(updated));
-      }
-      return updated;
-    });
-    if (userId) {
-      const product = {
-        product_id: item.id,
-        user_id: userId,
-        quantity: 1,
-      };
-
-      const { error } = await supabase.from("user_cart").insert(product);
-      if (error) {
-        console.log("error Add To Cart", error);
-        return;
-      }
+    if (item.stock === 0) {
+      toast.error(MESSAGES.cart.OUT_OF_STOCK);
+      return;
     }
+    try {
+      const options = getOptions && getOptions?.length > 0 ? getOptions : [];
+      const cartId = crypto.randomUUID();
+      const product = {
+        ...item,
+        cartId,
+        quantity: quantity || item.quantity || 1,
+        selected_options: options,
+        user_id: userId,
+      };
+      setCartData((prev) => {
+        const updated = [...prev, product];
+        if (!userId) {
+          localStorage.setItem("cart_guest", JSON.stringify(updated));
+        }
+        return updated;
+      });
+      if (userId) {
+        const product = {
+          id: cartId,
+          product_id: item.id,
+          user_id: userId,
+          quantity: 1,
+          selected_options: options,
+        };
 
-    toast.success(MESSAGES.cart.added(item.name));
+        const { error } = await supabase.from("user_cart").insert(product);
+        if (error) throw error;
+      }
+
+      toast.success(MESSAGES.cart.added(item.name));
+    } catch (error) {
+      console.log("error Add To Cart", error);
+      setCartData(previousCartData);
+      toast.error(MESSAGES.ERROR_MESSAGES.SomethingWentWrong);
+      return;
+    }
   },
 );
 
@@ -106,7 +120,6 @@ interface updateProductCount {
   setDisableBtn: Dispatch<SetStateAction<boolean>>;
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
   count: { quantity: number; id: string }[];
-  userId: string;
   cartData: typeProduct[];
 }
 
@@ -115,62 +128,76 @@ export const updateProduct = withLock(
     setDisableBtn,
     count,
     setCartData,
-    userId,
     cartData,
   }: updateProductCount) => {
-    setCartData((prev) =>
-      prev.map((item) => ({
-        ...item,
-        quantity:
-          count.find((c) => c.id === item.id)?.quantity || item.quantity,
-      })),
-    );
-    const updateProductCount = cartData.map((product) => ({
-      user_id: userId,
-      quantity:
-        count.find((c) => c.id === product.id)?.quantity || product.quantity,
-      product_id: product.id,
-    }));
+    const previousCartData = [...cartData];
+    try {
+      setCartData((prev) =>
+        prev.map((item) => ({
+          ...item,
+          quantity:
+            count.find((c) => c.id === item.cartId)?.quantity || item.quantity,
+        })),
+      );
+      const updatePromises = count.map((product) => {
+        return supabase
+          .from("user_cart")
+          .update({ quantity: product.quantity })
+          .eq("id", product.id);
+      });
 
-    const { error } = await supabase
-      .from("user_cart")
-      .upsert(updateProductCount, { onConflict: "product_id, user_id" });
+      const results = await Promise.all(updatePromises);
 
-    if (error) {
+      const hasError = results.some((res) => res.error);
+      if (hasError) console.error("One or more updates failed");
+
+      toast.success(MESSAGES.table.tableUpdate);
+      setDisableBtn(true);
+    } catch (error) {
       console.log(error);
-      return false;
+      setCartData(previousCartData);
+      toast.error(MESSAGES.ERROR_MESSAGES.SomethingWentWrong);
+      setDisableBtn(true);
     }
-
-    toast.success(MESSAGES.table.tableUpdate);
-    setDisableBtn(true);
   },
 );
 
 export const handleDeleteProductCart = withLock(
-  async ({ ID, name, setCartData, userId }: deleteProductCart) => {
-    setCartData((prev) => {
-      const data = prev.filter((item) => item.id !== ID);
+  async ({
+    ID,
+    name,
+    setCartData,
+    userId,
+    cartData,
+  }: handleDeleteProductCartProps) => {
+    const previousCartData = cartData;
+    try {
+      setCartData((prev) => {
+        const data = prev.filter((item) => item.cartId !== ID);
+        if (!userId) {
+          localStorage.setItem("cart_guest", JSON.stringify(data));
+        }
+        return data;
+      });
       if (!userId) {
-        localStorage.setItem("cart_guest", JSON.stringify(data));
+        toast.success(MESSAGES.cart.removed(name));
+        return;
       }
-      return data;
-    });
-    if (!userId) {
+
+      const { error } = await supabase.from("user_cart").delete().eq("id", ID);
+
+      if (error) {
+        console.log("error", error);
+        throw error;
+      }
+
       toast.success(MESSAGES.cart.removed(name));
+    } catch (error) {
+      setCartData(previousCartData);
+      console.log(error);
+      toast.error(MESSAGES.ERROR_MESSAGES.SomethingWentWrong);
       return;
     }
-
-    const { error } = await supabase
-      .from("user_cart")
-      .delete()
-      .eq("product_id", ID);
-
-    if (error) {
-      console.log("error", error);
-      return;
-    }
-
-    toast.success(MESSAGES.cart.removed(name));
   },
 );
 
@@ -192,52 +219,5 @@ export const handleDeleteAllProductCart = withLock(
       return false;
     }
     setCartData([]);
-  },
-);
-
-interface moveAllBagType {
-  wishList: typeProduct[];
-  setCartData: Dispatch<SetStateAction<typeProduct[]>>;
-  cartData: typeProduct[];
-}
-
-export const moveAllToBag = withLock(
-  async ({ wishList, cartData, setCartData }: moveAllBagType) => {
-    const addWishList = wishList
-      .filter((wish) => !cartData.some((cart) => cart.id === wish.id))
-      .filter((item) => item.active);
-
-    const isNotActive = wishList.filter((item) => !item.active);
-    if (isNotActive.length > 0) {
-      toast.info(
-        MESSAGES.cart.outOfStock(
-          isNotActive.map((item) => item.name).join(", "),
-        ),
-      );
-      if (wishList.length === 1) return;
-    }
-
-    if (addWishList.length === 0) {
-      toast.info(MESSAGES.wishlist.ExistCartShop);
-      return false;
-    }
-
-    const formattedData = addWishList.map((item) => ({
-      product_id: item.id,
-      user_id: item.user_id,
-      quantity: item.quantity || 1,
-    }));
-
-    const { error } = await supabase
-      .from("user_cart")
-      .upsert(formattedData, { count: "exact" })
-      .select();
-
-    if (error) {
-      console.log(error);
-      return false;
-    }
-    setCartData((prev) => [...prev, ...addWishList]);
-    toast.success(MESSAGES.cart.added);
   },
 );

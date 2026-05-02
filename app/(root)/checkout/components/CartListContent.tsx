@@ -18,7 +18,7 @@ const CartListContent = ({ userCartLoading, cartData }: Props) => {
         cartData?.length > 0 &&
         cartData.map((item) => (
           <li
-            key={item.id}
+            key={item.cartId}
             className="grid grid-cols-[40px_1fr_auto_auto] items-center gap-4"
           >
             <Image

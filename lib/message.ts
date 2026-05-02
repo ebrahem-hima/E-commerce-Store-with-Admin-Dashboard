@@ -9,6 +9,11 @@ export const MESSAGES = {
     added: (name?: string) =>
       `${name || "Products"} has been added to your cart.`,
     removed: (name: string) => `${name} has been removed from your cart.`,
+    maximum_stock: "Reached maximum stock limit",
+    MAX_QUANTITY: "You reached the maximum available quantity",
+    OUT_OF_STOCK: "This product is out of stock",
+    SELECT_ALL_OPTIONS: "Please select all available options",
+    ALREADY_OPTIONS: "These options are already in the cart",
     outOfStock: (names: string) =>
       names.includes(",")
         ? `Some products (${names}) are currently out of stock and cannot be added to your cart..`
