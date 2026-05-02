@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { typeProduct } from "../../types/productTypes";
+import { optionType, typeProduct } from "../../types/productTypes";
 import { createClient } from "@/app/utils/supabase/client";
 
 interface Props {
@@ -14,25 +14,32 @@ const UseUserCart = ({ isAuth, userId }: Props) => {
   const [userCartLoading, setUserCartLoading] = useState(true);
   const [total, setTotal] = useState(0);
 
+  /*
+  1- make loop on cartGuest
+  2- pass every option arr to function
+  3- check by every if all options exist in dataDB options
+  */
+
   const mergeUnique = useCallback(
     (data: typeProduct[], cartGuest: typeProduct[]) => {
       const map = new Map<string, typeProduct>();
-
       [...data, ...cartGuest].forEach((item) => {
-        const itemWithUserId = {
-          ...item,
-          user_id: userId,
-        };
-        if (!map.has(item.id!)) {
-          map.set(item.id!, itemWithUserId);
+        const optionsKey =
+          item?.selected_options &&
+          item?.selected_options
+            .map(({ optionTitle, values }) => `${optionTitle}:${values}`)
+            .sort()
+            .join("-");
+        const key = `${item.id}-${optionsKey}`;
+        if (!map.has(key)) {
+          map.set(key, item);
         }
       });
       const mapData = Array.from(map.values());
       return mapData;
     },
-    [userId],
+    [],
   );
-
   const insetDataIntoDB = useCallback(
     async ({
       dataSelect,
@@ -44,21 +51,34 @@ const UseUserCart = ({ isAuth, userId }: Props) => {
       const supabase = createClient();
       const collectData = mergeUnique(dataSelect, getCartGuest);
 
-      const getNewData =
-        dataSelect.length > 0
-          ? collectData.filter(
-              (item) => !dataSelect.some((d: typeProduct) => item.id === d.id),
-            )
-          : collectData;
+      const normalize = (options: optionType[]) =>
+        options
+          ?.map((opt) => ({
+            optionTitle: opt.optionTitle,
+            values: opt.values,
+          }))
+          .sort((a, b) => a.optionTitle.localeCompare(b.optionTitle));
+
+      const getNewData = collectData.filter((cartItem) => {
+        return !dataSelect.some((dbItem) => {
+          return (
+            dbItem.id === cartItem.id &&
+            JSON.stringify(normalize(dbItem.selected_options || [])) ===
+              JSON.stringify(normalize(cartItem.selected_options || []))
+          );
+        });
+      });
 
       const formatData = getNewData.map((item: typeProduct) => ({
+        id: item.cartId,
         user_id: item.user_id,
         product_id: item.id,
         quantity: item.quantity,
+        selected_options: item.selected_options,
       }));
       setCartData(collectData);
       const { error } = await supabase.from("user_cart").upsert(formatData, {
-        onConflict: "user_id,product_id",
+        onConflict: "user_id,product_id,selected_options",
       });
       if (error) throw error;
     },
@@ -85,7 +105,9 @@ const UseUserCart = ({ isAuth, userId }: Props) => {
         }));
         const { data: dataSelect, error: selectError } = await supabase
           .from("user_cart")
-          .select(`user_id, product_id, quantity, products(*)`)
+          .select(
+            `id, user_id, product_id, quantity, selected_options, products(*)`,
+          )
           .eq("user_id", userId);
         if (selectError) throw selectError;
 
@@ -96,6 +118,7 @@ const UseUserCart = ({ isAuth, userId }: Props) => {
               ? item.products[0]
               : item.products;
             return {
+              cartId: item.id,
               id: item.product_id,
               name: product.name,
               img: product.img,
@@ -110,6 +133,7 @@ const UseUserCart = ({ isAuth, userId }: Props) => {
               discount_type: product.discount_type,
               price: product.price,
               options: product.options,
+              selected_options: item.selected_options,
               active: product.active,
               created_at: product.created_at,
               search_text: product.search_text,

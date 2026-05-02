@@ -38,6 +38,7 @@ export const ProductProvider = ({
     isAuth,
     userId: initialUser || "",
   });
+  const [openCart, setOpenCart] = useState(false);
   // -------------- End CartShop --------------
 
   // -------------- Start  Fetch User Profile --------------
@@ -69,6 +70,9 @@ export const ProductProvider = ({
 
     cartData,
     setCartData,
+
+    openCart,
+    setOpenCart,
 
     userOrders,
 

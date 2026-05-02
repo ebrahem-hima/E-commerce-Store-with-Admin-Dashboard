@@ -15,7 +15,7 @@ import { typeCount } from "@/types/productTypes";
 
 const Page = () => {
   const [count, setCount] = useState<typeCount>([]);
-  const { getCoupon, setCartData, userId, cartData, userCartLoading } =
+  const { getCoupon, setCartData, cartData, userCartLoading } =
     useProductContext();
   const [disableBtn, setDisableBtn] = useState(true);
   const { push } = useRouter();
@@ -57,7 +57,7 @@ const Page = () => {
             />
           )}
         </div>
-        <div className="flex-between mt-6">
+        <div className="flex-between mt-6 mb-2">
           <Button
             asChild
             variant="white"
@@ -74,7 +74,6 @@ const Page = () => {
                 setDisableBtn,
                 count,
                 setCartData,
-                userId: userId || "",
                 cartData,
               });
             }}

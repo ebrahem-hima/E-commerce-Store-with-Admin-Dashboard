@@ -1,65 +1,50 @@
-import { Minus, Plus, Trash2 } from "lucide-react";
+"use client";
+
+import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import "../Card/Card.css";
-import { handleAddToCart } from "@/lib/userCartFn";
-import { toast } from "sonner";
-import { optionType, typeProduct } from "../../../types/productTypes";
+import { AddToCart } from "@/lib/userCartFn";
+import { typeProduct } from "../../../types/productTypes";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useProductContext } from "@/context/productContext";
+import { useSearchParams } from "next/navigation";
 import HeartWishListButton from "../Card/ProductCard/HeartWishListButton";
+import { IfProductExist } from "@/lib/utils";
+import QuantityControl from "./QuantityControl";
+import { toast } from "sonner";
 
 interface Props {
   item: typeProduct;
-  getOptions: optionType[];
 }
 
-const Counter = ({ item, getOptions }: Props) => {
-  const { active, stock } = item;
-  const { userId, cartData, setCartData } = useProductContext();
+const Counter = ({ item }: Props) => {
+  const { stock } = item;
+  const { userId, cartData, setCartData, setOpenCart } = useProductContext();
   const [quantity, setQuantity] = useState(1);
 
-  const handleMaxCount = () => {
-    setQuantity((q) => {
-      if (!active) {
-        toast.error("Product is out of stock");
-        return q;
-      }
-      if (q === stock) {
-        toast.info("Sorry, no more stock available");
-        return q;
-      }
-      return q + 1;
-    });
-  };
+  const searchParams = useSearchParams();
 
-  const isExist = cartData.some(
-    (cartItem: typeProduct) => cartItem.id === item.id,
-  );
+  const getOptions = useMemo(() => {
+    const options: { optionTitle: string; values: string[] }[] = [];
+    searchParams.forEach((values, key) => {
+      options.push({ optionTitle: key, values: [values] });
+    });
+    return options;
+  }, [searchParams]);
+
+  const isExist = IfProductExist(cartData, getOptions, item);
 
   return (
     <div className="flex items-center gap-2">
-      <div className="flex items-center w-fit rounded-sm">
-        <button
-          onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-          className="cursor-pointer active:text-white active:border-primary active:bg-primary hover:text-white flex-center h-8 w-8 border border-[#777] hover:bg-primary hover:border-primary rounded-l-[3px] duration-200"
-        >
-          <Minus size={17} />
-        </button>
+      <QuantityControl
+        quantity={quantity}
+        setQuantity={setQuantity}
+        stock={item.stock}
+      />
 
-        <span className="flex-center w-13 text-center border-t border-b h-8  border-[#777]">
-          {quantity}
-        </span>
-        <button
-          className="cursor-pointer active:text-white active:border-primary active:bg-primary hover:text-white flex-center h-8 w-8 border border-[#777] hover:bg-primary hover:border-primary rounded-r-[3px] duration-200"
-          onClick={handleMaxCount}
-        >
-          <Plus size={17} />
-        </button>
-      </div>
       <Button
         size="sm"
-        disabled={!active}
+        disabled={stock === 0}
         className={`w-fit hover:opacity-85! text-[15px] px-3 rounded-sm 
           ${
             stock === 0
@@ -71,15 +56,27 @@ const Counter = ({ item, getOptions }: Props) => {
           `}
         onClick={(e) => {
           e.preventDefault();
-          handleAddToCart({
-            userId: userId || "",
-            isExist,
-            setCartData,
-            cartData,
-            item,
-            getOptions,
-            quantity,
-          });
+          if (isExist) {
+            setOpenCart(true);
+          } else {
+            if (
+              getOptions.length === 0 &&
+              item.options &&
+              item.options?.length > 0
+            ) {
+              toast.info("please choose option");
+              return;
+            }
+            AddToCart({
+              userId: userId || "",
+              setCartData,
+              cartData,
+              item,
+              getOptions,
+              quantity,
+              isExist,
+            });
+          }
         }}
       >
         {/* Buy Now */}
@@ -87,8 +84,8 @@ const Counter = ({ item, getOptions }: Props) => {
           <span>Out of Stock</span>
         ) : isExist ? (
           <div className="flex gap-2 items-center text-sm">
-            <span>Remove from cart</span>
-            <Trash2 />
+            <span>View in Cart</span>
+            <MdOutlineAddShoppingCart className="h-5! w-5!" />
           </div>
         ) : (
           <div className="flex gap-2 items-center text-sm">

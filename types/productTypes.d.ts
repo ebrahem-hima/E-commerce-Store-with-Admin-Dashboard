@@ -12,10 +12,12 @@ export interface useCartType {
   user_id: string;
   product_id: string;
   quantity: string;
+  selected_options: optionType[];
   products: typeProduct;
 }
 
 export interface typeProduct {
+  cartId?: string;
   id: string;
   name: string;
   img: string;
@@ -25,6 +27,7 @@ export interface typeProduct {
   rate?: number;
   stock: number;
   category_id: number;
+  selected_options?: optionType[];
   quantity?: number;
   discount?: number;
   discount_type?: string;
@@ -90,11 +93,12 @@ export interface SliderComponentType {
   categoryId?: number;
 }
 
-export interface deleteProductCart {
+export interface handleDeleteProductCartProps {
   ID: string;
   name: string;
   userId: string;
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
+  cartData: typeProduct[];
 }
 
 export type typeCount = { quantity: number; id: string }[];

@@ -36,11 +36,11 @@ export function TableCart({ count, setCount, setDisableBtn }: Props) {
   const { userId, setCartData, cartData } = useProductContext();
 
   const handleCount = ({ item, e }: handleCountType) => {
-    const exist = count.some((countItem) => countItem.id === item.id);
+    const exist = count.some((countItem) => countItem.id === item.cartId);
     setCount((prev) =>
       exist
         ? prev.map((countItem) =>
-            countItem.id === item.id
+            countItem.id === item.cartId
               ? { ...countItem, quantity: Number(e.target.value) }
               : countItem,
           )
@@ -48,7 +48,7 @@ export function TableCart({ count, setCount, setDisableBtn }: Props) {
             ...prev,
             {
               quantity: Number(e.target.value),
-              id: item.id || "",
+              id: item.cartId || "",
             },
           ],
     );
@@ -62,16 +62,17 @@ export function TableCart({ count, setCount, setDisableBtn }: Props) {
           <Table className="w-full">
             <TableHeader>
               <TableRow>
-                <TableHead className="w-25">item</TableHead>
+                <TableHead className="w-25">Product</TableHead>
                 <TableHead>Price</TableHead>
+                <TableHead>Options</TableHead>
                 <TableHead className="w-17.5">Quantity</TableHead>
-                <TableHead className="text-right">Subtotal</TableHead>
+                <TableHead className="text-center">Subtotal</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody className="w-full">
               {cartData.map((item) => {
                 return (
-                  <TableRow key={item.id}>
+                  <TableRow key={item.cartId}>
                     <TableCell className="w-50 font-medium">
                       <div className="flex items-center gap-3 relative">
                         <Image
@@ -86,10 +87,11 @@ export function TableCart({ count, setCount, setDisableBtn }: Props) {
                           size={23}
                           onClick={() =>
                             handleDeleteProductCart({
-                              ID: item.id || "",
+                              ID: item.cartId || "",
                               name: item.name,
                               userId: userId || "",
                               setCartData,
+                              cartData,
                             })
                           }
                           className="absolute rounded-full top-0 left-0 bg-primary text-white cursor-pointer"
@@ -104,12 +106,25 @@ export function TableCart({ count, setCount, setDisableBtn }: Props) {
                         discountType={item.discount_type}
                       />
                     </TableCell>
+                    <TableCell>
+                      {item.selected_options &&
+                      item.selected_options?.length > 0 ? (
+                        item.selected_options?.map((p, idx) => (
+                          <div className="flex items-center gap-1" key={idx}>
+                            <p className="font-semibold">{p.optionTitle}:</p>
+                            <span>{p.values}</span>
+                          </div>
+                        ))
+                      ) : (
+                        <span>No options</span>
+                      )}
+                    </TableCell>
                     <TableCell className="w-fit">
                       <Input
                         onChange={(e) => handleCount({ item, e })}
                         type="number"
                         value={
-                          count.find((c) => c.id === item.id)?.quantity ||
+                          count.find((c) => c.id === item.cartId)?.quantity ||
                           item.quantity
                         }
                         min={1}

@@ -20,6 +20,9 @@ export interface ProductContextType {
   cartData: typeProduct[];
   setCartData: Dispatch<SetStateAction<typeProduct[]>>;
 
+  openCart: boolean;
+  setOpenCart: Dispatch<SetStateAction<boolean>>;
+
   userOrders: TypeUserOrder[];
 
   getCoupon: typeGetCoupon | null;

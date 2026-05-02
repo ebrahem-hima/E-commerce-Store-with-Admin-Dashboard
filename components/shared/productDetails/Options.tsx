@@ -1,52 +1,59 @@
+"use client";
+
 import { optionType } from "@/types/productTypes";
-import React from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback } from "react";
 
 interface Props {
   options: optionType[];
-  getOptions: optionType[];
-  setGetOptions: React.Dispatch<React.SetStateAction<optionType[]>>;
 }
 
-const Options = ({ options, getOptions, setGetOptions }: Props) => {
-  const addOptions = (value: string, optionTitle: string) => {
-    setGetOptions((prev) => {
-      const existing = prev.find((item) => item.optionTitle === optionTitle);
-      if (existing?.values) {
-        const values = existing.values.includes(value)
-          ? existing.values.filter((v) => v !== value)
-          : [value];
-        if (values.length === 0) {
-          return prev.filter((item) => item.optionTitle !== optionTitle);
-        }
-        return prev.map((item) =>
-          item.optionTitle === optionTitle ? { ...item, values } : item,
-        );
+const Options = ({ options }: Props) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathName = usePathname();
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+
+      if (searchParams.get(name) === value) {
+        params.delete(name);
       } else {
-        return [...prev, { optionTitle, values: [value] }];
+        params.set(name, value);
       }
-    });
+
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  const handleOptionClick = (title: string, value: string) => {
+    const queryString = createQueryString(title, value);
+    router.replace(`${pathName}?${queryString}`, { scroll: false });
   };
   return (
     <div className="flex flex-col gap-3">
       {options?.map((option, idx) => (
-        <div key={idx} className="flex gap-2">
-          <span className="font-inter font-normal text-[20px] tracking-[0.03em]">
+        <div key={idx} className="flex items-center gap-2">
+          <span className="font-inter font-normal text-md tracking-[0.03em]">
             {option.optionTitle}:
           </span>
           <div className="flex gap-2">
-            {(option.values || []).map((value, idx) => (
-              <span
-                key={idx}
-                className={`${
-                  getOptions.some((item) => item.values?.[0] === value)
-                    ? "bg-primary text-white border-primary!"
-                    : ""
-                } cursor-pointer duration-200 py-0.5 px-3 border border-gray-400 hover:border-primary hover:text-white hover:bg-primary rounded-sm active:bg-primary active:border-primary active:text-white`}
-                onClick={() => addOptions(value, option.optionTitle)}
-              >
-                {value}
-              </span>
-            ))}
+            {(option.values || []).map((value, idx) => {
+              const isActive = searchParams.get(option.optionTitle) === value;
+              return (
+                <span
+                  key={idx}
+                  className={`${
+                    isActive ? "bg-primary text-white border-primary!" : ""
+                  } cursor-pointer duration-200 text-sm py-0.5 px-3 border border-gray-400 hover:border-primary hover:text-white hover:bg-primary rounded-sm active:bg-primary active:border-primary active:text-white`}
+                  onClick={() => handleOptionClick(option.optionTitle, value)}
+                >
+                  {value}
+                </span>
+              );
+            })}
           </div>
         </div>
       ))}
